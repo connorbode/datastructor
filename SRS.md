@@ -76,6 +76,60 @@ The client web application will support the following browsers: Internet Explore
 
 ***
 
-## 3. System Features 
+## 3. Use Cases
 
 ***
+
+### 3.1 Account Management
+
+#### 3.1.1 Registration
+
+As a user, I should be able to register for the application using a single sign on identity like a Facebook or Google account.
+
+__Preconditions:__
+
+- I am not logged into an account
+
+__Postconditions:__
+
+- An account is created for me
+- My identity is associated with that account
+
+__Failure Scenarios:__
+
+- The email address associated with the identity I have chosen is already part of an account.
+
+__Alternate Scenarios:__
+
+- The identity I have chosen is already registered; see [Log In](#312-log-in) scenario.
+
+[back to top](#contents)
+
+#### 3.1.2 Log In
+
+As a user, I should be able to log in to my account using my single sign on identity.
+
+__Preconditions:__
+
+- I am not logged into an account
+
+__Postconditions:__
+
+- I am logged into an account
+
+[back to top](#contents)
+
+#### 3.1.3 Log Out
+
+As a user, I should be able to log out of my account 
+
+__Preconditions:__
+
+- I am logged into an account
+
+__Postconditions:__
+
+- I am not logged into an account
+
+[back to top](#contents)
+
