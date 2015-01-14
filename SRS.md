@@ -12,7 +12,21 @@
   1. [Product Perspective](#21-product-perspective)
   2. [User Classes and Characteristics](#22-user-classes-and-characteristics)
   3. [Operating Environment](#23-operating-environment)
-3. [System Features](#3-system-features)
+3. [Domain Model](#3-domain-model)
+4. [System Features](#4-system-features)
+  1. [Account Management](#41-account-management)
+    1. [Registration](#411-registration)
+    2. [Log In](#412-log-in)
+    3. [Log Out](#413-log-out)
+  2. [Generating Data](#42-generating-data)
+    1. [Generating Gaussian Distributions](#421-generating-gaussian-distributions)
+    2. [Generating Uniform Distributions](#422-generating-uniform-distributions)
+  3. [Sequences](#43-sequences)
+    1. [Create](#431-create)
+    2. [Retrieve](#432-retrieve)
+    3. [Update](#433-update)
+    4. [Delete](#434-delete)
+    
 
 ...
 
@@ -193,7 +207,7 @@ __Failure Scenarios:__
 
 - The sequence data provided is malformed (e.g. an invalid operation for the data structure)
 
-[back to top](#content)
+[back to top](#contents)
 
 #### 4.3.2 Retrieve
 
@@ -204,7 +218,7 @@ __Preconditions:__
 - I am logged into an account
 - I own the sequence
 
-[back to top](#content)
+[back to top](#contents)
 
 #### 4.3.3 Update
 
@@ -219,7 +233,7 @@ __Failure Scenarios:__
 
 - The sequence data provided for the update is (e.g. an invalid operation for the data structure)
 
-[back to top](#content)
+[back to top](#contents)
 
 #### 4.3.4 Delete
 
@@ -234,4 +248,4 @@ __Postconditions:__
 
 - I no longer own the sequence :'(
 
-[back to top](#content)
+[back to top](#contents)
