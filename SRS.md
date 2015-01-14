@@ -19,14 +19,18 @@ This project will serve as a teaching tool for data structures and algorithms.  
 
 [back to top](#contents)
 
+
 ### 1.2 Project Scope
 
 The project will consist of the following: a server application which will provide the core functionality, accessible through a programmable interface; a suite of end-to-end tests for the server; and a web client providing a UI. 
 
 [back to top](#contents)
 
+
 ### 1.3 References
 
 (none yet)
 
 [back to top](#contents)
+
+
