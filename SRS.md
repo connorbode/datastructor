@@ -76,15 +76,19 @@ The client web application will support the following browsers: Internet Explore
 
 ***
 
-## 3. Use Cases
+## 3. Domain Model
+
+*** 
+
+## 4. Use Cases
 
 ***
 
-### 3.1 Account Management
+### 4.1 Account Management
 
 ***
 
-#### 3.1.1 Registration
+#### 4.1.1 Registration
 
 As a user, I should be able to register for the application using a single sign on identity like a Facebook or Google account.
 
@@ -109,7 +113,7 @@ __Alternate Scenarios:__
 
 ***
 
-#### 3.1.2 Log In
+#### 4.1.2 Log In
 
 As a user, I should be able to log in to my account using my single sign on identity.
 
@@ -125,7 +129,7 @@ __Postconditions:__
 
 ***
 
-#### 3.1.3 Log Out
+#### 4.1.3 Log Out
 
 As a user, I should be able to log out of my account 
 
@@ -139,3 +143,95 @@ __Postconditions:__
 
 [back to top](#contents)
 
+***
+
+### 4.2 Generating Data
+
+***
+
+#### 4.2.1 Generating Gaussian Distributions
+
+As a user, I should be able to generate a random data with a Gaussian distribution.
+
+__Preconditions:__
+
+- I am logged into an account
+
+[back to top](#contents)
+
+***
+
+#### 4.2.2 Generating Uniform Distributions
+
+As a user, I should be able to generate a random data set with a uniform distribution.
+
+__Preconditions:__
+
+- I am logged into an account
+
+[back to top](#contents)
+
+***
+
+### 4.3 Sequences
+
+***
+
+#### 4.3.1 Create
+
+As a user, I should be able to create a sequence
+
+__Preconditions:__
+
+- I am logged into an account
+
+__Postconditions:__
+
+- I own the newly created sequence
+
+__Failure Scenarios:__
+
+- The sequence data provided is malformed (e.g. an invalid operation for the data structure)
+
+[back to top](#content)
+
+#### 4.3.2 Retrieve
+
+As a user, I should be able to retrieve a sequence
+
+__Preconditions:__
+
+- I am logged into an account
+- I own the sequence
+
+[back to top](#content)
+
+#### 4.3.3 Update
+
+As a user, I should be able to update a sequence
+
+__Preconditions:__
+
+- I am logged into an account
+- I own the sequence
+
+__Failure Scenarios:__
+
+- The sequence data provided for the update is (e.g. an invalid operation for the data structure)
+
+[back to top](#content)
+
+#### 4.3.4 Delete
+
+As a user, I should be able to delete a sequence
+
+__Preconditions:__
+
+- I am logged into an account
+- I own the sequence
+
+__Postconditions:__
+
+- I no longer own the sequence :'(
+
+[back to top](#content)
