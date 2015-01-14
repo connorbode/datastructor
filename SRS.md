@@ -82,6 +82,8 @@ The client web application will support the following browsers: Internet Explore
 
 ### 3.1 Account Management
 
+***
+
 #### 3.1.1 Registration
 
 As a user, I should be able to register for the application using a single sign on identity like a Facebook or Google account.
@@ -105,6 +107,8 @@ __Alternate Scenarios:__
 
 [back to top](#contents)
 
+***
+
 #### 3.1.2 Log In
 
 As a user, I should be able to log in to my account using my single sign on identity.
@@ -118,6 +122,8 @@ __Postconditions:__
 - I am logged into an account
 
 [back to top](#contents)
+
+***
 
 #### 3.1.3 Log Out
 
