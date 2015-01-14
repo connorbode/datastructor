@@ -13,7 +13,7 @@
   2. [User Classes and Characteristics](#22-user-classes-and-characteristics)
   3. [Operating Environment](#23-operating-environment)
 3. [Domain Model](#3-domain-model)
-4. [System Features](#4-system-features)
+4. [Use Cases](#4-use-cases)
   1. [Account Management](#41-account-management)
     1. [Registration](#411-registration)
     2. [Log In](#412-log-in)
@@ -26,7 +26,7 @@
     2. [Retrieve](#432-retrieve)
     3. [Update](#433-update)
     4. [Delete](#434-delete)
-    
+
 
 ...
 
