@@ -19,6 +19,7 @@ This project will serve as a teaching tool for data structures and algorithms.  
 
 [back to top](#contents)
 
+*** 
 
 ### 1.2 Project Scope
 
@@ -26,6 +27,7 @@ The project will consist of the following: a server application which will provi
 
 [back to top](#contents)
 
+***
 
 ### 1.3 References
 
@@ -33,4 +35,4 @@ The project will consist of the following: a server application which will provi
 
 [back to top](#contents)
 
-
+***
