@@ -2,7 +2,7 @@
 
 ## Contents
 
-1. [Introduction](#introduction)
+1. [Introduction](#1-introduction)
   1. Purpose
   2. Project Scope
   3. References
