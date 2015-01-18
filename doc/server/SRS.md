@@ -46,7 +46,7 @@ This project will serve as a teaching tool for data structures and algorithms.  
 
 ### 1.2 Project Scope
 
-The project will consist of the following: a server application which will provide the core functionality, accessible through a programmable interface; a suite of end-to-end tests for the server; and a web client providing a UI. 
+The overall project will consist of the following: a server application which will provide the core functionality, accessible through a programmable interface; a suite of end-to-end tests for the server; and a web client providing a UI.  __The scope of this SRS is limited to the server application.__  The client application (which is within the scope of this project) will be described in an alternate SRS.
 
 [back to top](#contents)
 
@@ -54,7 +54,8 @@ The project will consist of the following: a server application which will provi
 
 ### 1.3 References
 
-(none yet)
+- Client Application
+  - [SRS](../client/SRS.md)
 
 [back to top](#contents)
 
@@ -67,6 +68,8 @@ The project will consist of the following: a server application which will provi
 ### 2.1 Product Perspective
 
 The application has no relation to any existing applications.  It is an entirely new product.
+
+The product will be consumed by a client application, which is part of the same project. 
 
 [back to top](#contents)
 
