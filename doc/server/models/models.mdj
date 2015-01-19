@@ -301,6 +301,8 @@
 										"$ref": "AAAAAAFLAqKR/hNlRJ0="
 									},
 									"wordWrap": false,
+									"suppressAttributes": null,
+									"suppressOperations": null,
 									"showMultiplicity": true,
 									"showOperationSignature": true,
 									"attributeCompartment": {
@@ -585,6 +587,8 @@
 										"$ref": "AAAAAAFLAqMaNxOfvp4="
 									},
 									"wordWrap": false,
+									"suppressAttributes": null,
+									"suppressOperations": null,
 									"showMultiplicity": true,
 									"showOperationSignature": true,
 									"attributeCompartment": {
@@ -869,6 +873,8 @@
 										"$ref": "AAAAAAFLAqPMpBPRj1Q="
 									},
 									"wordWrap": false,
+									"suppressAttributes": null,
+									"suppressOperations": null,
 									"showMultiplicity": true,
 									"showOperationSignature": true,
 									"attributeCompartment": {
@@ -1211,6 +1217,7 @@
 										"$ref": "AAAAAAFLAqYHFxWKsj8="
 									},
 									"wordWrap": false,
+									"suppressAttributes": null,
 									"suppressOperations": false,
 									"showMultiplicity": true,
 									"showOperationSignature": true,
@@ -1497,6 +1504,7 @@
 									},
 									"wordWrap": false,
 									"suppressAttributes": false,
+									"suppressOperations": null,
 									"showMultiplicity": true,
 									"showOperationSignature": true,
 									"attributeCompartment": {
@@ -3393,6 +3401,8 @@
 										"$ref": "AAAAAAFLA0A0yI4SPMY="
 									},
 									"wordWrap": false,
+									"suppressAttributes": null,
+									"suppressOperations": null,
 									"showMultiplicity": true,
 									"showOperationSignature": true,
 									"attributeCompartment": {
@@ -4364,7 +4374,7 @@
 							},
 							"name": "Domain Model",
 							"visible": true,
-							"defaultDiagram": false,
+							"defaultDiagram": true,
 							"ownedViews": [
 								{
 									"_type": "UMLObjectView",

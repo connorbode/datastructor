@@ -109,6 +109,8 @@ The client web application will support the following browsers: Internet Explore
 
 ## 3. Domain Model
 
+[!]()
+
 *** 
 
 ## 4. Use Cases
