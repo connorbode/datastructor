@@ -156,6 +156,11 @@ __Postconditions:__
 
 - I am logged into an account
 
+__Failure Scenarios:__
+
+- There is no account matching the email address retrieved from the SSO.
+- The SSO used is not associated with the matching account
+
 [back to top](#contents)
 
 ***
