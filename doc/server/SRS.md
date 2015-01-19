@@ -2,6 +2,14 @@
 
 ***
 
+## TODOs
+
+- Domain model
+- Data requirements 
+- External interface requirements
+
+***
+
 ## Contents
 
 1. [Introduction](#1-introduction)
@@ -26,6 +34,12 @@
     2. [Retrieve](#432-retrieve)
     3. [Update](#433-update)
     4. [Delete](#434-delete)
+5. [Data Requirements](#5-data-requirements)
+  1. [Logical Data Model](#51-logical-data-model)
+  2. [Data Dictionary](#52-data-dictionary)
+6. [External Interface Requirements](#6-external-interface-requirements)
+  1. [API](#61-api)
+  2. [UI](#62-ui)
 
 
 ...
@@ -252,3 +266,5 @@ __Postconditions:__
 - I no longer own the sequence :'(
 
 [back to top](#contents)
+
+##
