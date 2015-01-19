@@ -1,4 +1,4 @@
-# The Datastructor
+# The Datastructor Server
 
 ***
 
@@ -6,7 +6,6 @@
 
 - Domain model
 - Data requirements 
-- External interface requirements
 
 ***
 
@@ -41,8 +40,6 @@
   1. [API](#61-api)
 
 
-...
-
 ***
 
 ## 1. Introduction
@@ -52,6 +49,8 @@
 ### 1.1 Purpose
 
 This project will serve as a teaching tool for data structures and algorithms.  It will allow instructors to create instances of data structures, populate those data structures with data, perform operations on those data structures, and record the sequence of manipulations to those data structures for future modification and playback.
+
+The purpose of the server component is overall persistence for the application. 
 
 [back to top](#contents)
 
