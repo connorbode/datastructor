@@ -39,7 +39,6 @@
   2. [Data Dictionary](#52-data-dictionary)
 6. [External Interface Requirements](#6-external-interface-requirements)
   1. [API](#61-api)
-  2. [UI](#62-ui)
 
 
 ...
@@ -288,6 +287,23 @@ __Postconditions:__
 
 ### 5.1 Logical Data Model
 
+[back to top](#contents)
+
 ***
 
 ### 5.2 Data Dictionary
+
+[back to top](#contents)
+
+***
+
+## 6. External Interface Requirements
+
+***
+
+### 6.1 API
+
+Each of the [use cases](#4-use-cases) described will be accessible via a RESTful HTTP API.
+
+[back to top](#contents)
+
