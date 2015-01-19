@@ -226,6 +226,8 @@ __Failure Scenarios:__
 
 [back to top](#contents)
 
+***
+
 #### 4.3.2 Retrieve
 
 As a user, I should be able to retrieve a sequence
@@ -236,6 +238,8 @@ __Preconditions:__
 - I own the sequence
 
 [back to top](#contents)
+
+***
 
 #### 4.3.3 Update
 
@@ -252,6 +256,8 @@ __Failure Scenarios:__
 
 [back to top](#contents)
 
+***
+
 #### 4.3.4 Delete
 
 As a user, I should be able to delete a sequence
@@ -267,4 +273,14 @@ __Postconditions:__
 
 [back to top](#contents)
 
-##
+***
+
+## 5. Data Requirements
+
+***
+
+### 5.1 Logical Data Model
+
+***
+
+### 5.2 Data Dictionary
