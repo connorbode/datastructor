@@ -94,7 +94,7 @@
 													"height": 13,
 													"autoResize": false,
 													"underline": false,
-													"text": "Account",
+													"text": "UserAccount",
 													"horizontalAlignment": 2,
 													"verticalAlignment": 5
 												},
@@ -3826,7 +3826,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 							},
-							"name": "Account",
+							"name": "UserAccount",
 							"visibility": "public",
 							"attributes": [
 								{
@@ -4437,11 +4437,11 @@
 													"containerExtending": true,
 													"left": 221,
 													"top": 147,
-													"width": 47,
+													"width": 79,
 													"height": 13,
 													"autoResize": false,
 													"underline": true,
-													"text": "User",
+													"text": "UserAccount",
 													"horizontalAlignment": 2,
 													"verticalAlignment": 5
 												},
@@ -4506,7 +4506,7 @@
 											"containerExtending": true,
 											"left": 216,
 											"top": 140,
-											"width": 57,
+											"width": 89,
 											"height": 25,
 											"autoResize": false,
 											"stereotypeLabel": {
@@ -4558,7 +4558,7 @@
 									"containerExtending": true,
 									"left": 216,
 									"top": 140,
-									"width": 57,
+									"width": 89,
 									"height": 25,
 									"autoResize": false,
 									"stereotypeDisplay": "label",
@@ -4800,7 +4800,7 @@
 											"parentStyle": false,
 											"containerChangeable": false,
 											"containerExtending": true,
-											"left": 296,
+											"left": 312,
 											"top": 161,
 											"width": 38,
 											"height": 13,
@@ -4833,7 +4833,7 @@
 											"parentStyle": false,
 											"containerChangeable": false,
 											"containerExtending": true,
-											"left": 315,
+											"left": 331,
 											"top": 176,
 											"width": 0,
 											"height": 13,
@@ -4865,7 +4865,7 @@
 											"parentStyle": false,
 											"containerChangeable": false,
 											"containerExtending": true,
-											"left": 316,
+											"left": 332,
 											"top": 131,
 											"width": 0,
 											"height": 13,
@@ -4993,7 +4993,7 @@
 											"parentStyle": false,
 											"containerChangeable": false,
 											"containerExtending": true,
-											"left": 298,
+											"left": 330,
 											"top": 160,
 											"width": 0,
 											"height": 13,
@@ -5025,7 +5025,7 @@
 											"parentStyle": false,
 											"containerChangeable": false,
 											"containerExtending": true,
-											"left": 301,
+											"left": 333,
 											"top": 174,
 											"width": 0,
 											"height": 13,
@@ -5057,7 +5057,7 @@
 											"parentStyle": false,
 											"containerChangeable": false,
 											"containerExtending": true,
-											"left": 294,
+											"left": 326,
 											"top": 133,
 											"width": 0,
 											"height": 13,
@@ -5088,7 +5088,7 @@
 										"$ref": "AAAAAAFLA2v3Rff4AVU="
 									},
 									"lineStyle": 1,
-									"points": "359:152;273:152",
+									"points": "359:152;305:152",
 									"stereotypeDisplay": "label",
 									"showVisibility": true,
 									"showProperty": true,
@@ -6768,7 +6768,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFLA2pQmO0GPwQ="
 							},
-							"name": "User",
+							"name": "UserAccount",
 							"visibility": "public"
 						},
 						{

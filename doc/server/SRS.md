@@ -19,25 +19,24 @@
   1. [Product Perspective](#21-product-perspective)
   2. [User Classes and Characteristics](#22-user-classes-and-characteristics)
   3. [Operating Environment](#23-operating-environment)
-3. [Domain Model](#3-domain-model)
-4. [Use Cases](#4-use-cases)
-  1. [Account Management](#41-account-management)
-    1. [Registration](#411-registration)
-    2. [Log In](#412-log-in)
-    3. [Log Out](#413-log-out)
-  2. [Generating Data](#42-generating-data)
-    1. [Generating Gaussian Distributions](#421-generating-gaussian-distributions)
-    2. [Generating Uniform Distributions](#422-generating-uniform-distributions)
-  3. [Sequences](#43-sequences)
-    1. [Create](#431-create)
-    2. [Retrieve](#432-retrieve)
-    3. [Update](#433-update)
-    4. [Delete](#434-delete)
-5. [Data Requirements](#5-data-requirements)
-  1. [Logical Data Model](#51-logical-data-model)
-  2. [Data Dictionary](#52-data-dictionary)
-6. [External Interface Requirements](#6-external-interface-requirements)
-  1. [API](#61-api)
+3. [Use Cases](#3-use-cases)
+  1. [Account Management](#31-account-management)
+    1. [Registration](#311-registration)
+    2. [Log In](#312-log-in)
+    3. [Log Out](#313-log-out)
+  2. [Generating Data](#32-generating-data)
+    1. [Generating Gaussian Distributions](#321-generating-gaussian-distributions)
+    2. [Generating Uniform Distributions](#322-generating-uniform-distributions)
+  3. [Sequences](#33-sequences)
+    1. [Create](#331-create)
+    2. [Retrieve](#332-retrieve)
+    3. [Update](#333-update)
+    4. [Delete](#334-delete)
+4. [Data Requirements](#4-data-requirements)
+  1. [Logical Data Model](#41-logical-data-model)
+  2. [Data Dictionary](#42-data-dictionary)
+5. [External Interface Requirements](#5-external-interface-requirements)
+  1. [API](#51-api)
 
 
 ***
@@ -103,23 +102,17 @@ The client web application will support the following browsers: Internet Explore
 
 [back to top](#contents)
 
-***
-
-## 3. Domain Model
-
-[!]()
-
 *** 
 
-## 4. Use Cases
+## 3. Use Cases
 
 ***
 
-### 4.1 Account Management
+### 3.1 Account Management
 
 ***
 
-#### 4.1.1 Registration
+#### 3.1.1 Registration
 
 As a user, I should be able to register for the application using a single sign on identity like a Facebook or Google account.
 
@@ -144,7 +137,7 @@ __Alternate Scenarios:__
 
 ***
 
-#### 4.1.2 Log In
+#### 3.1.2 Log In
 
 As a user, I should be able to log in to my account using my single sign on identity.
 
@@ -165,7 +158,7 @@ __Failure Scenarios:__
 
 ***
 
-#### 4.1.3 Log Out
+#### 3.1.3 Log Out
 
 As a user, I should be able to log out of my account 
 
@@ -181,11 +174,11 @@ __Postconditions:__
 
 ***
 
-### 4.2 Generating Data
+### 3.2 Generating Data
 
 ***
 
-#### 4.2.1 Generating Gaussian Distributions
+#### 3.2.1 Generating Gaussian Distributions
 
 As a user, I should be able to generate a random data with a Gaussian distribution.
 
@@ -197,7 +190,7 @@ __Preconditions:__
 
 ***
 
-#### 4.2.2 Generating Uniform Distributions
+#### 3.2.2 Generating Uniform Distributions
 
 As a user, I should be able to generate a random data set with a uniform distribution.
 
@@ -209,11 +202,11 @@ __Preconditions:__
 
 ***
 
-### 4.3 Sequences
+### 3.3 Sequences
 
 ***
 
-#### 4.3.1 Create
+#### 3.3.1 Create
 
 As a user, I should be able to create a sequence
 
@@ -233,7 +226,7 @@ __Failure Scenarios:__
 
 ***
 
-#### 4.3.2 Retrieve
+#### 3.3.2 Retrieve
 
 As a user, I should be able to retrieve a sequence
 
@@ -246,7 +239,7 @@ __Preconditions:__
 
 ***
 
-#### 4.3.3 Update
+#### 3.3.3 Update
 
 As a user, I should be able to update a sequence
 
@@ -263,7 +256,7 @@ __Failure Scenarios:__
 
 ***
 
-#### 4.3.4 Delete
+#### 3.3.4 Delete
 
 As a user, I should be able to delete a sequence
 
@@ -280,27 +273,37 @@ __Postconditions:__
 
 ***
 
-## 5. Data Requirements
+## 4. Data Requirements
 
 ***
 
-### 5.1 Logical Data Model
+### 4.1 Logical Data Model
+
+![Domain Model](models/domain.png)
 
 [back to top](#contents)
 
 ***
 
-### 5.2 Data Dictionary
+### 4.2 Data Dictionary
+
+- __Data Structure__: A data structure defines validations for sequences
+  - __Initial Data Validation__: Defines what initial data can be used for the data structure
+  - __Transformation Validations__: Defines what operations can be performed on the data structure
+- __Sequence__: A series of manipulations performed on a data set
+  - __Initial Data__: The initial values for the data set
+  - __Transformations__: A set of transformations to performed on the initial data set
+- __User__: A user of the application, who can own multiple sequences
 
 [back to top](#contents)
 
 ***
 
-## 6. External Interface Requirements
+## 5. External Interface Requirements
 
 ***
 
-### 6.1 API
+### 5.1 API
 
 Each of the [use cases](#4-use-cases) described will be accessible via a RESTful HTTP API.
 
