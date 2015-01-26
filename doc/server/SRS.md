@@ -2,13 +2,6 @@
 
 ***
 
-## TODOs
-
-- Domain model
-- Data requirements 
-
-***
-
 ## Contents
 
 1. [Introduction](#1-introduction)
