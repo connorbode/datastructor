@@ -293,9 +293,16 @@ __Postconditions:__
 - __Sequence__: A series of manipulations performed on a data set
   - __Initial Data__: The initial values for the data set
   - __Transformations__: A set of transformations to performed on the initial data set
+  - __Frame__: Within the scope of the project, `frame x` is the state of the data structure after applying `x` transformations to the initial data
 - __User__: A user of the application, who can own multiple sequences
 
 [back to top](#contents)
+
+***
+
+### 4.3 Risks
+
+Visualization frames are defined by a series of transformations on an initial data set.  A frame is recursively generated from the previous frames.  As a result, the initial loading time of a frame deep in a sequence may be high.  However, having frames generated incrementally will make for easy changes.  For example, a making a change to a piece of data that exists for 50 frames will require one modification instead of 50.  If load times become a problem, a potential solution is generating 'skip-frames' of the same format as the initial data.
 
 ***
 
