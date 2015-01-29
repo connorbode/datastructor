@@ -1,15 +1,17 @@
 var express = require('express');
-var validator = require('express-validator');
+var expressValidator = require('express-validator');
+var expressResource = require('express-resource');
 var bodyParser = require('body-parser');
-var app = express();
+var app = {};
 
-app.use(bodyParser.json());
-app.use(validator());
+app.routing = express();
+app.routing.use(bodyParser.json());
+app.routing.use(expressValidator());
 
-var model = require('./models/index.js');
-var controllers = require('./controllers/index.js')({
-  app: app,
-  model: model
-});
+app.db = require('mongoose');
+app.db.connect('mongodb://localhost:27017/datastructor');
 
-app.listen(3000);
+app.models = require('./models')(app);
+// app.controllers = require('./controllers')(app);
+
+app.routing.listen(3000);

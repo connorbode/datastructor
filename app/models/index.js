@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/datastructor');
-
-var cat = mongoose.Schema({ 
-  name: String 
-});
-
-module.exports = {
-  cat: mongoose.model('cat', cat)
+module.exports = function (app) {
+  return {
+    Account: require('./account')(app),
+    DataStructure: require('./data-structure')(app),
+    Identity: require('./identity')(app),
+    IdentityType: require('./identity-type')(app),
+    Operation: require('./operation')(app),
+    Sequence: require('./sequence')(app),
+  };
 };
