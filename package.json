@@ -7,8 +7,8 @@
     "doc": "doc"
   },
   "scripts": {
-    "start": "node app/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app/index.js",
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,15 @@
   },
   "homepage": "https://github.com/connorbode/datastructor",
   "dependencies": {
+    "body-parser": "^1.10.2",
     "express": "^4.11.1",
-    "express-resource": "^1.0.0"
+    "express-resource": "^1.0.0",
+    "express-validator": "^2.8.0",
+    "mongoose": "^3.8.22"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-mocha": "^2.0.0",
+    "supertest": "^0.15.0"
   }
 }
