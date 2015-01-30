@@ -6,7 +6,13 @@ var app = {};
 
 app.routing = express();
 app.routing.use(bodyParser.json());
-app.routing.use(expressValidator());
+app.routing.use(expressValidator({
+  customValidators: {
+    isProvider: function (value) {
+      return app.sso[value];
+    }
+  }
+}));
 
 app.db = require('mongoose');
 app.db.connect('mongodb://localhost:27017/datastructor');
