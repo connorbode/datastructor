@@ -29,7 +29,7 @@ __Sample request:__
 ```
 {
   code: `SSO OAuth code`,
-  service: 'github'
+  provider: 'github'
 }
 ```
 
