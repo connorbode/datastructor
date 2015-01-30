@@ -17,6 +17,10 @@ app.routing.use(expressValidator({
 app.db = require('mongoose');
 app.db.connect('mongodb://localhost:27017/datastructor');
 
+app.sso = {};
+app.sso.github = require('octonode');
+app.sso.github.auth.config({ id: process.env.GITHUB_CLIENT_ID, secret: process.env.GITHUB_CLIENT_SECRET });
+
 app.models = require('./models')(app);
 // app.controllers = require('./controllers')(app);
 
