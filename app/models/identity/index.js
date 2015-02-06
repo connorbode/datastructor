@@ -8,7 +8,7 @@ module.exports = function (app) {
   var IdentityModel = app.db.model('Identity', Identity);
 
   IdentityModel.schema.path('type').validate(function (value) {
-    return app.sso[value];
+    return app.sso[value] === undefined ? false : true;
   });
 
   return IdentityModel;
