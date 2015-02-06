@@ -21,7 +21,10 @@ beforeEach(function (done) {
   done();
 });
 
-after(function (done) {
-  global.app.db.connection.close();
-  done();
+afterEach(function (done) {
+  global.app.db.connection.close(function () {
+    app.db.models = {};
+    app.db.modelSchemas = {};
+    done();
+  });
 });
