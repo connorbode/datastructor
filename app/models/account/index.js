@@ -4,7 +4,7 @@ module.exports = function (app) {
     email: String,
     name: String,
     sequences: [{ type: Number, ref: 'Sequence' }],
-    identities: [{ type: Number, ref: 'Identity' }]
+    identities: [{ type: Schema.Types.ObjectId, ref: 'Identity' }]
   });
   return app.db.model('Account', Account);
 };

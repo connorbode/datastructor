@@ -3,7 +3,7 @@ module.exports = function (app) {
   var Sequence = new Schema({
     data: Schema.Types.Mixed,
     operations: [ Schema.Types.Mixed ],
-    type: { type: Number, ref: 'DataStructure' }
+    type: { type: Schema.Types.ObjectId, ref: 'DataStructure' }
   });
 
   return app.db.model('Sequence', Sequence);
