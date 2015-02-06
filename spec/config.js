@@ -5,7 +5,11 @@
  */
 
 before(function (done) {
-  global.assert = require('assert');
+  global.chai = require('chai');
+  global.assert = chai.assert;
+  global.expect = chai.expect;
+  global.should = chai.should();
+  global._ = require('lodash');
   process.env.GITHUB_CLIENT_ID = 'test';
   process.env.GITHUB_CLIENT_SECRET = 'test';
   done();
