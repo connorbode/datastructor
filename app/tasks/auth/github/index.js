@@ -9,13 +9,13 @@ module.exports = function (app) {
     var email;
     github.auth.login(code, function (err, token) {
       if (err) {
-        callback({error: err});
+        callback(err);
         return;
       }
 
       github.client().me().emails(function (err, data, headers) {
         if (err) {
-          callback({error: err});
+          callback(err);
           return;
         }
 

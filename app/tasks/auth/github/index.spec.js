@@ -33,7 +33,6 @@ describe('app.tasks.auth.github', function () {
 
     GithubAuthTask('hi', function (err, token, email) {
       assert.isNotNull(err);
-      assert.isDefined(err.error);
       done();
     });
   });
@@ -48,7 +47,7 @@ describe('app.tasks.auth.github', function () {
       .reply(404);
 
     GithubAuthTask('hi', function (err, token, email) {
-      assert.isDefined(err.error);
+      assert.isNotNull(err);
       done();
     });
   });
