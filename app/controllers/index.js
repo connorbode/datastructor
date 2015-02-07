@@ -4,6 +4,8 @@ module.exports = function (app) {
 
   return {
     checkParams: require('./check-params')(app),
-    error: require('./error')(app)
+    getSession: require('./get-session')(app),
+    error: require('./error')(app),
+    setSession: require('./set-session')(app)
   };
 };
