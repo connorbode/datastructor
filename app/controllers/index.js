@@ -1,5 +1,6 @@
 module.exports = function (app) {
-  app.routing.resource('sessions', require('./sessions')(app));
+
+  require('./api')(app);
 
   return {
     checkParams: require('./check-params')(app),
