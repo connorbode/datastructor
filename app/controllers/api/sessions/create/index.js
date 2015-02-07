@@ -11,6 +11,7 @@ module.exports = function (app) {
       app.controllers.error(err, res);
       app.tasks.login(req.body.provider, token, email, function (err) {
         app.controllers.error(err, res);
+        req.session.email = email;
       });
     });
   };
