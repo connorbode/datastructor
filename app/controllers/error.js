@@ -1,8 +1,12 @@
 module.exports = function (app) {
-  return function (err, res) {
+  return function (err, res, callback) {
     if (err) {
-      res.status(400).send({ errors: err });
+      if (err.message) {
+        err = err.message;
+      }
+      res.status(400).json({ errors: [ err ] });
       return;
     }
+    callback();
   };
 };
