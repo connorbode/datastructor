@@ -5,6 +5,7 @@
  */
 
 var mockgoose = require('mockgoose');
+var Session;
 
 before(function (done) {
   process.env.GITHUB_CLIENT_ID = 'test';
@@ -16,6 +17,10 @@ before(function (done) {
   app.tasks = require('../app/tasks')(app);
   app.controllers = require('../app/controllers')(app);
   app.models = require('../app/models')(app);
+  Session = require('supertest-session')({
+    app: app.routing
+  });
+
   done();
 });
 
@@ -32,8 +37,14 @@ before(function (done) {
 
 beforeEach(function (done) {
   mockgoose.reset();
+  global.session = new Session();
   done();
 });
+
+afterEach(function (done) {
+  session.destroy();
+  done();
+})
 
 after(function (done) {
   app.db.connection.close();

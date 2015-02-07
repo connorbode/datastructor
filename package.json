@@ -24,6 +24,7 @@
     "body-parser": "^1.10.2",
     "express": "^4.11.1",
     "express-resource": "^1.0.0",
+    "express-session": "^1.10.2",
     "express-validator": "^2.8.0",
     "jayschema": "^0.3.1",
     "lodash": "^3.1.0",
@@ -36,6 +37,7 @@
     "gulp-mocha": "^2.0.0",
     "mockgoose": "^1.10.7",
     "nock": "^0.59.1",
-    "supertest": "^0.15.0"
+    "supertest": "^0.15.0",
+    "supertest-session": "0.0.7"
   }
 }
