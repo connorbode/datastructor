@@ -21,6 +21,8 @@ before(function (done) {
     app: app.routing
   });
 
+  global.helpers = require('./helpers')(app);
+
   done();
 });
 
