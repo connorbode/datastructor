@@ -6,8 +6,8 @@ describe('app.controllers.api.sessions', function () {
         .send({
           provider: 'fake'
         })
-        .expect(400)
         .end(function (err, res) {
+          assert.equal(res.status, 400);
           done();
         });
     });
@@ -18,8 +18,8 @@ describe('app.controllers.api.sessions', function () {
         .send({
           code: 'fake'
         })
-        .expect(400)
         .end(function (err, res) {
+          assert.equal(res.status, 400);
           done();
         });
     });
@@ -31,8 +31,8 @@ describe('app.controllers.api.sessions', function () {
           code: 'fake',
           provider: 'fake'
         })
-        .expect(400)
         .end(function (err, res) {
+          assert.equal(res.status, 400);
           done();
         });
     });
@@ -48,8 +48,8 @@ describe('app.controllers.api.sessions', function () {
           code: 'fake',
           provider: 'github'
         })
-        .expect(400)
         .end(function (err, res) {
+          assert.equal(res.status, 400);
           done();
         });
     });
@@ -78,8 +78,8 @@ describe('app.controllers.api.sessions', function () {
               code: 'fake',
               provider: 'github'
             })
-            .expect(400)
             .end(function (err, res) {
+              assert.equal(res.status, 400);
               done();
             });
         });
@@ -89,6 +89,7 @@ describe('app.controllers.api.sessions', function () {
     it('successfully logs a user in', function (done) {
       var identity;
       var account;
+      var sessionId;
       identity = new app.models.Identity({ provider: 'github', token: 'oldtoken' });
       identity.save(function (err) {
         account = new app.models.Account({ email: 'primary@email.com', identities: [ identity._id ]});
@@ -110,16 +111,42 @@ describe('app.controllers.api.sessions', function () {
               code: 'fake',
               provider: 'github'
             })
-            .expect(200)
             .end(function (err, res) {
+              assert.equal(res.status, 200);
               app.models.Identity
                 .findOne()
                 .exec(function (err, identity) {
                   assert.equal(identity.token, 'a fake token');
-                  done();
+                  helpers.session.getData(session, function (err, sessionData) {
+                    assert.equal(sessionData.email, 'primary@email.com');
+                    done();
+                  });
                 });
             });
         });
+      });
+    });
+  });
+
+  describe('index', function () {
+    it('throws an error if the user is not logged in', function () {
+      session
+        .get('/api/sessions')
+        .end(function (err, res) {
+          assert.equal(res.status, 400);
+          assert.isDefined(res.body.errors);
+        });
+    });
+
+    it('returns the account if the user is logged in', function (done) {
+      helpers.session.create(function (err, data) {
+        session
+          .get('/api/sessions')
+          .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.body.email, 'primary@email.com');
+            done();
+          });
       });
     });
   });
