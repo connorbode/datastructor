@@ -1,4 +1,4 @@
-module.exports = function (app) {
+module.exports = function () {
   app.db = require('mongoose');
   app.db.connect('mongodb://localhost:27017/datastructor');
   app.db.connection.on('error', function (err) {

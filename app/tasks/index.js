@@ -1,8 +1,6 @@
-module.exports = function (app) {
-  return {
-    auth: require('./auth')(app),
-    getAccount: require('./get-account')(app),
-    login: require('./login')(app),
-    register: require('./register')(app)
-  };
+module.exports = {
+  auth: require('./auth'),
+  getAccount: require('./get-account'),
+  login: require('./login'),
+  register: require('./register')
 };

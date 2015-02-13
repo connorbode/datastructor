@@ -4,7 +4,7 @@ var resource = require('express-resource');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 
-module.exports = function (app) {
+module.exports = function () {
   app.routing = express();
   app.routing.use(bodyParser.json());
   app.routing.use(validator({

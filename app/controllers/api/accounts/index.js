@@ -1,5 +1,3 @@
-module.exports = function (app) {
-  return {
-    create: require('./create')(app)
-  };
+module.exports = {
+  create: require('./create')
 };

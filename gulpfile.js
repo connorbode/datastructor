@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
+var coverage = require('gulp-coverage');
 
 var options = {
   mocha: {

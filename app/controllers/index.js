@@ -1,11 +1,11 @@
-module.exports = function (app) {
+module.exports = function () {
 
-  require('./api')(app);
+  require('./api')();
 
   return {
-    checkParams: require('./check-params')(app),
-    getSession: require('./get-session')(app),
-    error: require('./error')(app),
-    setSession: require('./set-session')(app)
+    checkParams: require('./check-params'),
+    getSession: require('./get-session'),
+    error: require('./error'),
+    setSession: require('./set-session')
   };
 };

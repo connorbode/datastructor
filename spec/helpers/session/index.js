@@ -1,6 +1,4 @@
-module.exports = function (app) {
-  return {
-    create: require('./create')(app),
-    getData: require('./get-data')(app)
-  };
+module.exports =  {
+  create: require('./create'),
+  getData: require('./get-data')
 };

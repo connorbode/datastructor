@@ -11,8 +11,6 @@
  * - email is the main email from the account
  */
 
-module.exports = function (app) {
-  return {
-    github: require('./github')(app)
-  };
+module.exports = {
+  github: require('./github')
 };

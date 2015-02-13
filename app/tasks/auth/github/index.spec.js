@@ -1,11 +1,6 @@
 describe('app.tasks.auth.github', function () {
   var GithubAuthTask;
 
-  beforeEach(function (done) {
-    GithubAuthTask = require('./index.js')(app);
-    done();
-  });
-
   it('handles successful auth with github', function (done) {
     nock('https://github.com')
       .post('/login/oauth/access_token')
@@ -18,7 +13,7 @@ describe('app.tasks.auth.github', function () {
         { email: 'primary@email.com', primary: true }
       ]);
 
-    GithubAuthTask('hi', function (err, token, email) {
+    app.tasks.auth.github('hi', function (err, token, email) {
       assert.equal(token, 'a fake token');
       assert.equal(email, 'primary@email.com');
       assert.isNull(err);
@@ -31,7 +26,7 @@ describe('app.tasks.auth.github', function () {
       .post('/login/oauth/access_token')
       .reply(404);
 
-    GithubAuthTask('hi', function (err, token, email) {
+    app.tasks.auth.github('hi', function (err, token, email) {
       assert.isNotNull(err);
       done();
     });
@@ -46,7 +41,7 @@ describe('app.tasks.auth.github', function () {
       .get('/user/emails')
       .reply(404);
 
-    GithubAuthTask('hi', function (err, token, email) {
+    app.tasks.auth.github('hi', function (err, token, email) {
       assert.isNotNull(err);
       done();
     });

@@ -1,9 +1,9 @@
-var app = {};
+global.app = {};
 
-require('./config')(app);
+require('./config')();
 
-app.tasks = require('./tasks')(app);
-app.models = require('./models')(app);
-app.controllers = require('./controllers')(app);
+app.tasks = require('./tasks');
+app.models = require('./models');
+app.controllers = require('./controllers')();
 
 app.routing.listen(3000);

@@ -12,16 +12,16 @@ before(function (done) {
   process.env.GITHUB_CLIENT_SECRET = 'test';
 
   global.app = {};
-  require('../app/config')(app);
+  require('../app/config')();
   mockgoose(app.db);
-  app.tasks = require('../app/tasks')(app);
-  app.controllers = require('../app/controllers')(app);
-  app.models = require('../app/models')(app);
+  app.tasks = require('../app/tasks');
+  app.controllers = require('../app/controllers')();
+  app.models = require('../app/models');
   Session = require('supertest-session')({
     app: app.routing
   });
 
-  global.helpers = require('./helpers')(app);
+  global.helpers = require('./helpers');
 
   done();
 });

@@ -1,5 +1,3 @@
-module.exports = function (app) {
-  return function (req) {
-    return req.session.email;
-  };
+module.exports = function (req) {
+  return req.session.email;
 };

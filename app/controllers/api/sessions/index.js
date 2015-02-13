@@ -1,7 +1,5 @@
-module.exports = function (app) {
-  return {
-    create: require('./create')(app),
-    destroy: require('./destroy')(app),
-    index: require('./index/index.js')(app)
-  };
+module.exports = {
+  create: require('./create'),
+  destroy: require('./destroy'),
+  index: require('./index/index.js')
 };

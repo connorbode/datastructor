@@ -1,5 +1,3 @@
-module.exports = function (app) {
-  return {
-    session: require('./session')(app)
-  };
+module.exports = {
+  session: require('./session')
 };

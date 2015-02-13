@@ -1,4 +1,4 @@
-module.exports = function (app) {
+module.exports = function () {
   var Schema = app.db.Schema;
   var DataStructure = new Schema({
     validation: Schema.Types.Mixed,

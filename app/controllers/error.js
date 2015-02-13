@@ -1,12 +1,10 @@
-module.exports = function (app) {
-  return function (err, res, callback) {
-    if (err) {
-      if (err.message) {
-        err = err.message;
-      }
-      res.status(400).json({ errors: [ err ] });
-      return;
+module.exports = function (err, res, callback) {
+  if (err) {
+    if (err.message) {
+      err = err.message;
     }
-    callback();
-  };
+    res.status(400).json({ errors: [ err ] });
+    return;
+  }
+  callback();
 };
