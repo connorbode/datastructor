@@ -150,4 +150,20 @@ describe('app.controllers.api.sessions', function () {
       });
     });
   });
+
+  describe('destroy', function () {
+    it('destroys a session if a user is logged in', function (done) {
+      helpers.session.create(function (err, data) {
+        session
+          .delete('/api/sessions/blah')
+          .end(function (err, res) {
+            assert.equal(res.status, 200);
+            helpers.session.getData(session, function (err, sessionData) {
+              assert.isUndefined(sessionData.email);
+              done();
+            });
+          });
+      });
+    });
+  });
 });
