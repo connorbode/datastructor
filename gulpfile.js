@@ -3,7 +3,7 @@ var mocha = require('gulp-mocha');
 
 var options = {
   mocha: {
-    reporter: 'nyan'
+    reporter: 'min'
   }
 };
 
