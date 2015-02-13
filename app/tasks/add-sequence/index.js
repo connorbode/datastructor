@@ -3,6 +3,7 @@ module.exports = function (sequence, callback) {
   var operation;
   var validation;
   var valid;
+  var validator;
 
   // find the data structure
   app.models.DataStructure
@@ -22,9 +23,14 @@ module.exports = function (sequence, callback) {
         // validate operations
         valid = true;
         _.forEach(sequence.operations, function (operation) {
-          validator = _.where(structure.operations, { '_id': operation.type })[0];
-          validation = app.utils.schema.validate(operation.data, validator.validation);
-          valid = validation.length === 0;
+          validator = _.filter(structure.operations, function (op) { 
+            return op._id.toString() === operation.type.toString() 
+          })[0];
+          if (!validator) { valid = false; }
+          else {
+            validation = app.utils.schema.validate(operation.data, validator.validation);
+            valid = validation.length === 0 ? valid : false;
+          }
         });
         if (!valid) { return callback('operation failed validation'); }
 
