@@ -36,6 +36,8 @@
     "gulp": "^3.8.10",
     "gulp-coverage": "^0.3.34",
     "gulp-mocha": "^2.0.0",
+    "gulp-spawn-mocha": "^2.0.1",
+    "minimist": "^1.1.0",
     "mockgoose": "^1.10.7",
     "nock": "^0.59.1",
     "supertest": "^0.15.0",

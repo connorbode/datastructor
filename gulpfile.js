@@ -1,19 +1,17 @@
 var gulp = require('gulp');
-var mocha = require('gulp-mocha');
+var mocha = require('gulp-spawn-mocha');
 var coverage = require('gulp-coverage');
+var minimist = require('minimist');
 
-var options = {
-  mocha: {
-    reporter: 'min'
-  }
-};
-
-var sources = {
-  mocha: ['spec/config.js', 'app/**/*.spec.js']
-};
+var options = minimist(process.argv.slice(2));
 
 gulp.task('test', function () {
+  options.reporter = 'min';
+  options.debugBrk = options.debug ? 'debug' : undefined;
+
+  var sources = ['spec/config.js', 'app/**/*.spec.js'];
+
   return gulp
-    .src(sources.mocha)
-    .pipe(mocha(options.mocha));
+    .src(sources)
+    .pipe(mocha(options));
 });
