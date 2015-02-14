@@ -1,5 +1,6 @@
 module.exports = {
-  create: require('./create'),
-  index:  require('./index/index.js'),
-  show:   require('./show')
+  create:   require('./create'),
+  destroy:  require('./destroy'),
+  index:    require('./index/index.js'),
+  show:     require('./show')
 };
