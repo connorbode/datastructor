@@ -1,4 +1,4 @@
-module.exports = function (sequence, callback) {
+module.exports = function (accountId, sequence, callback) {
 
   var operation;
   var validation;
@@ -37,7 +37,23 @@ module.exports = function (sequence, callback) {
         // add sequence
         app.models.Sequence
           .create(sequence, function (err, seq) {
-            callback(null, seq);
+
+            if (err) { return callback(err); }
+            app.models.Account
+              .findOne({
+                _id: accountId
+              })
+              .populate('sequences')
+              .exec(function (err, account) {
+
+                if (err) { return callback(err); }
+                account.sequences.push(seq._id);
+
+                account.save(function (err, account) {
+                  if (err) { return callback(err); }
+                  callback(null, seq);
+                });
+              });
           });
       });
     });

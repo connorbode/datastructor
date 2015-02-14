@@ -1,4 +1,6 @@
 module.exports = function (req, res) {
+
+  var email;
   
   // validate user is logged in
   app.controllers.checkAuth(req, res, function () {
@@ -11,9 +13,14 @@ module.exports = function (req, res) {
     app.controllers.checkParams(req, res, function () {
 
       // add the sequence
-      app.tasks.addSequence(req.body, function (err, data) {
+      email = app.controllers.getSession(req);
+      app.tasks.getAccount(email, function (err, account) {
         app.controllers.error(err, res, function () {
-          res.status(201).json(data).end();
+          app.tasks.addSequence(account._id, req.body, function (err, data) {
+            app.controllers.error(err, res, function () {
+              res.status(201).json(data).end();
+            });
+          });
         });
       });
     });
