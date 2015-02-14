@@ -10,7 +10,6 @@ describe('app.tasks.delete-sequence', function () {
 
   it('removes the sequence otherwise', function (done) {
     helpers.createSequence(function (IDs) {
-      debugger;
       app.models.Account
         .create({
           email: 'hi',
