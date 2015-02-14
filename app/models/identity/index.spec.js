@@ -5,9 +5,8 @@ describe('app.models.identity', function () {
     _.forEach(providers, function (value, index) {
       app.models.Identity.create({token: 'test', provider: value}, function (err, identity) {
         assert.isNull(err);
-        if (index === providers.length - 1) {
-          done();
-        }
+        assert.equal(index, providers.length - 1);
+        done();
       });
     });
   });

@@ -6,8 +6,6 @@ module.exports = function (callback) {
     account = new app.models.Account({ email: 'primary@email.com', identities: [ identity._id ]});
     account.save(function (err, account) {
 
-      if (err) { callback(err); }
-
       nock('https://github.com')
         .post('/login/oauth/access_token')
         .reply(200, "access_token=a%20fake%20token&scope=user%3Aemail&token_type=bearer");
@@ -26,11 +24,9 @@ module.exports = function (callback) {
           provider: 'github'
         })
         .end(function (err, res) {
-          if (err) { callback(err); }
           app.models.Identity
             .findOne()
             .exec(function (err, identity) {
-              if (err) { callback(err); }
               callback(null, account);
             });
         });
