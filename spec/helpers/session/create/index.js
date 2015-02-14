@@ -4,7 +4,7 @@ module.exports = function (callback) {
   identity = new app.models.Identity({ provider: 'github', token: 'oldtoken' });
   identity.save(function (err) {
     account = new app.models.Account({ email: 'primary@email.com', identities: [ identity._id ]});
-    account.save(function (err) {
+    account.save(function (err, account) {
 
       if (err) { callback(err); }
 
@@ -31,7 +31,7 @@ module.exports = function (callback) {
             .findOne()
             .exec(function (err, identity) {
               if (err) { callback(err); }
-              callback(null, identity);
+              callback(null, account);
             });
         });
     });
