@@ -4,7 +4,8 @@ module.exports = function () {
     name: String,
     data: Schema.Types.Mixed,
     operations: [ Schema.Types.Mixed ],
-    type: { type: Schema.Types.ObjectId, ref: 'DataStructure' }
+    type: { type: Schema.Types.ObjectId, ref: 'DataStructure' },
+    owner: { type: Schema.Types.ObjectId, ref: 'Account' }
   });
 
   return app.db.model('Sequence', Sequence);

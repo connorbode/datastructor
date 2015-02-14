@@ -16,7 +16,8 @@ module.exports = function (req, res) {
       email = app.controllers.getSession(req);
       app.tasks.getAccount(email, function (err, account) {
         app.controllers.error(err, res, function () {
-          app.tasks.addSequence(account._id, req.body, function (err, data) {
+          req.body.owner = account._id;
+          app.tasks.addSequence(req.body, function (err, data) {
             app.controllers.error(err, res, function () {
               res.status(201).json(data).end();
             });

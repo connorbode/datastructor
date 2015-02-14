@@ -1,4 +1,4 @@
-module.exports = function (accountId, sequence, callback) {
+module.exports = function (sequence, callback) {
 
   var operation;
   var validation;
@@ -39,22 +39,7 @@ module.exports = function (accountId, sequence, callback) {
           .create(sequence, function (err, seq) {
 
             if (err) { return callback(err); }
-            app.models.Account
-              .findOne({
-                _id: accountId
-              })
-              .populate('sequences')
-              .exec(function (err, account) {
-
-                if (err) { return callback(err); }
-                if (!account) { return callback('account not found'); }
-                account.sequences.push(seq._id);
-
-                account.save(function (err, account) {
-                  if (err) { return callback(err); }
-                  callback(null, seq);
-                });
-              });
+            callback(null, seq);
           });
       });
     });
