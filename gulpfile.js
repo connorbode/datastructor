@@ -7,6 +7,7 @@ var options = minimist(process.argv.slice(2));
 
 gulp.task('test', function () {
   options.reporter = 'min';
+  options.istanbul = true;
   options.debugBrk = options.debug ? 'debug' : undefined;
 
   var sources = ['spec/config.js', 'app/**/*.spec.js'];
