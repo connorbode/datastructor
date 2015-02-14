@@ -1,8 +1,8 @@
-module.exports = function (limit, offset, callback) {
+module.exports = function (params, callback) {
   app.models.Sequence
     .find()
-    .skip(offset)
-    .limit(limit)
+    .skip(params.offset)
+    .limit(params.limit)
     .exec(function (err, sequences) {
       return callback(err, sequences);
     });
