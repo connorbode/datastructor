@@ -96,7 +96,7 @@ describe('app.controllers.api.index', function () {
           assert.equal(res.status, 200);
           assert.equal(res.body.length, 3);
           done();
-        })
+        });
     });
   });
 
