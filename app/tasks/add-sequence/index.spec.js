@@ -137,4 +137,26 @@ describe('app.tasks.add-sequence', function () {
           });
       });
   });
+
+  it('fails if the account is not found', function (done) {
+    app.models.Operation
+      .create({
+        validation: { type: 'string' }
+      }, function (err, op) {
+        app.models.DataStructure
+          .create({
+            validation: { type: 'string' },
+            operations: [ op._id ]
+          }, function (err, struct) {
+            app.tasks.addSequence('4edd40c86762e0fb12000003', {
+              type: struct._id,
+              data: 'string'
+            }, function (err, seq) {
+              assert.isNotNull(err);
+              assert.equal(err, 'account not found');
+              done()
+            });
+          });
+      });
+  });
 });

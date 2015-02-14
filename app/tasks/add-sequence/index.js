@@ -47,6 +47,7 @@ module.exports = function (accountId, sequence, callback) {
               .exec(function (err, account) {
 
                 if (err) { return callback(err); }
+                if (!account) { return callback('account not found'); }
                 account.sequences.push(seq._id);
 
                 account.save(function (err, account) {
