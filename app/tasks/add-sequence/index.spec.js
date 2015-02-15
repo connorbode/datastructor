@@ -77,6 +77,26 @@ describe('app.tasks.add-sequence', function () {
       });
   });
 
+  it('fails if the validation for the operation is not present', function (done) {
+    app.models.DataStructure
+      .create({
+        validation: { type: 'string' },
+        operations: []
+      }, function (err, struct) {
+        app.tasks.addSequence({
+          type: struct._id,
+          data: 'string',
+          operations: [
+            { type: '4edd40c86762e0fb12000003', data: 'string' }
+          ]
+        }, function (err, data) {
+          assert.isNotNull(err);
+          assert.equal(err, 'operation failed validation');
+          done();
+        });
+      });
+  });
+
   it('creates a sequence otherwise', function (done) {
     app.models.Operation
       .create({
