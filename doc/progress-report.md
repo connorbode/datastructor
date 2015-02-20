@@ -8,15 +8,16 @@ The project is a data structures teaching tool.  The resulting application will 
 ##### Achievements
 - Elicited project requirements.
 - Formalized project requirements in a software requirements specification.
-- Completed the server component of the project including: 
+- Completed the initial server components of the project including: 
   - account registration using OAuth 2.0 with Github as a single sign-on service provider
   - account log in / log out (also using OAuth 2.0 with Github)
   - CRUD operations on sequences
-- 85.23% branch coverage.  The uncovered branches are all related to elevating failed database requests.
+- 85% branch coverage.  The uncovered branches are all related to elevating failed database requests.
 
 ##### Problems
 - The database chosen does not support transactions so there is a major potential for database corruption.  Solving this problem will require a re-write of the data-source layer of the application.  If time allows, this problem will be solved.
 - I have not yet found a way to simulate a failed database request for testing.  This is crucial to achieve 100% branch coverage.
+- No usable interface yet
 
 ##### Next Steps
 - Develop a web interface for the application
