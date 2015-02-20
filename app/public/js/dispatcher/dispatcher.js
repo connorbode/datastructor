@@ -1,3 +1,5 @@
+// source : http://facebook.github.io/flux/docs/todo-list.html#content
+
 var Promise = require('es6-promise').Promise;
 var assign = require('object-assign');
 
