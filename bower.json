@@ -14,6 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "es6-promise": "~2.0.1"
+    "es6-promise": "~2.0.1",
+    "flux-react": "~2.6.2"
   }
 }
