@@ -4,10 +4,13 @@ var minimist    = require('minimist');
 var gulp        = require('gulp');
 var coverage    = require('gulp-coverage');
 var jshint      = require('gulp-jshint');
+var jsxhint     = require('gulp-jsxhint');
+var map         = require('map-stream');
 var mocha       = require('gulp-spawn-mocha');
 var nodemon     = require('gulp-nodemon');
 var stylish     = require('jshint-stylish');
 var reactify    = require('reactify');
+var react       = require('gulp-react');
 var uglify      = require('gulp-uglify');
 var source      = require('vinyl-source-stream');
 var streamify   = require('gulp-streamify');
@@ -32,13 +35,25 @@ gulp.task('test', function () {
 /** 
  * Lints the server
  */
-gulp.task('lint', function () {
+gulp.task('lint-server', function () {
   var sources = ['app/**/*.js', '!app/public/**/*.js'];
 
   return gulp
     .src(sources)
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
+});
+
+/**
+ * Lints the client
+ */
+gulp.task('lint-client', function () {
+  return gulp
+    .src(['app/public/**/*.js'])
+    .pipe(react())
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish', { verbose: true }))
+    .pipe(jshint.reporter('fail'));
 });
 
 /**
@@ -53,14 +68,13 @@ gulp.task('clean', function (callback) {
  */
 gulp.task('browserify', function () {
   var b = browserify({ debug: true });
-  var bundle;
   b.transform(reactify);
-  b.add('./app/public/js/app.js');
-  b.plugin('minifyify', { map: 'app.js.map', output: __dirname + '/dist/public/js/app.js.map' });
+  b.add('./app/public/app.js');
+  b.plugin('minifyify', { map: 'app.js.map', output: __dirname + '/dist/public/app.js.map' });
 
   return b.bundle()
-    .pipe(source('./app/public/js/app.js'))
-    .pipe(gulp.dest('./dist'));
+    .pipe(source('public/app.js'))
+    .pipe(gulp.dest('./dist/'));
 });
 
 /**
@@ -80,10 +94,18 @@ gulp.task('build', ['clean', 'copy', 'browserify']);
 /**
  * Automatic server reload
  */
-gulp.task('develop', function () {
+gulp.task('nodemon', function (done) {
+  var called = false;
   nodemon({
     script: './dist/index.js',
     ext: 'js',
     ignore: ['./dist/**/*', './app/public/**/*']
-  }).on('change', ['lint', 'copy']);
+  }).on('change', ['lint-server', 'copy']);
+});
+
+/**
+ * Development task
+ */
+gulp.task('develop', ['nodemon'], function () {
+  gulp.watch(['./app/public/**/*.js'], ['lint-client', 'browserify']);
 });
