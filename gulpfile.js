@@ -13,6 +13,7 @@ var reactify    = require('reactify');
 var react       = require('gulp-react');
 var runSequence = require('run-sequence');
 var uglify      = require('gulp-uglify');
+var sass        = require('gulp-sass');
 var source      = require('vinyl-source-stream');
 var streamify   = require('gulp-streamify');
 var watch       = require('gulp-watch');
@@ -67,7 +68,7 @@ gulp.task('clean', function (callback) {
 });
 
 /**
- * Compiles the client
+ * Compiles the client javascript
  */
 gulp.task('browserify', function () {
   var b = browserify({ debug: true });
@@ -99,10 +100,22 @@ gulp.task('copy-client', function () {
 });
 
 /**
+ * Compiles the client SASS
+ */
+gulp.task('sass', function () {
+  return gulp
+    .src(['./app/public/main.scss'])
+    .pipe(sass({
+      outputStyle: 'compress'
+    }))
+    .pipe(gulp.dest('./dist/public/'));
+});
+
+/**
  * Builds the application
  */
 gulp.task('build', function (done) {
-  runSequence('clean', 'copy-server', 'browserify', 'copy-client', done);
+  runSequence('clean', 'copy-server', 'browserify', 'copy-client', 'sass', done);
 });
 
 /**
@@ -124,6 +137,7 @@ gulp.task('nodemon', ['build'], function (done) {
 gulp.task('watch', function () {
   gulp.watch(['app/public/**/*.js'], ['browserify']);
   gulp.watch(['app/public/index.html'], ['copy-client']);
+  gulp.watch(['app/public/**/*.scss'], ['sass']);
 });
 
 /**
