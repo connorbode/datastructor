@@ -7,7 +7,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "start": "node app/index.js",
+    "start": "nodemon app/index.js",
     "test": "gulp test"
   },
   "repository": {
