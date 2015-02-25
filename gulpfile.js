@@ -77,6 +77,9 @@ gulp.task('browserify', function () {
   b.plugin('minifyify', { map: 'app.js.map', output: __dirname + '/dist/public/app.js.map' });
 
   return b.bundle()
+    .on('error', function (err) {
+      console.log(err.message);
+    })
     .pipe(source('public/app.js'))
     .pipe(gulp.dest('./dist/'));
 });
