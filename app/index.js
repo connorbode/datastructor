@@ -1,3 +1,5 @@
+var colors = require('colors');
+
 global.app = {};
 
 require('./config')();

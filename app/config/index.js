@@ -15,8 +15,9 @@ module.exports = function () {
   });
 
   if (unset) {
-    unset = unset.trim(/, $/, "");
-    throw "The following environment variables must be set: " + unset;
+    unset = unset.replace(/[, ]*$/, "");
+    console.log(("The following environment variables must be set: " + unset).red);
+    process.exit(0);
   }
 
   require('./routing')();
