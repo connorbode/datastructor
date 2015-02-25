@@ -5,6 +5,7 @@ var gulp        = require('gulp');
 var coverage    = require('gulp-coverage');
 var jshint      = require('gulp-jshint');
 var mocha       = require('gulp-spawn-mocha');
+var nodemon     = require('gulp-nodemon');
 var stylish     = require('jshint-stylish');
 var reactify    = require('reactify');
 var uglify      = require('gulp-uglify');
@@ -13,6 +14,9 @@ var streamify   = require('gulp-streamify');
 
 var options = minimist(process.argv.slice(2));
 
+/**
+ * Runs Mocha tests for the server
+ */
 gulp.task('test', function () {
   var sources = ['spec/config.js', 'app/**/*.spec.js'];
 
@@ -25,21 +29,29 @@ gulp.task('test', function () {
     .pipe(mocha(options));
 });
 
-gulp.task('jshint', function () {
-  var sources = ['app/**/*.js', '!app/public/bower_components/**/*.js'];
+/** 
+ * Lints the server
+ */
+gulp.task('lint', function () {
+  var sources = ['app/**/*.js', '!app/public/**/*.js'];
 
   return gulp
     .src(sources)
-    .transform(reactify)
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
+/**
+ * Cleans the dist directory
+ */
 gulp.task('clean', function (callback) {
   del(['./dist/**/*'], callback); 
 });
 
-gulp.task('build', ['clean'], function () {
+/**
+ * Compiles the client
+ */
+gulp.task('browserify', function () {
   var b = browserify({ debug: true });
   var bundle;
   b.transform(reactify);
@@ -48,5 +60,30 @@ gulp.task('build', ['clean'], function () {
 
   return b.bundle()
     .pipe(source('./app/public/js/app.js'))
-    .pipe(gulp.dest('./dist/public/js/app.js'));
+    .pipe(gulp.dest('./dist'));
+});
+
+/**
+ * Copies the server component to the dist directory
+ */
+gulp.task('copy', function () {
+  return gulp
+    .src(['./app/**/*', '!./app/public/**/*'])
+    .pipe(gulp.dest('./dist/'));
+});
+
+/**
+ * Builds the application
+ */
+gulp.task('build', ['clean', 'copy', 'browserify']);
+
+/**
+ * Automatic server reload
+ */
+gulp.task('develop', function () {
+  nodemon({
+    script: './dist/index.js',
+    ext: 'js',
+    ignore: ['./dist/**/*', './app/public/**/*']
+  }).on('change', ['lint', 'copy']);
 });
