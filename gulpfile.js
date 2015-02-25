@@ -11,9 +11,11 @@ var nodemon     = require('gulp-nodemon');
 var stylish     = require('jshint-stylish');
 var reactify    = require('reactify');
 var react       = require('gulp-react');
+var runSequence = require('run-sequence');
 var uglify      = require('gulp-uglify');
 var source      = require('vinyl-source-stream');
 var streamify   = require('gulp-streamify');
+var watch       = require('gulp-watch');
 
 var options = minimist(process.argv.slice(2));
 
@@ -47,13 +49,14 @@ gulp.task('lint-server', function () {
 /**
  * Lints the client
  */
-gulp.task('lint-client', function () {
+gulp.task('lint-client', function (done) {
   return gulp
     .src(['app/public/**/*.js'])
     .pipe(react())
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish', { verbose: true }))
-    .pipe(jshint.reporter('fail'));
+    .pipe(jshint.reporter('fail'))
+    .pipe(done);
 });
 
 /**
@@ -80,32 +83,50 @@ gulp.task('browserify', function () {
 /**
  * Copies the server component to the dist directory
  */
-gulp.task('copy', function () {
+gulp.task('copy-server', function () {
   return gulp
     .src(['./app/**/*', '!./app/public/**/*'])
     .pipe(gulp.dest('./dist/'));
 });
 
 /**
+ * Copies the client component to the dist directory
+ */
+gulp.task('copy-client', function () {
+  return gulp
+    .src(['./app/public/index.html'])
+    .pipe(gulp.dest('./dist/public/'));
+});
+
+/**
  * Builds the application
  */
-gulp.task('build', ['clean', 'copy', 'browserify']);
+gulp.task('build', function (done) {
+  runSequence('clean', 'copy-server', 'browserify', 'copy-client', done);
+});
 
 /**
  * Automatic server reload
  */
-gulp.task('nodemon', function (done) {
+gulp.task('nodemon', ['build'], function (done) {
   var called = false;
-  nodemon({
+  return nodemon({
     script: './dist/index.js',
     ext: 'js',
-    ignore: ['./dist/**/*', './app/public/**/*']
-  }).on('change', ['lint-server', 'copy']);
+    ignore: ['dist/**/*', 'app/public/**/*']
+  }).on('change', ['lint-server', 'copy-server'])
+    .on('start', ['watch']);
 });
 
 /**
  * Development task
  */
-gulp.task('develop', ['nodemon'], function () {
-  gulp.watch(['./app/public/**/*.js'], ['lint-client', 'browserify']);
+gulp.task('watch', function () {
+  gulp.watch(['app/public/**/*.js'], ['browserify']);
+  gulp.watch(['app/public/index.html'], ['copy-client']);
 });
+
+/**
+ * Default
+ */
+gulp.task('default', ['nodemon']);
