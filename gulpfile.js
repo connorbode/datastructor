@@ -106,7 +106,8 @@ gulp.task('sass', function () {
   return gulp
     .src(['./app/public/main.scss'])
     .pipe(sass({
-      outputStyle: 'compress'
+      outputStyle: 'compress',
+      errLogToConsole: true
     }))
     .pipe(gulp.dest('./dist/public/'));
 });
