@@ -113,10 +113,19 @@ gulp.task('sass', function () {
 });
 
 /**
+ * Copies client assets
+ */
+gulp.task('assets', function () {
+  return gulp
+    .src(['./app/public/assets/**/*'])
+    .pipe(gulp.dest('./dist/public/assets/'));
+});
+
+/**
  * Builds the application
  */
 gulp.task('build', function (done) {
-  runSequence('clean', 'copy-server', 'browserify', 'copy-client', 'sass', done);
+  runSequence('clean', 'copy-server', 'browserify', 'copy-client', 'sass', 'assets', done);
 });
 
 /**
