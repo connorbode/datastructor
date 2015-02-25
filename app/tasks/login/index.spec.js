@@ -40,7 +40,7 @@ describe('app.tasks.login', function () {
               done();
             });
         });
-      })
+      });
     });
   });
 });

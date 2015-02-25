@@ -24,7 +24,7 @@ module.exports = function (sequence, callback) {
         valid = true;
         _.forEach(sequence.operations, function (operation) {
           validator = _.filter(structure.operations, function (op) { 
-            return op._id.toString() === operation.type.toString() 
+            return op._id.toString() === operation.type.toString();
           })[0];
           if (!validator) { valid = false; }
           else {

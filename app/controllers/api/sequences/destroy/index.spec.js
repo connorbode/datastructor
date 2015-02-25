@@ -18,7 +18,7 @@ describe('app.controllers.api.sequences.destroy', function () {
           assert.equal(res.status, 400);
           assert.equal(res.body.errors[0], 'sequence not found');
           done();
-        })
+        });
     });
   });
 

@@ -52,7 +52,7 @@ describe('app.controllers.api.sequences.create', function () {
       .end(function (err, res) {
         assert.equal(res.status, 400);
         done();
-      })
+      });
   });
 
   it('fails if the appropriate params are not provided', function (done) {

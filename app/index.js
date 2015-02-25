@@ -1,4 +1,5 @@
 var colors = require('colors');
+var port = 3000;
 
 global.app = {};
 
@@ -8,4 +9,6 @@ app.tasks = require('./tasks');
 app.models = require('./models');
 app.controllers = require('./controllers')();
 
-app.routing.listen(3000);
+app.routing.listen(port);
+
+console.log(('datastructor running on port ' + port).green);

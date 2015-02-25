@@ -27,11 +27,6 @@ module.exports = function (sequenceId, accountId, update, callback) {
         .exec(function (err, struct) {
           if (err) { return callback(err); }
           if (!struct) { return callback('data structure not found'); }
-
-          // validate datastructure
-          if (global.stop) {
-            debugger;
-          }
           if (update.data !== undefined) {
             validation = app.utils.schema.validate(update.data, struct.validation);
             if (validation.length > 0) {
@@ -45,7 +40,7 @@ module.exports = function (sequenceId, accountId, update, callback) {
             valid = true;
             _.forEach(update.operations, function (operation) {
               validator = _.filter(struct.operations, function (op) { 
-                return op._id.toString() === operation.type.toString() 
+                return op._id.toString() === operation.type.toString();
               })[0];
               if (!validator) { valid = false; }
               else {
