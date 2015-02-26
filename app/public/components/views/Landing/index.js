@@ -61,7 +61,9 @@ module.exports = React.createClass({
           <div>
             <h1>sign in with one of these great providers</h1>
             <div>
-              <img src="/public/assets/images/github.png" />
+              <a href="https://github.com/login/oauth/authorize?scope=user&client_id=486fc6286ec9255f889b">
+                <img src="/public/assets/images/github.png" />
+              </a>
             </div>
           </div>
         </div>
