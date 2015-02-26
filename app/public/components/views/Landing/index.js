@@ -1,5 +1,7 @@
-var React = require('react');
-var $     = require('jquery');
+var React         = require('react');
+var $             = require('jquery');
+var ViewActions   = require('../../../actions/ViewActions');
+var ViewConstants = require('../../../constants/ViewConstants');
 
 module.exports = React.createClass({
 
@@ -42,7 +44,11 @@ module.exports = React.createClass({
     this.setHeight();
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.setHeight);
-    window.onmousewheel = this.handleScroll;
+  },
+
+  componentWillUnmount: function () {
+    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.setHeight);
   },
 
   render: function () {
@@ -50,7 +56,7 @@ module.exports = React.createClass({
       <div className="landing">
         <div className="pageOne page">
           <div className="login">
-            <button>sign in</button>
+            <button id="sign-in">sign in</button>
           </div>
           <div className="title">
             <h1>datastructor!</h1>
