@@ -1,7 +1,7 @@
 module.exports = function () {
   app.db = require('mongoose');
-  app.db.connect('mongodb://localhost:27017/datastructor');
+  app.db.connect(process.env.MONGO || 'mongodb://localhost:27017/datastructor');
   app.db.connection.on('error', function (err) {
-    // log, maybe?
+    console.log('error connecting to mongo'.red);
   });
 };

@@ -3,7 +3,8 @@ module.exports = function () {
   // check that the appropriate environment  variables have been set
   var env = [
     'GITHUB_CLIENT_ID',
-    'GITHUB_CLIENT_SECRET'
+    'GITHUB_CLIENT_SECRET',
+    'MONGO'
   ];
 
   var unset = "";
