@@ -23,6 +23,10 @@ module.exports = {
   loadPath: function (path, params) {
     switch (path) {
 
+      case "/":
+        this.go(ViewConstants.views.LANDING);
+        break;
+
       default: 
         this.go(ViewConstants.views.FOUR_OH_FOUR);
         break;
