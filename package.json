@@ -7,8 +7,9 @@
     "doc": "doc"
   },
   "scripts": {
-    "start": "gulp develop",
-    "test": "gulp test"
+    "start": "gulp nodemon",
+    "test": "gulp test",
+    "start-db": "mongod --dbpath ~/.data/"
   },
   "repository": {
     "type": "git",
