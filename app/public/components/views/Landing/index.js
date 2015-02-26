@@ -39,10 +39,11 @@ module.exports = React.createClass({
     var UP = 38;
     var DOWN = 40;
     var key = e.which;
-    e.preventDefault();
     if (key === UP) {
+      e.preventDefault();
       this.scroll(this.state.page - 1);
     } else {
+      e.preventDefault();
       this.scroll(this.state.page + 1);
     }
 
