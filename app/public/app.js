@@ -1,7 +1,7 @@
-var React = require('react');
-var components = require('./components');
+var React    = require('react');
+var ViewPort = require('./components/ViewPort');
 
 React.render(
-  <components.views.Landing />,
+  <ViewPort />,
   document.getElementById('content')
 );
