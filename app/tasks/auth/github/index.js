@@ -7,7 +7,7 @@ module.exports = function (code, callback) {
       return;
     }
 
-    github.client().me().emails(function (err, data, headers) {
+    github.client(token).me().emails(function (err, data, headers) {
       if (err) {
         callback(err);
         return;
