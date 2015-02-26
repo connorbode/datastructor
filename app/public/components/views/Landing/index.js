@@ -12,7 +12,7 @@ module.exports = React.createClass({
   },
 
   scroll: function (page) {
-    $('#container').animate({
+    $('body').animate({
         scrollTop: this.state.height * page
       }, {
         complete: function () {
@@ -41,8 +41,8 @@ module.exports = React.createClass({
   componentDidMount: function () {
     this.setHeight();
     window.addEventListener('scroll', this.handleScroll);
-    window.addEventListener('DOMMouseScroll', this.handleScroll);
     window.addEventListener('resize', this.setHeight);
+    window.onmousewheel = this.handleScroll;
   },
 
   render: function () {
