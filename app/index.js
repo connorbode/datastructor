@@ -1,6 +1,8 @@
 var colors = require('colors');
 var port = process.env.PORT || 3000;
 
+require('es6-promise').polyfill();
+
 global.app = {};
 
 require('./config')();
