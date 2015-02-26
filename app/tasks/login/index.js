@@ -6,7 +6,13 @@ module.exports = function (provider, token, email, callback) {
   var account;
   var accountData;
   Account
-    .findOne({ email: email })
+    .findAndModify({ 
+      query: {
+        email: email
+      },
+      new: true,
+      upsert: true
+    })
     .populate({
       path: 'identities',
       model: 'Identity',
@@ -20,13 +26,13 @@ module.exports = function (provider, token, email, callback) {
         return;
       }
 
-      if (!account) {
-        callback('email not found');
-        return;
-      }
-
       if (account.identities.length === 0) {
-        callback('identity not found');
+        Identity.create({
+          token: token,
+          provider: provider
+        }).exec(function (err, identity) {
+
+        });
         return;
       }
 

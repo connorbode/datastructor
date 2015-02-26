@@ -1,5 +1,5 @@
 var colors = require('colors');
-var port = 3000;
+var port = process.env.PORT || 3000;
 
 global.app = {};
 
