@@ -14,25 +14,46 @@ module.exports = React.createClass({
   },
 
   scroll: function (page) {
-    $('body').animate({
-        scrollTop: this.state.height * page
-      }, {
-        complete: function () {
-          this.state.page = page;
-          this.state.name = 'idle';
-        }.bind(this)
-      });
+    if (this.state.name === 'idle' && page >= 0 && page <= 1) {
+      this.state.name = 'scrolling';
+      $('body').animate({
+          scrollTop: this.state.height * page
+        }, {
+          complete: function () {
+            this.state.page = page;
+            this.state.name = 'idle';
+          }.bind(this)
+        });
+    }
+  },
+
+  scrollToSignIn: function () {
+    this.scroll(1);
   },
 
   handleScroll: function (e) {
     e.preventDefault();
-    if (this.state.name === 'idle') {
-      this.state.name = 'scrolling';
-      if (window.scrollY > this.state.page * this.state.height) {
-        this.scroll(this.state.page + 1);
-      } else {
-        this.scroll(this.state.page - 1);
-      }
+  },
+
+  handleKey: function (e) {
+    var UP = 38;
+    var DOWN = 40;
+    var key = e.which;
+    e.preventDefault();
+    if (key === UP) {
+      this.scroll(this.state.page - 1);
+    } else {
+      this.scroll(this.state.page + 1);
+    }
+
+  },
+
+  handleWheel: function (e) {
+    e.preventDefault();
+    if (e.wheelDelta < 1) {
+      this.scroll(this.state.page + 1);
+    } else {
+      this.scroll(this.state.page - 1);
     }
   },
 
@@ -43,12 +64,18 @@ module.exports = React.createClass({
   componentDidMount: function () {
     this.setHeight();
     window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('mousewheel', this.handleWheel);
     window.addEventListener('resize', this.setHeight);
+    window.addEventListener('keydown', this.handleKey);
+    $('#sign-in').on('click', this.scrollToSignIn);
   },
 
   componentWillUnmount: function () {
     window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('mousewheel', this.handleWheel);
     window.removeEventListener('resize', this.setHeight);
+    window.removeEventListener('keydown', this.handleKey);
+    $('#sign-in').off('click', this.scrollToSignIn);
   },
 
   render: function () {
