@@ -1,3 +1,4 @@
 module.exports = {
-  Landing: require('./Landing')
+  Landing:    require('./Landing'),
+  FourOhFour: require('./FourOhFour')
 };

@@ -1,0 +1,16 @@
+.four-oh-four {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+
+  div {
+    @include vertical-center;
+
+    h1 {
+      color: #555;
+      font-family: 'Lobster';
+      font-size: 100px;
+      margin-bottom: 20px;
+    }
+  }
+}

@@ -3,7 +3,10 @@ module.exports = {
     CHANGE_VIEW: 'CHANGE_VIEW'
   },
   views: {
-    LANDING: 'Landing',
-    TEST:    'Test'
+    LANDING:      'Landing',
+    FOUR_OH_FOUR: 'FourOhFour'
+  },
+  paths: {
+    '/auth': 'Auth'
   }
 };
