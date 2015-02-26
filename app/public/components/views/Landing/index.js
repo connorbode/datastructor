@@ -59,6 +59,7 @@ module.exports = React.createClass({
 
   setHeight: function () {
     this.state.height = window.innerHeight;
+    this.scroll(this.state.page);
   },
 
   componentDidMount: function () {
