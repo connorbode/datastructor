@@ -1,5 +1,50 @@
 .landing {
-  h1 {
-    font-family: 'Lobster'
+
+  .page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .pageOne {
+
+    div.title {
+      @include vertical-center;
+
+      h1 {
+        color: #555;
+        font-family: 'Lobster';
+        font-size: 100px;
+        margin-bottom: 20px;
+      }
+    }
+
+    div.login { 
+      position: absolute;
+      right: 30px;
+      top: 20px;
+    }
+  }
+
+  .pageTwo {
+    background-color: #ddd;
+
+    div {
+      @include vertical-center;
+
+      h1 {
+        font-family: 'Lobster';
+        margin-bottom: 30px;
+      }
+
+      div {
+        top: 30px;
+      }
+
+      img {
+        cursor: pointer;
+      }
+    }
   }
 }
