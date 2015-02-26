@@ -1,19 +1,32 @@
-var dispatcher    = require('../../dispatcher');
-var ViewConstants = require('../../constants/ViewConstants');
+var dispatcher     = require('../../dispatcher');
+var ViewConstants  = require('../../constants/ViewConstants');
 
 module.exports = {
 
   /**
    * Dispatches a view change
    * @param {string} to     The view to load
-   * @param {string} origin The component that the request originated from
+   * @param {string} params Parameters to send to the view
    */
-  go: function (to, origin) {
+  go: function (to) {
     dispatcher.dispatch({
       actionType: ViewConstants.actions.CHANGE_VIEW,
-      origin: origin,
       view: to
     });
+  },
+
+  /**
+   * Loads a URL path
+   * @param {string} path   The path to load
+   * @param {object} params Query string parameters
+   */
+  loadPath: function (path, params) {
+    switch (path) {
+
+      default: 
+        this.go(ViewConstants.views.FOUR_OH_FOUR);
+        break;
+    }
   }
 
 };
