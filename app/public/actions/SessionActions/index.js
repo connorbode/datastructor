@@ -20,7 +20,7 @@ module.exports = {
     }).error(function () {
       dispatcher.dispatch({
         actionType: SessionConstants.AUTH_ERROR
-      })
+      });
     });
   }
 };
