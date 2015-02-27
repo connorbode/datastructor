@@ -11,6 +11,14 @@ $color-error: rgb(194, 15, 15);
           transform: $t;
 }
 
+@mixin transition ($t) {
+  -webkit-transition: $t;
+     -moz-transition: $t;
+      -ms-transition: $t;
+       -o-transition: $t;
+          transition: $t;
+}
+
 @mixin radius ($t) {
   -webkit-border-radius: $t;
      -moz-border-radius: $t;
