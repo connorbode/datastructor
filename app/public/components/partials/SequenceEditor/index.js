@@ -1,9 +1,9 @@
 var React = require('react');
 
-module.exports = {
+module.exports = React.createClass({
   render: function () {
     return (
       <h1>Sequence Editor</h1>
     );
   }
-};
+});
