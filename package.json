@@ -36,7 +36,8 @@
     "lodash": "^3.3.1",
     "mongoose": "^3.8.22",
     "object-assign": "^2.0.0",
-    "octonode": "^0.6.14"
+    "octonode": "^0.6.14",
+    "spin": "0.0.1"
   },
   "devDependencies": {
     "browserify": "^8.1.3",
