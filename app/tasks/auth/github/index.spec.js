@@ -7,7 +7,7 @@ describe('app.tasks.auth.github', function () {
       .reply(200, "access_token=a%20fake%20token&scope=user%3Aemail&token_type=bearer");
 
     nock('https://api.github.com')
-      .get('/user/emails')
+      .get('/user/emails?access_token=a%20fake%20token')
       .reply(200, [
         { email: 'not.primary@email.com', verified: true },
         { email: 'primary@email.com', primary: true }

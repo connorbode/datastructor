@@ -54,38 +54,6 @@ describe('app.controllers.api.sessions', function () {
         });
     });
 
-    it('returns 400 if the email is not found', function (done) {
-      var identity;
-      var account;
-      identity = new app.models.Identity({ provider: 'github', token: 'oldtoken' });
-      identity.save(function (err) {
-        account = new app.models.Account({ email: 'other@email.com', identities: [ identity._id ]});
-        account.save(function (err) {
-          nock('https://github.com')
-            .post('/login/oauth/access_token')
-            .reply(200, "access_token=a%20fake%20token&scope=user%3Aemail&token_type=bearer");
-
-          nock('https://api.github.com')
-            .get('/user/emails')
-            .reply(200, [
-              { email: 'not.primary@email.com', verified: true },
-              { email: 'primary@email.com', primary: true }
-            ]);
-
-          session
-            .post('/api/sessions')
-            .send({
-              code: 'fake',
-              provider: 'github'
-            })
-            .end(function (err, res) {
-              assert.equal(res.status, 400);
-              done();
-            });
-        });
-      });
-    });
-
     it('successfully logs a user in', function (done) {
       var identity;
       var account;
@@ -99,7 +67,7 @@ describe('app.controllers.api.sessions', function () {
             .reply(200, "access_token=a%20fake%20token&scope=user%3Aemail&token_type=bearer");
 
           nock('https://api.github.com')
-            .get('/user/emails')
+            .get('/user/emails?access_token=a%20fake%20token')
             .reply(200, [
               { email: 'not.primary@email.com', verified: true },
               { email: 'primary@email.com', primary: true }
