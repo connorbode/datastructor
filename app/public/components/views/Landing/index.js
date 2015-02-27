@@ -70,13 +70,6 @@ module.exports = React.createClass({
     this.scroll(_state.page);
   },
 
-  isLoggedIn: function () {
-    console.log(UserStore.isLoggedIn());
-    // if (UserStore.isLoggedIn()) {
-    //   ViewActions.go(ViewConstants.views.SEQUENCES);
-    // }
-  },
-
   componentDidMount: function () {
     this.setHeight();
     window.addEventListener('scroll', this.handleScroll);
@@ -85,8 +78,6 @@ module.exports = React.createClass({
     window.addEventListener('keydown', this.handleKey);
     $('#sign-in').on('click', this.scrollToSignIn);
     UserStore.addChangeListener(this.checkAuth);
-    UserStore.addChangeListener(this.isLoggedIn);
-    this.isLoggedIn();
   },
 
   componentWillUnmount: function () {
@@ -96,7 +87,6 @@ module.exports = React.createClass({
     window.removeEventListener('keydown', this.handleKey);
     $('#sign-in').off('click', this.scrollToSignIn);
     UserStore.removeChangeListener(this.checkAuth);
-    UserStore.removeChangeListener(this.isLoggedIn);
   },
 
   render: function () {
