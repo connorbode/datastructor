@@ -34,8 +34,12 @@ module.exports = React.createClass({
       'menu-btn': true,
       'active': this.state.menu
     });
+    var header = cx({
+      'header': true,
+      'hide':   this.props.hide
+    })
     return (
-      <div className="header">
+      <div className={header}>
         <h1>datastructor!</h1>
         <div id="menu-btn" className={menuBtn}> 
           <i id="menu-icon" className="fa fa-align-justify"></i>

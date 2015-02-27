@@ -3,10 +3,13 @@ var views         = require('../views');
 var ViewConstants = require('../../constants/ViewConstants');
 var ViewStore     = require('../../stores/ViewStore');
 var Spinner       = require('spin');
+var Header        = require('../partials/Header');
 
 function getState () {
+  var viewName = ViewStore.getView();
   return {
-    view:     views[ViewStore.getView()],
+    viewName: viewName,
+    view:     views[viewName],
     loading:  ViewStore.getLoading(),
     error:    ViewStore.getError()
   };
@@ -19,7 +22,8 @@ module.exports = React.createClass({
 
   getInitialState: function () {
     return {
-      view: views[ViewConstants.views.LANDING]
+      view:     views[ViewConstants.views.LANDING],
+      viewName: ViewConstants.views.LANDING
     };
   },
 
@@ -57,6 +61,7 @@ module.exports = React.createClass({
       'active': this.state.loading,
       'loading-spinner': true
     });
+    var hideHeader = this.state.viewName === ViewConstants.views.LANDING;
     return (
       <div>
         <div className={loadingSpinner}>
@@ -64,6 +69,7 @@ module.exports = React.createClass({
           <div className="text">Loading</div>
         </div>
         <div className={loading}></div>
+        <Header hide={hideHeader} />
         <this.state.view />
       </div>
     );
