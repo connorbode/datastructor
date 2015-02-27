@@ -41,6 +41,10 @@ var ViewActions = {
         this.go(ViewConstants.views.LANDING);
         break;
 
+      case "/sequences":
+        this.go(ViewConstants.views.SEQUENCES);
+        break;
+
       default: 
         this.go(ViewConstants.views.FOUR_OH_FOUR);
         break;
