@@ -38,6 +38,10 @@ var PathActions = {
         ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
         break;
 
+      case "/sequences/new":
+        ViewActions.go(ViewConstants.views.SEQUENCE_NEW);
+        break;
+
       default: 
         ViewActions.go(ViewConstants.views.FOUR_OH_FOUR);
         break;

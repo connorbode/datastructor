@@ -3,13 +3,15 @@ module.exports = {
     CHANGE_VIEW: 'CHANGE_VIEW'
   },
   views: {
+    FOUR_OH_FOUR:  'FourOhFour',
     LANDING:       'Landing',
     SEQUENCE_LIST: 'SequenceList',
-    FOUR_OH_FOUR:  'FourOhFour'
+    SEQUENCE_NEW:  'SequenceNew'
   },
   paths: {
-    'Landing':    '/',
-    'Sequences':  '/sequences',
-    'FourOhFour': '/four-oh-four'
+    'FourOhFour':   '/four-oh-four',
+    'Landing':      '/',
+    'SequenceList': '/sequences',
+    'SequenceNew':  '/sequences/new'
   }
 };

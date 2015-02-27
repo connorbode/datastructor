@@ -1,10 +1,12 @@
-var React     = require('react');
-var UserStore = require('../../../stores/UserStore');
-var $         = require('jquery');
+var React         = require('react');
+var UserStore     = require('../../../stores/UserStore');
+var $             = require('jquery');
+var ViewActions   = require('../../../actions/ViewActions');
+var ViewConstants = require('../../../constants/ViewConstants');
 
 module.exports = React.createClass({
   handleAddSequence: function () {
-    console.log('add sequence!');
+    ViewActions.go(ViewConstants.views.SEQUENCE_NEW);
   },
 
   componentDidMount: function () {
