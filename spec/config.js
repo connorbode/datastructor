@@ -11,6 +11,7 @@ before(function (done) {
   process.env.GITHUB_CLIENT_ID = 'test';
   process.env.GITHUB_CLIENT_SECRET = 'test';
 
+  require('es6-promise').polyfill();
   global.app = {};
   require('../app/config')();
   mockgoose(app.db);
