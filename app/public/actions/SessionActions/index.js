@@ -13,7 +13,7 @@ function saveSession (data) {
 
 function loadSession () {
   var parsedCookie  = cookie.parse(document.cookie);
-  var sessionCookie = JSON.parse(parsedCookie.session);
+  var sessionCookie = parsedCookie.session ? JSON.parse(parsedCookie.session) : undefined;
   return sessionCookie;
 }
 
