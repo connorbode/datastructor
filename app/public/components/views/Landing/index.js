@@ -1,30 +1,37 @@
-var React         = require('react');
+var React         = require('react/addons');
 var $             = require('jquery');
 var ViewActions   = require('../../../actions/ViewActions');
 var ViewConstants = require('../../../constants/ViewConstants');
+var UserStore     = require('../../../stores/UserStore');
+
+var _state = {
+  name: 'idle',
+  page: 0,
+  height: 0,
+  authFailed: false
+};
 
 module.exports = React.createClass({
 
-  getInitialState: function () {
-    return {
-      name: 'idle',
-      page: 0,
-      height: 0
-    };
-  },
-
   scroll: function (page) {
-    if (this.state.name === 'idle' && page >= 0 && page <= 1) {
-      this.state.name = 'scrolling';
+    if (_state.name === 'idle' && page >= 0 && page <= 1) {
+      _state.name = 'scrolling';
       $('body').animate({
-          scrollTop: this.state.height * page
+          scrollTop: _state.height * page
         }, {
           complete: function () {
-            this.state.page = page;
-            this.state.name = 'idle';
+            _state.page = page;
+            _state.name = 'idle';
           }.bind(this)
         });
     }
+  },
+
+  checkAuth: function () {
+    _state.authFailed = UserStore.authFailed();
+    this.forceUpdate(function () {
+      this.scroll(1);
+    });
   },
 
   scrollToSignIn: function () {
@@ -41,10 +48,10 @@ module.exports = React.createClass({
     var key = e.which;
     if (key === UP) {
       e.preventDefault();
-      this.scroll(this.state.page - 1);
+      this.scroll(_state.page - 1);
     } else {
       e.preventDefault();
-      this.scroll(this.state.page + 1);
+      this.scroll(_state.page + 1);
     }
 
   },
@@ -52,15 +59,15 @@ module.exports = React.createClass({
   handleWheel: function (e) {
     e.preventDefault();
     if (e.wheelDelta < 1) {
-      this.scroll(this.state.page + 1);
+      this.scroll(_state.page + 1);
     } else {
-      this.scroll(this.state.page - 1);
+      this.scroll(_state.page - 1);
     }
   },
 
   setHeight: function () {
-    this.state.height = window.innerHeight;
-    this.scroll(this.state.page);
+    _state.height = window.innerHeight;
+    this.scroll(_state.page);
   },
 
   componentDidMount: function () {
@@ -70,6 +77,7 @@ module.exports = React.createClass({
     window.addEventListener('resize', this.setHeight);
     window.addEventListener('keydown', this.handleKey);
     $('#sign-in').on('click', this.scrollToSignIn);
+    UserStore.addChangeListener(this.checkAuth);
   },
 
   componentWillUnmount: function () {
@@ -78,9 +86,18 @@ module.exports = React.createClass({
     window.removeEventListener('resize', this.setHeight);
     window.removeEventListener('keydown', this.handleKey);
     $('#sign-in').off('click', this.scrollToSignIn);
+    UserStore.removeChangeListener(this.checkAuth);
   },
 
   render: function () {
+    var cx = React.addons.classSet;
+    var providers = cx({
+      hide: _state.authFailed
+    });
+    var error = cx({
+      error: true,
+      hide: !_state.authFailed
+    });
     return (
       <div className="landing">
         <div className="pageOne page">
@@ -94,7 +111,12 @@ module.exports = React.createClass({
         </div>
         <div className="pageTwo page">
           <div>
-            <h1>sign in with one of these great providers</h1>
+            <h1 className={providers}>
+              sign in with one of these great providers
+            </h1>
+            <h1 className={error}>
+              woops. we had some trouble signing you in.
+            </h1>
             <div>
               <a href="https://github.com/login/oauth/authorize?scope=user&client_id=486fc6286ec9255f889b">
                 <img src="/public/assets/images/github.png" />

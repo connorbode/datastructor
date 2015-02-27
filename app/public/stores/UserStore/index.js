@@ -7,9 +7,11 @@ var SessionConstants = require('../../constants/SessionConstants');
 var CHANGE_EVENT = 'change';
 
 var _user        = null;
+var _authFailed  = false;
 
 var setUser = function (user) {
-  _user = user;
+  _user       = user;
+  _authFailed = false;
 }
 
 var UserStore = assign({}, EventEmitter.prototype, {
@@ -33,6 +35,10 @@ var UserStore = assign({}, EventEmitter.prototype, {
     return _user !== null;
   },
 
+  authFailed: function () {
+    return _authFailed;
+  },
+
   dispatcherIndex: dispatcher.register(function (payload) {
 
     var email;
@@ -43,6 +49,11 @@ var UserStore = assign({}, EventEmitter.prototype, {
         email = payload.data.email;
         emailCookie = cookie.serialize('email', email);
         document.cookie = emailCookie;
+        UserStore.emitChange();
+        break;
+
+      case SessionConstants.AUTH_ERROR:
+        _authFailed = true;
         UserStore.emitChange();
         break;
     }

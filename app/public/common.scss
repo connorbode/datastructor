@@ -1,3 +1,7 @@
+/* VARIABLES */
+
+$color-error: rgb(194, 15, 15);
+
 /* MIXINS */
 
 @mixin transform ($t) {
@@ -82,4 +86,9 @@ button {
   &:hover {
     background-color: #777;
   }
+}
+
+
+.hide {
+  display: none;
 }
