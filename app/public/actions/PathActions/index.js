@@ -11,6 +11,9 @@ var PathActions = {
    */
   loadPath: function (path, params) {
     var session = SessionActions.init();
+    var actionOptions = {
+      stateAction: ViewConstants.stateActions.REPLACE
+    };
 
     // log the user in
     if (path === '/auth/github') {
@@ -18,32 +21,32 @@ var PathActions = {
         code:     params.code,
         provider: 'github'
       }).success(function () {
-        ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
+        ViewActions.go(ViewConstants.views.SEQUENCE_LIST, actionOptions);
       });
     }
 
     // load landing if not logged in
     if (!session) {
-      ViewActions.go(ViewConstants.views.LANDING);
+      ViewActions.go(ViewConstants.views.LANDING, actionOptions);
       return;
     }
 
     switch (path) {
 
       case "/":
-        ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
+        ViewActions.go(ViewConstants.views.SEQUENCE_LIST, actionOptions);
         break;
 
       case "/sequences":
-        ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
+        ViewActions.go(ViewConstants.views.SEQUENCE_LIST, actionOptions);
         break;
 
       case "/sequences/new":
-        ViewActions.go(ViewConstants.views.SEQUENCE_NEW);
+        ViewActions.go(ViewConstants.views.SEQUENCE_NEW, actionOptions);
         break;
 
       default: 
-        ViewActions.go(ViewConstants.views.FOUR_OH_FOUR);
+        ViewActions.go(ViewConstants.views.FOUR_OH_FOUR, actionOptions);
         break;
     }
   }

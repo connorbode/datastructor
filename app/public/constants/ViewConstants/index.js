@@ -13,5 +13,10 @@ module.exports = {
     'Landing':      '/',
     'SequenceList': '/sequences',
     'SequenceNew':  '/sequences/new'
+  },
+  stateActions: {
+    NONE:    'view.stateActions.none',
+    REPLACE: 'view.stateActions.replace',
+    PUSH:    'view.stateActions.push'
   }
 };

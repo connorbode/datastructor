@@ -1,6 +1,7 @@
 var React         = require('react/addons');
 var views         = require('../views');
 var ViewConstants = require('../../constants/ViewConstants');
+var ViewActions   = require('../../actions/ViewActions');
 var ViewStore     = require('../../stores/ViewStore');
 var Spinner       = require('spin');
 var Header        = require('../partials/Header');
@@ -27,6 +28,11 @@ module.exports = React.createClass({
     };
   },
 
+  handlePopState: function (e) {
+    e.preventDefault();
+    ViewActions.go(e.state.view, { stateAction: ViewConstants.stateActions.NONE });
+  },
+
   initSpinner: function () {
     var target = document.getElementById('spinner');
     new Spinner({ 
@@ -43,6 +49,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
+    window.onpopstate = this.handlePopState;
     ViewStore.addChangeListener(this.update);
     this.initSpinner();
   },
