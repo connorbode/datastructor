@@ -1,7 +1,8 @@
-var dispatcher    = require('../../dispatcher');
-var EventEmitter  = require('events').EventEmitter;
-var assign        = require('object-assign');
-var ViewConstants = require('../../constants/ViewConstants');
+var dispatcher       = require('../../dispatcher');
+var EventEmitter     = require('events').EventEmitter;
+var assign           = require('object-assign');
+var ViewConstants    = require('../../constants/ViewConstants');
+var SessionConstants = require('../../constants/SessionConstants');
 
 var CHANGE_EVENT  = 'change';
 
@@ -33,6 +34,11 @@ var ViewStore = assign({}, EventEmitter.prototype, {
     switch (payload.actionType) {
       case ViewConstants.actions.CHANGE_VIEW:
         setView(payload.view);
+        ViewStore.emitChange();
+        break;
+
+      case SessionConstants.AUTH_SUCCESS:
+        setView(ViewConstants.views.SEQUENCES);
         ViewStore.emitChange();
         break;
     }

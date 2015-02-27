@@ -1,6 +1,5 @@
 module.exports = {
-  AUTH_SUCCESS: 'api.auth.success',
-  AUTH_FAILURE: 'api.auth.failure',
-  ERROR:        'api.error',
-  SUCESS:       'api.success'
+  REQUEST: 'api.request',
+  SUCCESS: 'api.success',
+  FAILURE: 'api.failure'
 };

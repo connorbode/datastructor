@@ -1,6 +1,7 @@
 var dispatcher     = require('../../dispatcher');
 var ViewConstants  = require('../../constants/ViewConstants');
 var ApiActions     = require('../ApiActions');
+var SessionActions = require('../SessionActions');
 
 
 module.exports = {
@@ -30,7 +31,7 @@ module.exports = {
         break;
 
       case "/auth/github":
-        ApiActions.session.create({
+        SessionActions.create({
           code:     params.code,
           provider: 'github'
         });
