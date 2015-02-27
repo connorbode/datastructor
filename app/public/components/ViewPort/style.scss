@@ -20,10 +20,11 @@
   bottom: 30px;
   left: 30px;
   z-index: 3;
-  display: none;
+  opacity: 0;
+  @include transition(opacity 0.2s ease-out);
 
   &.active {
-    display: block;
+    opacity: 1;
   }
 
   div#spinner {
