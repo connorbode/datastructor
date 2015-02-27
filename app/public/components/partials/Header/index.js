@@ -1,6 +1,8 @@
 var React          = require('react/addons');
 var $              = require('jquery');
 var SessionActions = require('../../../actions/SessionActions');
+var ViewActions    = require('../../../actions/ViewActions');
+var ViewConstants  = require('../../../constants/ViewConstants');
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -9,19 +11,24 @@ module.exports = React.createClass({
     };
   },
 
-  clickMenu: function () {
+  handleMenuClick: function () {
     this.setState({
       menu: !this.state.menu
     });
   },
 
-  logout: function () {
+  handleLogoutClick: function () {
     SessionActions.destroy();
   },
 
+  handleSequenceClick: function () {
+    ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
+  },
+
   componentDidMount: function () {
-    $('#menu-btn').on('click', this.clickMenu);
-    $('#logout-btn').on('click', this.logout);
+    $('#menu-btn').on('click', this.handleMenuClick);
+    $('#logout-btn').on('click', this.handleLogoutClick);
+    $('#sequence-btn').on('click', this.handleSequenceClick);
   },
 
   render: function () {
