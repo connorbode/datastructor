@@ -3,13 +3,24 @@ var EventEmitter     = require('events').EventEmitter;
 var assign           = require('object-assign');
 var ViewConstants    = require('../../constants/ViewConstants');
 var SessionConstants = require('../../constants/SessionConstants');
+var ApiConstants     = require('../../constants/ApiConstants');
 
 var CHANGE_EVENT  = 'change';
 
-var _view         = null;
+var _view         = ViewConstants.views.LANDING;
+var _loading      = false;
+var _error        = false;
 
 var setView = function (view) {
   _view = view;
+}
+
+var setLoading = function (loading) {
+  _loading = loading;
+}
+
+var setError = function (error) {
+  _error = error;
 }
 
 var ViewStore = assign({}, EventEmitter.prototype, {
@@ -29,6 +40,14 @@ var ViewStore = assign({}, EventEmitter.prototype, {
     return _view;
   },
 
+  getLoading: function () {
+    return _loading;
+  },
+
+  getError: function () {
+    return _error;
+  },
+
   dispatcherIndex: dispatcher.register(function (payload) {
 
     switch (payload.actionType) {
@@ -39,6 +58,22 @@ var ViewStore = assign({}, EventEmitter.prototype, {
 
       case SessionConstants.AUTH_SUCCESS:
         setView(ViewConstants.views.SEQUENCES);
+        ViewStore.emitChange();
+        break;
+
+      case ApiConstants.REQUEST:
+        setLoading(true);
+        ViewStore.emitChange();
+        break;
+
+      case ApiConstants.SUCCESS:
+        setLoading(false);
+        ViewStore.emitChange();
+        break;
+
+      case ApiConstants.ERROR:
+        setLoading(false);
+        setError(true);
         ViewStore.emitChange();
         break;
     }
