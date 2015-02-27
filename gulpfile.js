@@ -1,5 +1,6 @@
 var browserify  = require('browserify');
 var del         = require('del');
+var debug       = require('gulp-debug');
 var minimist    = require('minimist');
 var gulp        = require('gulp');
 var coverage    = require('gulp-coverage');

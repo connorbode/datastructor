@@ -46,6 +46,7 @@
     "es6-promise": "^2.0.1",
     "gulp": "^3.8.10",
     "gulp-coverage": "^0.3.34",
+    "gulp-debug": "^2.0.1",
     "gulp-jshint": "^1.9.2",
     "gulp-jsxhint": "0.0.1",
     "gulp-mocha": "^2.0.0",
