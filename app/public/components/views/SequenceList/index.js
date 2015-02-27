@@ -13,6 +13,10 @@ module.exports = React.createClass({
     $('#add-sequence-btn').on('click', this.handleAddSequence);
   },
 
+  componentWillUnmount: function () {
+    $('#add-sequence-btn').off('click', this.handleAddSequence);
+  },
+
   render: function () {
     return (
       <div className="sequence-wrapper">
