@@ -11,7 +11,7 @@ module.exports = function (req, res) {
         app.tasks.login(req.body.provider, token, email, function (err) {
           app.controllers.error(err, res, function () {
             app.controllers.setSession(req, email);
-            res.status(200).end();
+            res.status(200).json({email: email}).end();
           });
         });
       });
