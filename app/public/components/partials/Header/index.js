@@ -4,6 +4,8 @@ var SessionActions = require('../../../actions/SessionActions');
 var ViewActions    = require('../../../actions/ViewActions');
 var ViewConstants  = require('../../../constants/ViewConstants');
 
+var menuTimeout;
+
 module.exports = React.createClass({
   getInitialState: function () {
     return {
@@ -17,6 +19,18 @@ module.exports = React.createClass({
     });
   },
 
+  handleMenuMouseOut: function () {
+    menuTimeout = setTimeout(function () {
+      this.setState({
+        menu: false
+      });
+    }.bind(this), 1000);
+  },
+
+  handleMenuMouseOver: function () {
+    clearTimeout(menuTimeout);
+  },
+
   handleLogoutClick: function () {
     SessionActions.destroy();
   },
@@ -27,6 +41,10 @@ module.exports = React.createClass({
 
   componentDidMount: function () {
     $('#menu-btn').on('click', this.handleMenuClick);
+    $('#menu').on({
+      'mouseout':  this.handleMenuMouseOut,
+      'mouseover': this.handleMenuMouseOver
+    });
     $('#logout-btn').on('click', this.handleLogoutClick);
     $('#sequence-btn').on('click', this.handleSequenceClick);
   },
