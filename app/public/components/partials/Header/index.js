@@ -1,5 +1,6 @@
-var React = require('react/addons');
-var $     = require('jquery');
+var React          = require('react/addons');
+var $              = require('jquery');
+var SessionActions = require('../../../actions/SessionActions');
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -15,7 +16,7 @@ module.exports = React.createClass({
   },
 
   logout: function () {
-    console.log('logout');
+    SessionActions.destroy();
   },
 
   componentDidMount: function () {
