@@ -56,10 +56,10 @@ var ViewStore = assign({}, EventEmitter.prototype, {
         ViewStore.emitChange();
         break;
 
-      case SessionConstants.AUTH_SUCCESS:
-        setView(ViewConstants.views.SEQUENCES);
-        ViewStore.emitChange();
-        break;
+      // case SessionConstants.AUTH_SUCCESS:
+      //   setView(ViewConstants.views.SEQUENCES);
+      //   ViewStore.emitChange();
+      //   break;
 
       case ApiConstants.REQUEST:
         setLoading(true);

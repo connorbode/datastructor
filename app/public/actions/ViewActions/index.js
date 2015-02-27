@@ -4,7 +4,7 @@ var ApiActions     = require('../ApiActions');
 var SessionActions = require('../SessionActions');
 
 
-module.exports = {
+var ViewActions = {
 
   /**
    * Dispatches a view change
@@ -12,6 +12,7 @@ module.exports = {
    * @param {string} params Parameters to send to the view
    */
   go: function (to) {
+    window.history.pushState({}, to, ViewConstants.paths[to]);
     dispatcher.dispatch({
       actionType: ViewConstants.actions.CHANGE_VIEW,
       view: to
@@ -34,6 +35,8 @@ module.exports = {
         SessionActions.create({
           code:     params.code,
           provider: 'github'
+        }, function () {
+          ViewActions.go(ViewConstants.views.SEQUENCES);
         });
         this.go(ViewConstants.views.LANDING);
         break;
@@ -45,3 +48,5 @@ module.exports = {
   }
 
 };
+
+module.exports = ViewActions;

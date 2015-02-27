@@ -3,7 +3,7 @@ var ApiActions       = require('../ApiActions');
 var SessionConstants = require('../../constants/SessionConstants');
 
 module.exports = {
-  create: function (params) {
+  create: function (params, callback) {
     ApiActions.request({
       url:    '/api/sessions',
       method: 'POST',
@@ -17,6 +17,9 @@ module.exports = {
         actionType: SessionConstants.AUTH_SUCCESS,
         data:       data
       });
+      if (callback) {
+        callback();
+      }
     }).error(function () {
       dispatcher.dispatch({
         actionType: SessionConstants.AUTH_ERROR

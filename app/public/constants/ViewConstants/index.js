@@ -8,6 +8,8 @@ module.exports = {
     FOUR_OH_FOUR: 'FourOhFour'
   },
   paths: {
-    '/auth': 'Auth'
+    'Landing':    '/',
+    'Sequences':  '/sequences',
+    'FourOhFour': '/four-oh-four'
   }
 };
