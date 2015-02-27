@@ -125,7 +125,7 @@ describe('app.controllers.api.sessions', function () {
         session
           .delete('/api/sessions/blah')
           .end(function (err, res) {
-            assert.equal(res.status, 200);
+            assert.equal(res.status, 204);
             helpers.session.getData(session, function (err, sessionData) {
               assert.isUndefined(sessionData.email);
               done();

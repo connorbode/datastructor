@@ -10,6 +10,7 @@ var Session;
 before(function (done) {
   process.env.GITHUB_CLIENT_ID = 'test';
   process.env.GITHUB_CLIENT_SECRET = 'test';
+  process.env.MONGO = 'test';
 
   require('es6-promise').polyfill();
   global.app = {};
