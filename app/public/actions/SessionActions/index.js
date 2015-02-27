@@ -1,6 +1,21 @@
 var dispatcher       = require('../../dispatcher');
 var ApiActions       = require('../ApiActions');
 var SessionConstants = require('../../constants/SessionConstants');
+var cookie           = require('cookie');
+
+function saveSession (data) {
+  var stringData = JSON.stringify(data);
+  var cookieData = cookie.serialize('session', stringData, {
+    path: '/'
+  });
+  document.cookie = cookieData;
+}
+
+function loadSession () {
+  var parsedCookie  = cookie.parse(document.cookie);
+  var sessionCookie = JSON.parse(parsedCookie.session);
+  return sessionCookie;
+}
 
 module.exports = {
   create: function (params, callback) {
@@ -17,6 +32,7 @@ module.exports = {
         actionType: SessionConstants.AUTH_SUCCESS,
         data:       data
       });
+      saveSession(data);
       if (callback) {
         callback();
       }
@@ -25,5 +41,20 @@ module.exports = {
         actionType: SessionConstants.AUTH_ERROR
       });
     });
+  },
+
+  init: function (callback) {
+    var session = loadSession();
+    if (session) {
+      dispatcher.dispatch({
+        actionType: SessionConstants.AUTH_LOADED,
+        data:       session
+      });
+    } else {
+      dispatcher.dispatch({
+        actionType: SessionConstants.AUTH_NONE
+      });
+    }
+    return session;
   }
 };

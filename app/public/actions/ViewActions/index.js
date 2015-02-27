@@ -25,10 +25,17 @@ var ViewActions = {
    * @param {object} params Query string parameters
    */
   loadPath: function (path, params) {
+    var session = SessionActions.init();
+
+    if (!session) {
+      this.go(ViewConstants.views.LANDING);
+      return;
+    }
+
     switch (path) {
 
       case "/":
-        this.go(ViewConstants.views.LANDING);
+        this.go(ViewConstants.views.SEQUENCES);
         break;
 
       case "/auth/github":

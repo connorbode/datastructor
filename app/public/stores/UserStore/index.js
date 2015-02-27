@@ -1,5 +1,4 @@
 var dispatcher       = require('../../dispatcher');
-var cookie           = require('cookie');
 var EventEmitter     = require('events').EventEmitter;
 var assign           = require('object-assign');
 var SessionConstants = require('../../constants/SessionConstants');
@@ -41,19 +40,19 @@ var UserStore = assign({}, EventEmitter.prototype, {
 
   dispatcherIndex: dispatcher.register(function (payload) {
 
-    var email;
-    var emailCookie;
-
     switch (payload.actionType) {
       case SessionConstants.AUTH_SUCCESS:
-        email = payload.data.email;
-        emailCookie = cookie.serialize('email', email);
-        document.cookie = emailCookie;
+        setUser(payload.data);
         UserStore.emitChange();
         break;
 
       case SessionConstants.AUTH_ERROR:
         _authFailed = true;
+        UserStore.emitChange();
+        break;
+
+      case SessionConstants.AUTH_LOADED:
+        setUser(payload.data);
         UserStore.emitChange();
         break;
     }
