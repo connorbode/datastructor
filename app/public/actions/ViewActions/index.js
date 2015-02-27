@@ -27,6 +27,17 @@ var ViewActions = {
   loadPath: function (path, params) {
     var session = SessionActions.init();
 
+    // log the user in
+    if (path === '/auth/github') {
+      SessionActions.create({
+        code:     params.code,
+        provider: 'github'
+      }).success(function () {
+        ViewActions.go(ViewConstants.views.SEQUENCES);
+      });
+    }
+
+    // load landing if not logged in
     if (!session) {
       this.go(ViewConstants.views.LANDING);
       return;
@@ -36,16 +47,6 @@ var ViewActions = {
 
       case "/":
         this.go(ViewConstants.views.SEQUENCES);
-        break;
-
-      case "/auth/github":
-        SessionActions.create({
-          code:     params.code,
-          provider: 'github'
-        }, function () {
-          ViewActions.go(ViewConstants.views.SEQUENCES);
-        });
-        this.go(ViewConstants.views.LANDING);
         break;
 
       case "/sequences":

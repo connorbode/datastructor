@@ -18,8 +18,8 @@ function loadSession () {
 }
 
 module.exports = {
-  create: function (params, callback) {
-    ApiActions.request({
+  create: function (params) {
+    return ApiActions.request({
       url:    '/api/sessions',
       method: 'POST',
       headers: {
@@ -33,9 +33,6 @@ module.exports = {
         data:       data
       });
       saveSession(data);
-      if (callback) {
-        callback();
-      }
     }).error(function () {
       dispatcher.dispatch({
         actionType: SessionConstants.AUTH_ERROR
