@@ -3,9 +3,9 @@ module.exports = {
     CHANGE_VIEW: 'CHANGE_VIEW'
   },
   views: {
-    LANDING:      'Landing',
-    SEQUENCES:    'Sequences',
-    FOUR_OH_FOUR: 'FourOhFour'
+    LANDING:       'Landing',
+    SEQUENCE_LIST: 'SequenceList',
+    FOUR_OH_FOUR:  'FourOhFour'
   },
   paths: {
     'Landing':    '/',

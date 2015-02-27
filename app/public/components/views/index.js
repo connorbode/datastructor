@@ -1,5 +1,5 @@
 module.exports = {
-  FourOhFour: require('./FourOhFour'),
-  Landing:    require('./Landing'),
-  Sequences:  require('./Sequences')
+  FourOhFour:   require('./FourOhFour'),
+  Landing:      require('./Landing'),
+  SequenceList: require('./SequenceList')
 };

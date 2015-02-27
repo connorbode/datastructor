@@ -18,7 +18,7 @@ var PathActions = {
         code:     params.code,
         provider: 'github'
       }).success(function () {
-        ViewActions.go(ViewConstants.views.SEQUENCES);
+        ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
       });
     }
 
@@ -31,11 +31,11 @@ var PathActions = {
     switch (path) {
 
       case "/":
-        ViewActions.go(ViewConstants.views.SEQUENCES);
+        ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
         break;
 
       case "/sequences":
-        ViewActions.go(ViewConstants.views.SEQUENCES);
+        ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
         break;
 
       default: 
