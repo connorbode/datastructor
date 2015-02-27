@@ -42,8 +42,8 @@ module.exports = React.createClass({
         </div>
         <div id="menu" className={menu}>
           <ul>
-            <li><a href='/sequences'>sequences</a></li>
-            <li><a id="logout-btn" href='#'>logout</a></li>
+            <li><a id="sequence-btn">sequences</a></li>
+            <li><a id="logout-btn">logout</a></li>
           </ul>
         </div> 
       </div>
