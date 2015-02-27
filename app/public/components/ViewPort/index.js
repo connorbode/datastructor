@@ -21,7 +21,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
-    ViewStore.addChangeListener(this.updateView)
+    ViewStore.addChangeListener(this.updateView);
   },
 
   componentWillUnmount: function () {
