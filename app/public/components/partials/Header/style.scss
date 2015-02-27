@@ -1,0 +1,60 @@
+.header {
+  h1 {
+    position: absolute;
+    left: 20px;
+    top: 10px;
+    font-family: 'Lobster';
+    color: $color-fade;
+  }
+
+  div.menu-btn {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 30px;
+    background-color: $color-fade;
+    padding: 5px;
+    border-radius: 4px;
+    padding-bottom: 3px;
+    color: white;
+    cursor: pointer;
+    z-index: 2;
+    @include transition(all 0.2s ease-out);
+
+    &:hover {
+      background-color: $color-focus;
+
+      &.active {
+        background-color: $color-fade;
+      }
+    }
+  }
+
+  div.menu {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    background-color: $color-fade;
+    padding: 5px;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 30px;
+    z-index: 1;
+    max-height: 0;
+    color: white;
+    @include transition(all 0.2s ease-out);
+
+    &.active {
+      width: 150px;
+      max-height: 400px;
+    }
+
+    a {
+      color: white; 
+      
+      &:hover {
+        color: $color-focus;
+      }
+    }
+  }
+}

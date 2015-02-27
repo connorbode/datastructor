@@ -1,9 +1,10 @@
-var React = require('react');
+var React  = require('react');
+var Header = require('../../partials/Header');
 
 module.exports = React.createClass({
   render: function () {
     return (
-      <h1>Sequences!</h1>
+      <Header />
     );
   }
 });
