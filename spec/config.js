@@ -12,6 +12,7 @@ before(function (done) {
   process.env.GITHUB_CLIENT_SECRET = 'test';
   process.env.MONGO = 'test';
 
+  require('colors');
   require('es6-promise').polyfill();
   global.app = {};
   require('../app/config')();
