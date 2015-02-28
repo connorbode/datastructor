@@ -1,6 +1,6 @@
 .header {
   h1 {
-    position: absolute;
+    position: fixed;
     left: 20px;
     top: 10px;
     font-family: 'Lobster';
@@ -8,7 +8,7 @@
   }
 
   div.menu-btn {
-    position: absolute;
+    position: fixed;
     right: 20px;
     top: 15px;
     font-size: 30px;
@@ -31,7 +31,7 @@
   }
 
   div.menu {
-    position: absolute;
+    position: fixed;
     right: 20px;
     top: 15px;
     background-color: $color-fade;
