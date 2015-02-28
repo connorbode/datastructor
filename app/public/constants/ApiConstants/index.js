@@ -1,5 +1,5 @@
 module.exports = {
-  REQUEST: 'api.request',
-  SUCCESS: 'api.success',
-  FAILURE: 'api.failure'
+  REQUEST:         'api.request',
+  SUCCESS:         'api.success',
+  FAILURE:         'api.failure'
 };
