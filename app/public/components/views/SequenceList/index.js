@@ -19,8 +19,8 @@ module.exports = React.createClass({
 
   render: function () {
     return (
-      <div className="sequence-wrapper">
-        <div className="sequences">
+      <div className="table-center-wrapper">
+        <div className="table-center sequences">
           <h1>
             <span>sequences</span>
             <i id="add-sequence-btn" className="fa fa-plus-circle"></i>
