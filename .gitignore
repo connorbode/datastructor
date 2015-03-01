@@ -29,3 +29,5 @@ node_modules
 
 # Build directory
 dist
+
+*.sh
