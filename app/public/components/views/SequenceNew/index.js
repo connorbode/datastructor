@@ -1,39 +1,45 @@
-var React            = require('react');
-var SequenceEditor   = require('../../partials/SequenceEditor');
-var Dropdown         = require('react-select');
-var $                = require('jquery');
-var StructureActions = require('../../../actions/StructureActions');
-var StructureStore   = require('../../../stores/StructureStore');
-var _                = require('lodash');
+var React             = require('react');
+var Dropdown          = require('react-select');
+var $                 = require('jquery');
+var StructureActions  = require('../../../actions/StructureActions');
+var StructureStore    = require('../../../stores/StructureStore');
+var SequenceActions   = require('../../../actions/SequenceActions');
+var _                 = require('lodash');
+
+var structure = null;
 
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      list: []
+      list:      []
     };
-  },
-
-  loadList: function () {
-    StructureActions.list();
   },
 
   handleListLoaded: function () {
     this.setState({
-      list: StructureStore.getList()
+      list:      StructureStore.getList()
     });
   },
 
-  _onSelect: function () {
+  createSequence: function () {
+    SequenceActions.create({
+      type: structure,
+      name: $('#sequence-title').val()
+    });
+  },
 
+  _onSelect: function (selection) {
+    structure = selection;
   },
 
   componentDidMount: function () {
     $('#sequence-title').trigger('focus');
-    // this.loadList();
+    $('#create-sequence').on('click', this.createSequence);
     StructureStore.addChangeListener(this.handleListLoaded);
   },
 
   componentWillUnmount: function () {
+    $('#create-sequence').off('click', this.createSequence);
     StructureStore.removeChangeListener(this.handleListLoaded);
   },
 
@@ -50,8 +56,8 @@ module.exports = React.createClass({
         <div className="table-center sequence-new">
           <h1>add a sequence</h1>
           <input id="sequence-title" type="text" placeholder="sequence title" />
-          <Dropdown name="hi" options={options} onChange={this._onSelect} placeholder="sequence structure" />
-          <button>create!</button>
+          <Dropdown options={options} onChange={this._onSelect} placeholder="sequence structure" />
+          <button id="create-sequence">create!</button>
         </div>
       </div>
     );
