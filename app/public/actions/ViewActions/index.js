@@ -21,11 +21,13 @@ var ViewActions = {
    * Dispatches a view change
    * @param {string} to      The view to load
    * @param {string} options Primarily, how to deal with the history state.
+   * @param {string} params  Parameters to send to the new view
    */
-  go: function (to, options) {
+  go: function (to, options, params) {
     var id;
     var state; 
     var stateAction; 
+    var viewPath = ViewConstants.paths[to];
 
     if (!options) {
       options = {
@@ -33,6 +35,19 @@ var ViewActions = {
       };
     }
 
+    // run view specific actions
+    switch (to) {
+      case ViewConstants.views.SEQUENCE_NEW:
+        StructureActions.list();
+        break;
+
+      case ViewConstants.views.SEQUENCE_EDIT:
+        viewPath = viewPath.replace(/:id/, params._id);
+        break;
+
+    }
+
+    // run push action
     stateAction = options.stateAction;
 
     if (stateAction !== ViewConstants.stateActions.NONE) {
@@ -42,22 +57,15 @@ var ViewActions = {
         id:   id
       };
       if (stateAction === ViewConstants.stateActions.REPLACE) {
-        window.history.replaceState({ view: to, id: id }, to, ViewConstants.paths[to]);
+        window.history.replaceState({ view: to, id: id }, to, viewPath);
       } else {
-        window.history.pushState({ view: to, id: id }, to, ViewConstants.paths[to]);
+        window.history.pushState({ view: to, id: id }, to, viewPath);
       }
     }
     dispatcher.dispatch({
       actionType: ViewConstants.actions.CHANGE_VIEW,
       view: to
     });
-
-    // run view specific actions
-    switch (to) {
-      case ViewConstants.views.SEQUENCE_NEW:
-        StructureActions.list();
-        break;
-    }
   }
 
 };
