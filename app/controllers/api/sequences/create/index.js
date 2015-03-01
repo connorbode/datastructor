@@ -7,8 +7,6 @@ module.exports = function (req, res) {
 
     // validate request parameters
     req.checkBody('name', 'invalid name').notEmpty();
-    req.checkBody('data', 'must provide data').notEmpty();
-    req.checkBody('operations', 'must provide operations').notEmpty();
     req.checkBody('type', 'must provide a type').notEmpty();
     app.controllers.checkParams(req, res, function () {
 
