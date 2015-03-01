@@ -5,9 +5,11 @@ var cookie           = require('cookie');
 var ViewActions      = require('../ViewActions');
 var ViewConstants    = require('../../constants/ViewConstants');
 
+var COOKIE_NAME = 'user';
+
 function saveSession (data) {
   var stringData = JSON.stringify(data);
-  var cookieData = cookie.serialize('session', stringData, {
+  var cookieData = cookie.serialize(COOKIE_NAME, stringData, {
     path: '/'
   });
   document.cookie = cookieData;
@@ -15,12 +17,12 @@ function saveSession (data) {
 
 function loadSession () {
   var parsedCookie  = cookie.parse(document.cookie);
-  var sessionCookie = parsedCookie.session ? JSON.parse(parsedCookie.session) : undefined;
+  var sessionCookie = parsedCookie[COOKIE_NAME] ? JSON.parse(parsedCookie[COOKIE_NAME]) : undefined;
   return sessionCookie;
 }
 
 function destroySession () {
-  document.cookie = 'session=';
+  document.cookie = COOKIE_NAME + '=';
 }
 
 module.exports = {
