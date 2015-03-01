@@ -1,6 +1,7 @@
 var dispatcher       = require('../../dispatcher');
 var ViewConstants    = require('../../constants/ViewConstants');
 var StructureActions = require('../StructureActions');
+var SequenceActions  = require('../SequenceActions');
 
 var _id = function () {
   if (window.history.state && window.history.state.id) {
@@ -37,6 +38,10 @@ var ViewActions = {
 
     // run view specific actions
     switch (to) {
+      case ViewConstants.views.SEQUENCE_LIST:
+        SequenceActions.list();
+        break;
+
       case ViewConstants.views.SEQUENCE_NEW:
         StructureActions.list();
         break;

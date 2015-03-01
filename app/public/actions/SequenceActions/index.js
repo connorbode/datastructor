@@ -27,6 +27,26 @@ var SequenceActions = {
         actionType: SequenceConstants.CREATE_ERROR
       });
     });
+  },
+
+  list: function () {
+    ApiActions.request({
+      method:   'GET',
+      url:      '/api/sequences',
+      dataType: 'json',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).success(function (data) {
+      dispatcher.dispatch({
+        actionType: SequenceConstants.LIST_SUCCESS,
+        data: data
+      });
+    }).error(function () {
+      dispatcher.dispatch({
+        actionType: SequenceConstants.LIST_ERROR
+      });
+    });
   }
 };
 
