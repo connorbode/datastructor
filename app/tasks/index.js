@@ -4,6 +4,7 @@ module.exports = {
   deleteSequence: require('./delete-sequence'),
   getAccount:     require('./get-account'),
   getSequence:    require('./get-sequence'),
+  getStructure:   require('./get-structure'),
   listSequences:  require('./list-sequences'),
   listStructures: require('./list-structures'),
   login:          require('./login'),
