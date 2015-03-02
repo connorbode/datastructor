@@ -2,8 +2,10 @@
   h1 {
     position: fixed;
     font-family: Lobster;
-    left: 20px;
-    top: 40px;
+    top: 10px;
     color: $color-focus;
-  } 
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+  }
 }
