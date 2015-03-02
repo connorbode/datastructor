@@ -21,5 +21,25 @@ module.exports = {
         actionType: StructureConstants.LIST_ERROR
       })
     });
+  },
+
+  get: function (id) {
+    ApiActions.request({
+      url:    '/api/structures/' + id,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      dataType: 'json'
+    }).success(function (data) {
+      dispatcher.dispatch({
+        actionType: StructureConstants.GET_SUCCESS,
+        data:       data
+      });
+    }).error(function (err) {
+      dispatcher.dispatch({
+        actionType: StructureConstants.GET_ERROR
+      });
+    });
   }
 };

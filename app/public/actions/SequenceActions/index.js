@@ -66,7 +66,7 @@ var SequenceActions = {
   },
 
   get: function (id) {
-    ApiActions.request({
+    return ApiActions.request({
       method:   'GET',
       url:      '/api/sequences/' + id,
       dataType: 'json',

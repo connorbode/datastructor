@@ -3,6 +3,7 @@ module.exports = function (id, callback) {
     .findOne({
       _id: id
     })
+    .
     .lean()
     .exec(function (err, sequence) {
       if (!sequence) { return callback('sequence not found'); }

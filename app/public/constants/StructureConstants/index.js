@@ -1,4 +1,6 @@
 module.exports = {
   LIST_SUCCESS: 'structure.list.success',
-  LIST_ERROR:   'structure.list.error'
+  LIST_ERROR:   'structure.list.error',
+  GET_SUCCESS:  'structure.get.success',
+  GET_ERROR:    'structure.get.error'
 };

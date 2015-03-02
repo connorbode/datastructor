@@ -6,13 +6,24 @@ var _                  = require('lodash');
 
 var CHANGE_EVENT = 'change';
 
+var _structures = [];
+var _structure = {};
+
 function updateList (list) {
   _structures = list;
+}
+
+function setStructure(structure) {
+  _structure = structure;
 }
 
 var StructureStore = assign({}, EventEmitter.prototype, {
   getList: function () {
     return _structures;
+  },
+
+  getStructure: function () {
+    return _structure;
   },
 
   emitChange: function () {
@@ -32,6 +43,11 @@ var StructureStore = assign({}, EventEmitter.prototype, {
     switch (payload.actionType) {
       case StructureConstants.LIST_SUCCESS:
         updateList(payload.data);
+        StructureStore.emitChange();
+        break;
+
+      case StructureConstants.GET_SUCCESS:
+        setStructure(payload.data);
         StructureStore.emitChange();
         break;
     }
