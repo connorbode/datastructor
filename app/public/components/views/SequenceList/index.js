@@ -13,6 +13,13 @@ module.exports = React.createClass({
     };
   },
 
+  handleSequenceClick: function (e) {
+    var id = e.target.getAttribute('data-id');
+    ViewActions.go(ViewConstants.views.SEQUENCE_EDIT, {
+      stateAction: ViewConstants.stateActions.PUSH
+    }, { _id: id });
+  },
+
   handleAddSequence: function () {
     ViewActions.go(ViewConstants.views.SEQUENCE_NEW);
   },
@@ -104,7 +111,7 @@ module.exports = React.createClass({
             <ul>
               {this.state.sequences.map(function (sequence) {
                 return (
-                  <li key={sequence._id}>
+                  <li key={sequence._id} data-id={sequence._id} onClick={this.handleSequenceClick}>
                     <span>{sequence.name}</span>
                     <i className="fa fa-times-circle" 
                        onClick={this.handleDeleteSequence} 

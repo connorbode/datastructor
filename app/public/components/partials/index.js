@@ -1,4 +1,5 @@
 module.exports = {
   Header:         require('./Header'),
-  SequenceEditor: require('./SequenceEditor')
+  SequenceEditor: require('./SequenceEditor'),
+  SequenceViewer: require('./SequenceViewer')
 };
