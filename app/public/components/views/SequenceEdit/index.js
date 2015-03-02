@@ -1,7 +1,10 @@
 var React = require('react');
+var SequenceViewer = require('../../partials/SequenceViewer');
 
 module.exports = React.createClass({
   render: function () {
-    return (<h1>Sequence!!</h1>);
+    return (
+      <SequenceViewer />
+    );
   }
 });
