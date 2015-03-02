@@ -31,6 +31,7 @@ before(function (done) {
 
 before(function (done) {
   global.chai = require('chai');
+  chai.use(require('chai-as-promised'));
   global.assert = chai.assert;
   global.expect = chai.expect;
   global.should = chai.should();
