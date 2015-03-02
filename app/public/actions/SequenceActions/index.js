@@ -47,6 +47,22 @@ var SequenceActions = {
         actionType: SequenceConstants.LIST_ERROR
       });
     });
+  },
+
+  delete: function (id) {
+    ApiActions.request({
+      method: 'DELETE',
+      url:    '/api/sequences/' + id
+    }).success(function (data) {
+      dispatcher.dispatch({
+        actionType: SequenceConstants.DELETE_SUCCESS,
+        id: id
+      });
+    }).error(function () {
+      dispatcher.dispatch({
+        actionType: SequenceConstants.DELETE_ERROR
+      });
+    });
   }
 };
 

@@ -102,7 +102,7 @@ button {
 /* COMMONLY USED CLASSES */
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .table-center-wrapper {
