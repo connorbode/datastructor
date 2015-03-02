@@ -1,4 +1,4 @@
-describe('app.tasks.getStructures', function () {
+describe('app.tasks.listStructures', function () {
   it('returns the appropriate data structures', function (done) {
     new Promise(function (resolve, reject) {
       app.models.DataStructure.create({
@@ -10,7 +10,7 @@ describe('app.tasks.getStructures', function () {
         resolve(struct);
       });
     }).then(function (struct) {
-      app.tasks.getStructures('email', function (err, structures) {
+      app.tasks.listStructures('email', function (err, structures) {
         assert.equal(structures.length, 1);
         assert.equal(structures[0].name, struct.name);
         assert.equal(structures[0].validation.name, struct.validation.name);
