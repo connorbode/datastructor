@@ -4,7 +4,7 @@ describe('app.controllers.api.sequences.show', function () {
     session
       .get('/api/sequences/1')
       .end(function (err, res) {
-        assert.equal(res.status, 400);
+        assert.equal(res.status, 401);
         assert.equal(res.body.errors[0], 'not logged in');
         done();
       });

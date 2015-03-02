@@ -1,4 +1,4 @@
-describe('app.controllers.api.index', function () {
+describe('app.controllers.api.sequences.index', function () {
 
   var ids = {};
 
@@ -70,7 +70,7 @@ describe('app.controllers.api.index', function () {
     session
       .get('/api/sequences')
       .end(function (err, res) {
-        assert.equal(res.status, 400);
+        assert.equal(res.status, 401);
         done();
       });
   });

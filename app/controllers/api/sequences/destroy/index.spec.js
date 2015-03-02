@@ -4,7 +4,7 @@ describe('app.controllers.api.sequences.destroy', function () {
     session
       .delete('/api/sequences/1')
       .end(function (err, res) {
-        assert.equal(res.status, 400);
+        assert.equal(res.status, 401);
         assert.isDefined(res.body.errors);
         done();
       });
