@@ -7,9 +7,14 @@ var _                 = require('lodash');
 var CHANGE_EVENT = 'change';
 
 var _sequences = [];
+var _sequence  = null;
 
 var setSequences = function (sequences) {
   _sequences = sequences;
+};
+
+var setSequence = function (sequence) {
+  _sequence = sequence;
 };
 
 var removeSequence = function (id) {
@@ -25,6 +30,10 @@ var SequenceStore = assign({}, EventEmitter.prototype, {
 
   getSequences: function () {
     return _sequences;
+  },
+
+  getSequence: function () {
+    return _sequence;
   },
 
   addChangeListener: function (callback) {
@@ -47,6 +56,10 @@ var SequenceStore = assign({}, EventEmitter.prototype, {
         removeSequence(payload.id);
         SequenceStore.emitChange();
         break;
+
+      case SequenceConstants.GET_SUCCESS:
+        setSequence(payload.data);
+        SequenceStore.emitChange();
     }
 
     return true;
