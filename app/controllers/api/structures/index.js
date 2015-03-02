@@ -1,3 +1,4 @@
 module.exports = {
-  index: require('./index/index.js')
+  index: require('./index/index.js'),
+  show:  require('./show')
 };
