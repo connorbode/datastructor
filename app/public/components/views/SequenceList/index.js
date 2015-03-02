@@ -83,10 +83,14 @@ module.exports = React.createClass({
       <div>
         <div className={deleteSequenceClass}>
           <div className="table-center">
-            <div>Are you sure you want to delete <b>{deleteName}</b>?</div>
             <div>
-              <button onClick={this.handleCancelDelete}>Cancel</button>
-              <button onClick={this.handleConfirmDelete}>Confirm</button>
+              <span>Delete </span>
+              <span className="bold">{deleteName}</span>
+              <span>?</span>
+            </div>
+            <div>
+              <button onClick={this.handleCancelDelete}>No</button>
+              <button onClick={this.handleConfirmDelete}>Yes</button>
             </div>
           </div>
         </div>
