@@ -16,7 +16,7 @@ module.exports = {
       })
       .error(function (xhr) {
         dispatcher.dispatch({
-          actionType: ApiConstants.FAILURE
+          actionType: ApiConstants.ERROR
         });
         if (xhr.status === 401) {
           SessionActions.clean();
