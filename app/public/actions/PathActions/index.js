@@ -14,6 +14,7 @@ var PathActions = {
     var actionOptions = {
       stateAction: ViewConstants.stateActions.REPLACE
     };
+    var id;
 
     // log the user in
     if (path === '/auth/github') {
@@ -33,17 +34,27 @@ var PathActions = {
 
     switch (path) {
 
+      // landing page -- forward to list sequences
       case "/":
         ViewActions.go(ViewConstants.views.SEQUENCE_LIST, actionOptions);
         break;
 
+      // list sequences
       case "/sequences":
         ViewActions.go(ViewConstants.views.SEQUENCE_LIST, actionOptions);
         break;
 
+      // add sequence
       case "/sequences/new":
         ViewActions.go(ViewConstants.views.SEQUENCE_NEW, actionOptions);
         break;
+
+      // edit sequence
+      case path.match(/\/sequences\/[a-z0-9]*\/edit/)[0]:
+        id = path.match(/\/sequences\/([a-z0-9]*)\/edit/)[1];
+        ViewActions.go(ViewConstants.views.SEQUENCE_EDIT, actionOptions, { _id: id });
+        break;
+
 
       default: 
         ViewActions.go(ViewConstants.views.FOUR_OH_FOUR, actionOptions);
