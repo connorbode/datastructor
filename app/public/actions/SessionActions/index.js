@@ -78,5 +78,13 @@ module.exports = {
         actionType: SessionConstants.LOGOUT_ERROR
       });
     });
+  },
+
+  clean: function () {
+    destroySession();
+    dispatcher.dispatch({
+      actionType: SessionConstants.LOGOUT_SUCCESS
+    });
+    ViewActions.go(ViewConstants.views.LANDING);
   }
 };

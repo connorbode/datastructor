@@ -1,9 +1,10 @@
-var dispatcher   = require('../../dispatcher');
-var $            = require('jquery');
-var ApiConstants = require('../../constants/ApiConstants');
+var dispatcher     = require('../../dispatcher');
+var $              = require('jquery');
+var ApiConstants   = require('../../constants/ApiConstants');
 
 module.exports = {
   request: function (params) {
+    var SessionActions = require('../SessionActions');
     dispatcher.dispatch({
       actionType: ApiConstants.REQUEST
     });
@@ -13,10 +14,13 @@ module.exports = {
           actionType: ApiConstants.SUCCESS
         });
       })
-      .error(function (err) {
+      .error(function (xhr) {
         dispatcher.dispatch({
           actionType: ApiConstants.FAILURE
         });
+        if (xhr.status === 401) {
+          SessionActions.clean();
+        }
       });
   }
 };
