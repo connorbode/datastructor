@@ -48,7 +48,7 @@ describe('app.controllers.structures.show', function () {
             expect(res.body.name).to.equal('dave');
             expect(res.body.operations.length).to.equal(1);
             done();
-          })
+          });
       });
     });
   });

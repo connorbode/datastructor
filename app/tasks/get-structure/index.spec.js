@@ -39,7 +39,7 @@ describe('app.tasks.getStructure', function () {
           });
       });
     }).then(function () {
-      return app.tasks.getStructure(data.struct._id)
+      return app.tasks.getStructure(data.struct._id);
     }).then(function (struct) {
       assert.equal(data.struct.name, struct.name);
       assert.equal(struct.validation.name, struct.validation.name);
