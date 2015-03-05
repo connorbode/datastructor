@@ -53,6 +53,12 @@ module.exports = React.createClass({
       })
       .attr('y2', function () {
         return getOffset.apply(this, ['y2', 'y']);
+      })
+      .attr('x', function () {
+        return getOffset.apply(this, ['x', 'x']);
+      })
+      .attr('y', function () {
+        return getOffset.apply(this, ['y', 'y']);
       });
   },
 
