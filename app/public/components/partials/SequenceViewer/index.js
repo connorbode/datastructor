@@ -35,12 +35,24 @@ module.exports = React.createClass({
     }
 
     d3.event.sourceEvent.stopPropagation();
-    svg.selectAll('circle.' + dragClass)
+    svg.selectAll('.' + dragClass)
       .attr('cx', function () {
         return getOffset.apply(this, ['cx', 'x']);
       })
       .attr('cy', function () {
         return getOffset.apply(this, ['cy', 'y']);
+      })
+      .attr('x1', function () {
+        return getOffset.apply(this, ['x1', 'x']);
+      })
+      .attr('x2', function () {
+        return getOffset.apply(this, ['x2', 'x']);
+      })
+      .attr('y1', function () {
+        return getOffset.apply(this, ['y1', 'y']);
+      })
+      .attr('y2', function () {
+        return getOffset.apply(this, ['y2', 'y']);
       });
   },
 
@@ -63,6 +75,8 @@ module.exports = React.createClass({
       .on('drag', this.handleDrag)
       .on('dragstart', this.handleDragStart)
       .on('dragend', this.handleDragEnd);
+    svg = d3.select('svg');
+    svg.call(drag);
 
   },
 
@@ -76,8 +90,6 @@ module.exports = React.createClass({
       { id: 3 }
     ];
 
-    svg = d3.select('svg');
-    svg.call(drag);
     svg.selectAll('circle')
       .data(data)
       .enter()
