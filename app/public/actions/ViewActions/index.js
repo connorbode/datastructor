@@ -51,6 +51,11 @@ var ViewActions = {
         SequenceActions.get(params._id).success(function (data) {
           StructureActions.get(data.type);
         });
+        break;
+
+      case ViewConstants.views.DATA_STRUCTURE_LIST:
+        StructureActions.list();
+        break;
       
       break;
 

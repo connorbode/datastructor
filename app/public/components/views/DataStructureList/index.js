@@ -1,9 +1,8 @@
-var React                 = require('react/addons');
-var ViewActions           = require('../../../actions/ViewActions');
-var ViewConstants         = require('../../../constants/ViewConstants');
-var _                     = require('lodash');
-var DataStructureStore    = require('../../../stores/StructureStore');
-var DataStructureActions  = require('../../../actions/StructureActions');
+var React             = require('react/addons');
+var ViewActions       = require('../../../actions/ViewActions');
+var ViewConstants     = require('../../../constants/ViewConstants');
+var StructureStore    = require('../../../stores/StructureStore');
+var StructureActions  = require('../../../actions/StructureActions');
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -26,7 +25,7 @@ module.exports = React.createClass({
 
   handleDataStructureListLoaded: function () {
     this.setState({
-      dataStructures: DataStructureStore.getDataStructures()
+      dataStructures: StructureStore.getList()
     });
   },
 
@@ -58,11 +57,11 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
-    // DataStructureStore.addChangeListener(this.handleDataStructureListLoaded);
+    StructureStore.addChangeListener(this.handleDataStructureListLoaded);
   },
 
   componentWillUnmount: function () {
-    // DataStructureStore.removeChangeListener(this.handleDataStructureListLoaded);
+    StructureStore.removeChangeListener(this.handleDataStructureListLoaded);
   },
 
   render: function () {
