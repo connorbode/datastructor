@@ -1,5 +1,6 @@
 module.exports = {
   addSequence:    require('./add-sequence'),
+  addStructure:   require('./add-structure'),
   auth:           require('./auth'),
   deleteSequence: require('./delete-sequence'),
   getAccount:     require('./get-account'),
