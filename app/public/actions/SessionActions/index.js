@@ -22,7 +22,7 @@ function loadSession () {
 }
 
 function destroySession () {
-  document.cookie = COOKIE_NAME + '=';
+  document.cookie = COOKIE_NAME + '=; path=/;';
 }
 
 module.exports = {
