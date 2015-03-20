@@ -75,13 +75,13 @@ module.exports = React.createClass({
 
     var deleteSequenceClass = cx({
       'table-center-wrapper': true,
-      'delete-result':      true,
+      'delete-result':        true,
       'hide':                 !this.state.delete
     });
 
     var deleteSequenceOverlayClass = cx({
       'delete-result-overlay': true,
-      'hide':                    !this.state.delete
+      'hide':                  !this.state.delete
     });
 
     var deleteName = this.state.delete ? this.state.delete.name : null;
