@@ -1,5 +1,4 @@
 var React          = require('react/addons');
-var $              = require('jquery');
 var SessionActions = require('../../../actions/SessionActions');
 var ViewActions    = require('../../../actions/ViewActions');
 var ViewConstants  = require('../../../constants/ViewConstants');
@@ -39,14 +38,18 @@ module.exports = React.createClass({
     ViewActions.go(ViewConstants.views.SEQUENCE_LIST);
   },
 
+  handleDataStructureClick: function () {
+    alert('not implemented');
+  },
+
   componentDidMount: function () {
-    $('#menu-btn').on('click', this.handleMenuClick);
-    $('#menu').on({
-      'mouseout':  this.handleMenuMouseOut,
-      'mouseover': this.handleMenuMouseOver
-    });
-    $('#logout-btn').on('click', this.handleLogoutClick);
-    $('#sequence-btn').on('click', this.handleSequenceClick);
+    var menu = document.getElementById('menu');
+    menu.addEventListener('mouseout', this.handleMenuMouseOut);
+    menu.addEventListener('mouseover', this.handleMenuMouseOver);
+    document.getElementById('menu-btn').addEventListener('click', this.handleMenuClick);
+    document.getElementById('logout-btn').addEventListener('click', this.handleLogoutClick);
+    document.getElementById('sequence-btn').addEventListener('click', this.handleSequenceClick);
+    document.getElementById('data-structure-btn').addEventListener('click', this.handleDataStructureClick);
   },
 
   render: function () {
@@ -72,6 +75,7 @@ module.exports = React.createClass({
         <div id="menu" className={menu}>
           <ul>
             <li><a id="sequence-btn">sequences</a></li>
+            <li><a id="data-structure-btn">data structures</a></li>
             <li><a id="logout-btn">logout</a></li>
           </ul>
         </div> 
