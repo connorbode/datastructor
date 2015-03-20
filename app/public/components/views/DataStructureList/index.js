@@ -2,8 +2,8 @@ var React                 = require('react/addons');
 var ViewActions           = require('../../../actions/ViewActions');
 var ViewConstants         = require('../../../constants/ViewConstants');
 var _                     = require('lodash');
-var DataStructureStore    = require('../../../stores/DataStructureStore');
-var DataStructureActions  = require('../../../actions/DataStructureActions');
+var DataStructureStore    = require('../../../stores/StructureStore');
+var DataStructureActions  = require('../../../actions/StructureActions');
 
 module.exports = React.createClass({
   getInitialState: function () {

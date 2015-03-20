@@ -1,6 +1,6 @@
-var dispatcher         = require('../../dispatcher');
-var ApiActions        = require('../ApiActions');
-var StructureConstants = require('../../constants/StructureConstants');
+var dispatcher          = require('../../dispatcher');
+var ApiActions          = require('../ApiActions');
+var StructureConstants  = require('../../constants/StructureConstants');
 
 module.exports = {
   list: function () {
