@@ -39,7 +39,7 @@ module.exports = React.createClass({
   },
 
   handleDataStructureClick: function () {
-    alert('not implemented');
+    ViewActions.go(ViewConstants.views.DATA_STRUCTURE_LIST);
   },
 
   componentDidMount: function () {

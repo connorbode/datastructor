@@ -69,18 +69,18 @@ module.exports = React.createClass({
     var cx = React.addons.classSet;
 
     var noSequenceClass = cx({
-      'no-sequences': true,
+      'no-results': true,
       'hide':         this.state.sequences.length !== 0
     });
 
     var deleteSequenceClass = cx({
       'table-center-wrapper': true,
-      'delete-sequence':      true,
+      'delete-result':      true,
       'hide':                 !this.state.delete
     });
 
     var deleteSequenceOverlayClass = cx({
-      'delete-sequence-overlay': true,
+      'delete-result-overlay': true,
       'hide':                    !this.state.delete
     });
 
@@ -103,7 +103,7 @@ module.exports = React.createClass({
         </div>
         <div className={deleteSequenceOverlayClass}></div>
         <div className="table-center-wrapper">
-          <div className="table-center sequences">
+          <div className="table-center results-list">
             <h1>
               <span>sequences</span>
               <i onClick={this.handleAddSequence} className="fa fa-plus-circle"></i>

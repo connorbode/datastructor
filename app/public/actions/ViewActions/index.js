@@ -51,7 +51,8 @@ var ViewActions = {
         SequenceActions.get(params._id).success(function (data) {
           StructureActions.get(data.type);
         });
-        break;
+      
+      break;
 
     }
 

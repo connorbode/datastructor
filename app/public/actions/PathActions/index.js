@@ -66,6 +66,10 @@ var PathActions = {
         ViewActions.go(ViewConstants.views.SEQUENCE_EDIT, actionOptions, { _id: matches.editSequence.id });
         break;
 
+      // list data structures
+      case "/data-structures":
+        ViewActions.go(ViewConstants.views.DATA_STRUCTURE_LIST, actionOptions);
+        break;
 
       default: 
         ViewActions.go(ViewConstants.views.FOUR_OH_FOUR, actionOptions);

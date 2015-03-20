@@ -3,11 +3,12 @@ module.exports = {
     CHANGE_VIEW: 'CHANGE_VIEW'
   },
   views: {
-    FOUR_OH_FOUR:  'FourOhFour',
-    LANDING:       'Landing',
-    SEQUENCE_LIST: 'SequenceList',
-    SEQUENCE_NEW:  'SequenceNew',
-    SEQUENCE_EDIT: 'SequenceEdit'
+    DATA_STRUCTURE_LIST:  'DataStructureList',
+    FOUR_OH_FOUR:         'FourOhFour',
+    LANDING:              'Landing',
+    SEQUENCE_LIST:        'SequenceList',
+    SEQUENCE_NEW:         'SequenceNew',
+    SEQUENCE_EDIT:        'SequenceEdit'
   },
   paths: {
     'DataStructureList':  '/data-structures',
