@@ -122,7 +122,7 @@ module.exports = React.createClass({
                 );
               }.bind(this))}
             </ul>
-            <div className={noDataStructureClass}>You don&quot;t have any data structures!</div>
+            <div className={noDataStructureClass}>You don&rsquo;t have any data structures!</div>
           </div>
         </div>
       </div>

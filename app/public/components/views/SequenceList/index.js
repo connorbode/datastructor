@@ -122,7 +122,7 @@ module.exports = React.createClass({
                 );
               }.bind(this))}
             </ul>
-            <div className={noSequenceClass}>You don&quot;t have any sequences!</div>
+            <div className={noSequenceClass}>You don&rsquo;t have any sequences!</div>
           </div>
         </div>
       </div>
