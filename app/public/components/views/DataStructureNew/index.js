@@ -52,10 +52,9 @@ module.exports = React.createClass({
     }, []);
     return (
       <div className="table-center-wrapper">
-        <div className="table-center sequence-new">
-          <h1>add a sequence</h1>
-          <input id="sequence-title" type="text" placeholder="sequence title" />
-          <Dropdown options={options} onChange={this._onSelect} placeholder="sequence structure" />
+        <div className="table-center item-new">
+          <h1>add a data structure</h1>
+          <input id="structure-title" type="text" placeholder="title" />
           <button id="create-sequence">create!</button>
         </div>
       </div>

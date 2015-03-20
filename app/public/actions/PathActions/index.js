@@ -71,6 +71,11 @@ var PathActions = {
         ViewActions.go(ViewConstants.views.DATA_STRUCTURE_LIST, actionOptions);
         break;
 
+      // add data structure
+      case "/data-structures/new":
+        ViewActions.go(ViewConstants.views.DATA_STRUCTURE_NEW, actionOptions);
+        break;
+
       default: 
         ViewActions.go(ViewConstants.views.FOUR_OH_FOUR, actionOptions);
         break;

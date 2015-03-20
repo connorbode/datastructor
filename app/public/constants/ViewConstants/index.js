@@ -4,6 +4,7 @@ module.exports = {
   },
   views: {
     DATA_STRUCTURE_LIST:  'DataStructureList',
+    DATA_STRUCTURE_NEW:   'DataStructureNew',
     FOUR_OH_FOUR:         'FourOhFour',
     LANDING:              'Landing',
     SEQUENCE_LIST:        'SequenceList',
@@ -12,6 +13,7 @@ module.exports = {
   },
   paths: {
     'DataStructureList':  '/data-structures',
+    'DataStructureNew':   '/data-structures/new',
     'FourOhFour':         '/four-oh-four',
     'Landing':            '/',
     'SequenceList':       '/sequences',

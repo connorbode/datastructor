@@ -1,5 +1,6 @@
 module.exports = {
   DataStructureList:  require('./DataStructureList'),
+  DataStructureNew:   require('./DataStructureNew'),
   FourOhFour:         require('./FourOhFour'),
   Landing:            require('./Landing'),
   SequenceEdit:       require('./SequenceEdit'),
