@@ -14,7 +14,7 @@ var PathActions = {
     var actionOptions = {
       stateAction: ViewConstants.stateActions.REPLACE
     };
-    var id;
+    var matchers, matches;
 
     // log the user in
     if (path === '/auth/github') {
@@ -31,6 +31,18 @@ var PathActions = {
       ViewActions.go(ViewConstants.views.LANDING, actionOptions);
       return;
     }
+
+    // run path matchers
+    matchers = {
+      editSequence: path.match(/\/sequences\/([a-z0-9]*)\/edit/)
+    };
+
+    matches = {
+      editSequence: {
+        match:    matchers.editSequence ? matchers.editSequence[0] : '',
+        id:       matchers.editSequence ? matchers.editSequence[1] : null
+      }
+    };
 
     switch (path) {
 
@@ -50,9 +62,8 @@ var PathActions = {
         break;
 
       // edit sequence
-      case path.match(/\/sequences\/[a-z0-9]*\/edit/)[0]:
-        id = path.match(/\/sequences\/([a-z0-9]*)\/edit/)[1];
-        ViewActions.go(ViewConstants.views.SEQUENCE_EDIT, actionOptions, { _id: id });
+      case matches.editSequence.match:
+        ViewActions.go(ViewConstants.views.SEQUENCE_EDIT, actionOptions, { _id: matches.editSequence.id });
         break;
 
 
