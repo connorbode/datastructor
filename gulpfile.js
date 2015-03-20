@@ -18,6 +18,7 @@ var sass        = require('gulp-sass');
 var source      = require('vinyl-source-stream');
 var streamify   = require('gulp-streamify');
 var watch       = require('gulp-watch');
+var watchify    = require('watchify');
 
 var options = minimist(process.argv.slice(2));
 
@@ -72,16 +73,27 @@ gulp.task('clean', function (callback) {
  * Compiles the client javascript
  */
 gulp.task('browserify', function () {
-  var b = browserify({ debug: true });
-  b.transform(reactify);
-  b.add('./app/public/app.js');
-  b.plugin('minifyify', { map: 'app.js.map', output: __dirname + '/dist/public/app.js.map' });
+  var bundler = browserify({ 
+    debug:      true,
+    transform:  [ reactify ],
+    entries:    [ './app/public/app.js' ],
+  });
+  bundler.plugin('minifyify', { map: 'app.js.map', output: __dirname + '/dist/public/app.js.map' });
+  var watcher = watchify(bundler);
 
-  return b.bundle()
+  return watcher
     .on('error', function (err) {
       console.log(err.message);
       this.emit('end');
     })
+    .on('update', function () {
+      console.log('updating bundle');
+      watcher.bundle()
+        .pipe(source('public/app.js'))
+        .pipe(gulp.dest('./dist/'));
+      console.log('updated bundle!');
+    })
+    .bundle()
     .pipe(source('public/app.js'))
     .pipe(gulp.dest('./dist/'));
 });
@@ -150,7 +162,6 @@ gulp.task('nodemon', ['build'], function (done) {
  * Development task
  */
 gulp.task('watch', function () {
-  gulp.watch(['app/public/**/*.js'], ['browserify']);
   gulp.watch(['app/public/index.html'], ['copy-client']);
   gulp.watch(['app/public/**/*.scss'], ['sass']);
 });
