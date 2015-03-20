@@ -1,6 +1,7 @@
 var dispatcher          = require('../../dispatcher');
 var ApiActions          = require('../ApiActions');
 var StructureConstants  = require('../../constants/StructureConstants');
+var ViewConstants       = require('../../constants/ViewConstants');
 
 module.exports = {
   list: function () {
@@ -44,6 +45,8 @@ module.exports = {
   },
 
   create: function (params) {
+    var ViewActions = require('../ViewActions');
+
     ApiActions.request({
       url:      '/api/structures/',
       method:   'POST',
@@ -56,7 +59,10 @@ module.exports = {
       dispatcher.dispatch({
         actionType: StructureConstants.CREATE_SUCCESS,
         data:       data
-      })
+      });
+      ViewActions.go(ViewConstants.views.DATA_STRUCTURE_EDIT, {
+        stateAction: ViewConstants.stateActions.PUSH
+      }, data);
     }).error(function (err) {
       dispatcher.dispatch({
         actionType: StructureConstants.CREATE_ERROR

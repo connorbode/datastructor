@@ -56,6 +56,10 @@ var ViewActions = {
       case ViewConstants.views.DATA_STRUCTURE_LIST:
         StructureActions.list();
         break;
+
+      case ViewConstants.views.DATA_STRUCTURE_EDIT:
+        viewPath = viewPath.replace(/:id/, params._id);
+        break;
       
       break;
 

@@ -34,13 +34,18 @@ var PathActions = {
 
     // run path matchers
     matchers = {
-      editSequence: path.match(/\/sequences\/([a-z0-9]*)\/edit/)
+      editSequence:   path.match(/\/sequences\/([a-z0-9]*)\/edit/),
+      editStructure:  path.match(/\/data-structures\/([a-z0-9]*)\/edit/)
     };
 
     matches = {
       editSequence: {
         match:    matchers.editSequence ? matchers.editSequence[0] : '',
         id:       matchers.editSequence ? matchers.editSequence[1] : null
+      },
+      editStructure: {
+        match:    matchers.editStructure ? matchers.editStructure[0] : '',
+        id:       matchers.editStructure ? matchers.editStructure[1] : null
       }
     };
 
@@ -74,6 +79,11 @@ var PathActions = {
       // add data structure
       case "/data-structures/new":
         ViewActions.go(ViewConstants.views.DATA_STRUCTURE_NEW, actionOptions);
+        break;
+
+      // edit data structure
+      case matches.editStructure.match:
+        ViewActions.go(ViewConstants.views.DATA_STRUCTURE_EDIT, actionOptions, { _id: matches.editStructure.id });
         break;
 
       default: 

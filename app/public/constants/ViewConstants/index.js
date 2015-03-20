@@ -3,6 +3,7 @@ module.exports = {
     CHANGE_VIEW: 'CHANGE_VIEW'
   },
   views: {
+    DATA_STRUCTURE_EDIT:  'DataStructureEdit',
     DATA_STRUCTURE_LIST:  'DataStructureList',
     DATA_STRUCTURE_NEW:   'DataStructureNew',
     FOUR_OH_FOUR:         'FourOhFour',
@@ -12,6 +13,7 @@ module.exports = {
     SEQUENCE_EDIT:        'SequenceEdit'
   },
   paths: {
+    'DataStructureEdit':  '/data-structures/:id/edit',
     'DataStructureList':  '/data-structures',
     'DataStructureNew':   '/data-structures/new',
     'FourOhFour':         '/four-oh-four',
