@@ -141,7 +141,7 @@ gulp.task('nodemon', ['build'], function (done) {
   return nodemon({
     script: './dist/index.js',
     ext: 'js',
-    ignore: ['dist/**/*', 'app/public/**/*']
+    ignore: ['dist/**/*', 'app/public/**/*', 'coverage/**/*', 'doc/**/*', 'node_modules/**/*', 'spec/**/*']
   }).on('change', ['lint-server', 'copy-server'])
     .on('start', ['watch']);
 });
