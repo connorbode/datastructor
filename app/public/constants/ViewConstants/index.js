@@ -10,11 +10,12 @@ module.exports = {
     SEQUENCE_EDIT: 'SequenceEdit'
   },
   paths: {
-    'FourOhFour':   '/four-oh-four',
-    'Landing':      '/',
-    'SequenceList': '/sequences',
-    'SequenceNew':  '/sequences/new',
-    'SequenceEdit': '/sequences/:id/edit'
+    'DataStructureList':  '/data-structures',
+    'FourOhFour':         '/four-oh-four',
+    'Landing':            '/',
+    'SequenceList':       '/sequences',
+    'SequenceNew':        '/sequences/new',
+    'SequenceEdit':       '/sequences/:id/edit'
   },
   stateActions: {
     NONE:    'view.stateActions.none',
