@@ -1,11 +1,11 @@
 var React             = require('react');
 var Dropdown          = require('react-select');
-var $                 = require('jquery');
 var StructureActions  = require('../../../actions/StructureActions');
 var StructureStore    = require('../../../stores/StructureStore');
-var _                 = require('lodash');
 
 var structure = null;
+var titleElem;
+var createBtnElem;
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -20,10 +20,9 @@ module.exports = React.createClass({
     });
   },
 
-  createSequence: function () {
-    SequenceActions.create({
-      type: structure,
-      name: $('#sequence-title').val()
+  createStructure: function () {
+    StructureActions.create({
+      name: titleElem.value
     });
   },
 
@@ -32,18 +31,20 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
-    $('#sequence-title').trigger('focus');
-    $('#create-sequence').on('click', this.createSequence);
+    titleElem     = document.getElementById('structure-title');
+    createBtnElem = document.getElementById('create-btn');
+    titleElem.focus();
+    createBtnElem.addEventListener('click', this.createStructure);
     StructureStore.addChangeListener(this.handleListLoaded);
   },
 
   componentWillUnmount: function () {
-    $('#create-sequence').off('click', this.createSequence);
+    createBtnElem.removeEventListener('click', this.createStructure);
     StructureStore.removeChangeListener(this.handleListLoaded);
   },
 
   render: function () {
-    var options = _.reduce(this.state.list, function (opts, item) {
+    var options = this.state.list.reduce(function (opts, item) {
       opts.push({
         value: item._id,
         label: item.name
@@ -55,7 +56,7 @@ module.exports = React.createClass({
         <div className="table-center item-new">
           <h1>add a data structure</h1>
           <input id="structure-title" type="text" placeholder="title" />
-          <button id="create-sequence">create!</button>
+          <button id="create-btn">create!</button>
         </div>
       </div>
     );
