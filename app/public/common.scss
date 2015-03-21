@@ -128,6 +128,10 @@ button {
   font-weight: bold;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .delete-result {
   z-index: 3;
   position: absolute;
