@@ -35,7 +35,7 @@ module.exports = React.createClass({
     var value = _codeMirrorObj.getDoc().getValue();
     var parsed = value ? JSON.parse(value) : {};
     var state = this.state;
-    if (state.edit === 'initialization') {
+    if (this.state.edit === 'initialization') {
       state.structure.initialization = parsed.initialization;
       state.structure.validation     = parsed.validation;
       this.setState(state);
