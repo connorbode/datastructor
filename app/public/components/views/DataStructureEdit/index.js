@@ -103,15 +103,13 @@ module.exports = React.createClass({
   buildOperations: function () {
     if (!this.state.structure.operations) return null;
     return this.state.structure.operations.map(function (operation, index) {
-      var arrowClass = cx({
-        "fa":                     true,
-        "fa-arrow-circle-right":  true,
-        "hide":                   !operation.selected
+      var listClass = cx({
+        "clickable": true,
+        "bold":      this.state.edit === index
       });
       return (
-        <li className="clickable" onClick={this.handleSelectOperation.bind(this, index)}>
-          <i className={arrowClass}></i>
-          <span>{operation.name}</span>
+        <li className={listClass} onClick={this.handleSelectOperation.bind(this, index)}>
+          {operation.name}
         </li>
       );
     }.bind(this));
@@ -146,8 +144,6 @@ module.exports = React.createClass({
   },
 
   render: function () {
-
-    console.log(this.state.edit);
 
     var newOperationClass = cx({
       clickable:  true,
