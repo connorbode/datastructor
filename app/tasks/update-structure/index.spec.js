@@ -139,6 +139,8 @@ describe('app.tasks.updateStructure', function () {
           struct.initialization.should.equal('updated');
           struct.validation.test.should.equal('updated');
           struct.operations.length.should.equal(2);
+          struct.operations[0].operation.should.equal('updated');
+          struct.operations[1].operation.should.equal('updated');
           done();
         });
       });

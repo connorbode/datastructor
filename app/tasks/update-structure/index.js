@@ -22,7 +22,7 @@ module.exports = function (structure, callback) {
 
               // update operation
               app.models.Operation
-                .findOne({
+                .findOneAndUpdate({
                   _id: operation._id
                 }, operation, function (err, op) {
                   if (err) return reject(err);
