@@ -14,8 +14,12 @@
 
   .editor {
     position: absolute;
-    width: 100%;
+    width: 50%;
     top: 100px;
+
+    &.right-editor {
+      left: 50%;
+    }
   }
 
   .operations {

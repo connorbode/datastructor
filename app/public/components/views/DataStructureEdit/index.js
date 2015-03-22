@@ -4,10 +4,12 @@ var CodeMirror      = require('codemirror');
 var cx              = React.addons.classSet;
 require('codemirror/mode/javascript/javascript');
 
-var _editorElem;
+var _operationEditorElem;
+var _validationEditorElem;
 var _containerElem;
 var _newOperationElem;
-var _codeMirrorObj;
+var _operationEditorObj;
+var _validationEditorObj;
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -23,52 +25,53 @@ module.exports = React.createClass({
     var containerHeight;
     var containerWidth;
 
-    computedStyle   = window.getComputedStyle(_editorElem);
+    computedStyle   = window.getComputedStyle(_operationEditorElem);
     offsetTop       = parseInt(computedStyle.getPropertyValue('top').replace(/px/, ''));
     containerHeight = _containerElem.scrollHeight;
     containerWidth  = _containerElem.scrollWidth;
 
-    _codeMirrorObj.setSize(containerWidth, containerHeight - 2 * offsetTop);
+    _operationEditorObj.setSize(containerWidth / 2, containerHeight - 2 * offsetTop);
+    _validationEditorObj.setSize(containerWidth / 2, containerHeight - 2 * offsetTop);
   },
 
   getCodeMirrorValue: function () {
-    var value = _codeMirrorObj.getDoc().getValue();
-    var parsed = value ? JSON.parse(value) : {};
-    var state = this.state;
+    var validationStr = _validationEditorObj.getDoc().getValue();
+    var validation    = validationStr ? JSON.parse(validationStr) : {};
+    var operation     = _operationEditorObj.getDoc().getValue();
+    var state         = this.state;
+
     if (this.state.edit === 'initialization') {
-      state.structure.initialization = parsed.initialization;
-      state.structure.validation     = parsed.validation;
+      state.structure.initialization = operation;
+      state.structure.validation     = validation;
       this.setState(state);
     }
   },
 
-  setCodeMirrorValue: function (val) {
-    _codeMirrorObj.getDoc().setValue(JSON.stringify(val, null, 2));
+  setCodeMirrorValue: function (validation, operation) {
+    var validationStr;
+    validation    = validation || '';
+    operation     = operation || '';
+    validationStr = JSON.stringify(validation, null, 2);
+    
+    _validationEditorObj.getDoc().setValue(validationStr);
+    _operationEditorObj.getDoc().setValue(operation);
   },
 
   handleSelectOperation: function (index) {
     var op = this.state.structure.operations[index];
     var state = this.state;
-    var val = {
-      validation: op.validation,
-      operation:  op.operation
-    };
+    this.getCodeMirrorValue();
     state.edit = index;
     this.setState(state);
-    this.setCodeMirrorValue(val);
+    this.setCodeMirrorValue(op.validation, op.operation);
   },
 
   handleSelectInitialization: function () {
     var state = this.state;
-    var val;
     this.getCodeMirrorValue();
-    val = {
-      validation: this.state.structure.validation,
-      operation: this.state.structure.initialization
-    };
     state.edit = "initialization";
     this.setState(state);
-    this.setCodeMirrorValue(val);
+    this.setCodeMirrorValue(this.state.structure.validation, this.state.structure.initialization);
   },
 
   handleAddOperationClick: function () {
@@ -85,7 +88,7 @@ module.exports = React.createClass({
       state.structure.operations.push({
         name: opName,
         validation: {},
-        operation: function (data) {}
+        operation: ""
       });
       _newOperationElem.value = '';
     }
@@ -117,11 +120,7 @@ module.exports = React.createClass({
 
   componentDidMount: function () {
 
-    // build editor
-    _editorElem       = document.getElementById('editor');
-    _containerElem    = document.getElementById('editor-container');
-    _newOperationElem = document.getElementById('new-operation');
-    _codeMirrorObj = CodeMirror(_editorElem, {
+    var codeMirrorOptions = {
       lineNumbers:  true,
       theme:        'monokai',
       extraKeys: {
@@ -129,7 +128,16 @@ module.exports = React.createClass({
           cm.replaceSelection("  ", "end");
         }
       }
-    });
+    };
+
+    // build editor
+    _operationEditorElem  = document.getElementById('operation-editor');
+    _validationEditorElem = document.getElementById('validation-editor');
+    _containerElem        = document.getElementById('editor-container');
+    _newOperationElem     = document.getElementById('new-operation');
+
+    _operationEditorObj = CodeMirror(_operationEditorElem, codeMirrorOptions);
+    _validationEditorObj = CodeMirror(_validationEditorElem, codeMirrorOptions);
     this.setCodeMirrorSize(); 
 
     // watch for window resize
@@ -149,14 +157,17 @@ module.exports = React.createClass({
       clickable:  true,
       hide:       !this.state.nameOperation
     });
+
     var initializationClass = cx({
       "clickable":  true,
       "bold":       this.state.edit === "initialization"
     });
+
     return (
       <div id="editor-container" className="structure-edit">
         <h1>{this.state.structure.name}</h1>
-        <div id="editor" className="editor"></div>
+        <div id="operation-editor" className="editor"></div>
+        <div id="validation-editor" className="editor right-editor"></div>
         <div className="operations">
           <h2>
             <span>operations</span>
