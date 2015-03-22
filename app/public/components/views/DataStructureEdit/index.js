@@ -21,6 +21,7 @@ module.exports = React.createClass({
   },
 
   saveStructure: function () {
+    this.getCodeMirrorValue();
     StructureActions.update(this.state.structure);
   },
 
