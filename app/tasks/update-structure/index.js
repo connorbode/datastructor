@@ -52,7 +52,7 @@ module.exports = function (structure, callback) {
             .all(promises)
             .then(function (operations) {
               struct = struct.toObject();
-              struct.operations = operations
+              struct.operations = operations;
               callback(null, struct);
             })
             .catch(function (err) {
