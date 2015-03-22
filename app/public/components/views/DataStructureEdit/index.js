@@ -1,7 +1,8 @@
-var React           = require('react/addons');
-var StructureStore  = require('../../../stores/StructureStore');
-var CodeMirror      = require('codemirror');
-var cx              = React.addons.classSet;
+var React             = require('react/addons');
+var StructureStore    = require('../../../stores/StructureStore');
+var CodeMirror        = require('codemirror');
+var cx                = React.addons.classSet;
+var StructureActions  = require('../../../actions/StructureActions');
 require('codemirror/mode/javascript/javascript');
 
 var _operationEditorElem;
@@ -17,6 +18,10 @@ module.exports = React.createClass({
       structure:      {},    // the loaded data structure
       nameOperation:  false  // whether the user has initiated naming a new operation
     };
+  },
+
+  saveStructure: function () {
+    StructureActions.update(this.state.structure);
   },
 
   setCodeMirrorSize: function () {
@@ -40,11 +45,15 @@ module.exports = React.createClass({
     var operation     = _operationEditorObj.getDoc().getValue();
     var state         = this.state;
 
-    if (this.state.edit === 'initialization') {
+    if (state.edit === 'initialization') {
       state.structure.initialization = operation;
       state.structure.validation     = validation;
-      this.setState(state);
+    } else if (state.edit !== undefined) {
+      state.structure.operations[state.edit].operation = operation;
+      state.structure.operations[state.edit].validation = validation;
     }
+    
+    this.setState(state);
   },
 
   setCodeMirrorValue: function (validation, operation) {
@@ -183,6 +192,7 @@ module.exports = React.createClass({
             </li>
           </ul>
         </div>
+        <button className="save-btn" onClick={this.saveStructure}>Save!</button>
       </div>
     );
   }
