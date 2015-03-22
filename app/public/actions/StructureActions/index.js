@@ -68,5 +68,26 @@ module.exports = {
         actionType: StructureConstants.CREATE_ERROR
       });
     });
+  },
+
+  update: function (params) {
+    ApiActions.request({
+      dataType: 'json',
+      method:   'PUT',
+      data:     JSON.stringify(params),
+      url:      '/api/structures/' + params._id,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).success(function (data) {
+      dispatcher.dispatch({
+        actionType: StructureConstants.UPDATE_SUCCESS,
+        data:       data
+      });
+    }).error(function (err) {
+      dispatcher.dispatch({
+        actionType: StructureConstants.UPDATE_ERROR
+      });
+    });
   }
 };
