@@ -33,6 +33,7 @@ module.exports = React.createClass({
   handleDeleteSequence: function (e) {
     var id   = e.target.getAttribute('data-id');
     var name = e.target.getAttribute('data-name');
+    e.stopPropagation();
     this.setState({
       sequences: this.state.sequences,
       delete: {

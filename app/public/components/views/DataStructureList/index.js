@@ -32,6 +32,7 @@ module.exports = React.createClass({
   handleDeleteDataStructure: function (e) {
     var id   = e.target.getAttribute('data-id');
     var name = e.target.getAttribute('data-name');
+    e.stopPropagation();
     this.setState({
       dataStructures: this.state.dataStructures,
       delete: {
