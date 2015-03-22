@@ -17,6 +17,17 @@ module.exports = function (sequence, callback) {
       // validate datastructure
       if (err) { return callback(err); }
       if (!structure) { return callback('could not find datastructure'); }
+      if (!sequence.data) {
+
+        // add sequence
+        app.models.Sequence
+          .create(sequence, function (err, seq) {
+
+            if (err) { return callback(err); }
+            return callback(null, seq);
+          });
+      }
+      return;
       app.utils.schema.validate(sequence.data, structure.validation, function (errs) {
         if (errs) { return callback('data failed validation'); }
 
