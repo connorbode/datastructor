@@ -2,9 +2,9 @@ var React           = require('react');
 var SequenceStore   = require('../../../stores/SequenceStore');
 var StructureStore  = require('../../../stores/StructureStore');
 
-var drag;
 var dragClass = 'draggable';
 var _viewport;
+var _svg;
 
 var _initialization;
 var _operations = [];
@@ -17,52 +17,16 @@ module.exports = React.createClass({
     };
   },
 
-  handleDragStart: function () {
-    _viewport.style('cursor', 'pointer');
+  handleZoom: function () {
+    _viewport.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
   },
 
-  handleDragEnd: function () {
-    _viewport.style('cursor', 'default');
+  handleZoomStart: function () {
+    _svg.style('cursor', 'pointer');
   },
 
-  handleDrag: function () {
-    function getOffset (attr, axis) {
-      var current = this.getAttribute(attr);
-      if (current && axis === 'x') {
-        return parseInt(current) + d3.event.dx;
-      } else if (current && axis === 'y') {
-        return parseInt(current) + d3.event.dy;
-      } else {
-        return current
-      }
-    }
-
-    d3.event.sourceEvent.stopPropagation();
-    _viewport.selectAll('.' + dragClass)
-      .attr('cx', function () {
-        return getOffset.apply(this, ['cx', 'x']);
-      })
-      .attr('cy', function () {
-        return getOffset.apply(this, ['cy', 'y']);
-      })
-      .attr('x1', function () {
-        return getOffset.apply(this, ['x1', 'x']);
-      })
-      .attr('x2', function () {
-        return getOffset.apply(this, ['x2', 'x']);
-      })
-      .attr('y1', function () {
-        return getOffset.apply(this, ['y1', 'y']);
-      })
-      .attr('y2', function () {
-        return getOffset.apply(this, ['y2', 'y']);
-      })
-      .attr('x', function () {
-        return getOffset.apply(this, ['x', 'x']);
-      })
-      .attr('y', function () {
-        return getOffset.apply(this, ['y', 'y']);
-      });
+  handleZoomEnd: function () {
+    _svg.style('cursor', 'default');
   },
 
   handleSequenceLoaded: function () {
@@ -83,15 +47,29 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
+    var elem, width, height;
+    var zoom;
+
+    // add store listeners
     SequenceStore.addChangeListener(this.handleSequenceLoaded);
     StructureStore.addChangeListener(this.handleStructureLoaded);
-    drag = d3.behavior.drag()
-      .on('drag', this.handleDrag)
-      .on('dragstart', this.handleDragStart)
-      .on('dragend', this.handleDragEnd);
-    _viewport = d3.select('svg');
-    _viewport.call(drag);
 
+    // set up viewport
+    _svg = d3.select('svg');
+    _viewport = _svg.append('g');
+    elem = _svg.node();
+    width = elem.scrollWidth;
+    height = elem.scrollHeight;
+
+    // set up behaviors
+    zoom = d3.behavior.zoom()
+      .center([width / 2, height / 2])
+      .on('zoom', this.handleZoom)
+      .on('zoomstart', this.handleZoomStart)
+      .on('zoomend', this.handleZoomEnd);
+
+    // apply behaviors
+    _svg.call(zoom);
   },
 
   componentWillUnmount: function () {
