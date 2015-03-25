@@ -18,6 +18,9 @@ module.exports = React.createClass({
     };
   },
 
+  /**
+   * Centers the elements on the screen
+   */
   centerGroup: function () {
     var groupBbox = _viewport.node().getBBox();
     var groupWidth = groupBbox.width;
@@ -31,24 +34,43 @@ module.exports = React.createClass({
     _zoom.event(_svg);
   },
 
+  /**
+   * Handler for the zoom event.  
+   * Pans and zooms the viewport.
+   */
   handleZoom: function () {
     _viewport.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
   },
 
+  /**
+   * Handles the zoomstart event.
+   * Applies a pointer to the cursor so 
+   * panning looks like the cursor responds.
+   */
   handleZoomStart: function () {
     _svg.style('cursor', 'pointer');
   },
 
+  /**
+   * Handles the zoomend event.
+   * Sets the cursor back to normal.
+   */
   handleZoomEnd: function () {
     _svg.style('cursor', 'default');
   },
 
+  /**
+   * Loads the sequence into the state
+   */
   handleSequenceLoaded: function () {
     var currentState = this.state;
     currentState.sequence = SequenceStore.getSequence();
     this.setState(currentState);
   },
 
+  /**
+   * Loads the structure into the state
+   */
   handleStructureLoaded: function () {
     var currentState = this.state;
     currentState.structure = StructureStore.getStructure();
@@ -63,6 +85,9 @@ module.exports = React.createClass({
     this.centerGroup();
   },
 
+  /**
+   * Initialize the component
+   */
   componentDidMount: function () {
     var elem, width, height;
     var zoom;
@@ -90,11 +115,17 @@ module.exports = React.createClass({
 
   },
 
+  /**
+   * Remove component listeners
+   */
   componentWillUnmount: function () {
     SequenceStore.removeChangeListener(this.handleSequenceLoaded);
     StructureStore.removeChangeListener(this.handleStructureLoaded);
   },
 
+  /**
+   * Render the component
+   */
   render: function () {
 
     return (
