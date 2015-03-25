@@ -5,6 +5,7 @@ var StructureStore  = require('../../../stores/StructureStore');
 var dragClass = 'draggable';
 var _viewport;
 var _svg;
+var _zoom;
 
 var _initialization;
 var _operations = [];
@@ -15,6 +16,19 @@ module.exports = React.createClass({
       sequence: {},
       structure: {}
     };
+  },
+
+  centerGroup: function () {
+    var groupBbox = _viewport.node().getBBox();
+    var groupWidth = groupBbox.width;
+    var groupHeight = groupBbox.height;
+    var containerNode = _svg.node();
+    var containerWidth = containerNode.scrollWidth;
+    var containerHeight = containerNode.scrollHeight;
+    var offsetLeft = (containerWidth - groupWidth) / 2;
+    var offsetTop = (containerHeight - groupHeight) / 2;
+    _zoom.translate([offsetLeft, offsetTop]);
+    _zoom.event(_svg);
   },
 
   handleZoom: function () {
@@ -44,6 +58,9 @@ module.exports = React.createClass({
       dragClass:  dragClass
     });
     this.setState(currentState);
+
+    // center items in the viewport
+    this.centerGroup();
   },
 
   componentDidMount: function () {
@@ -62,14 +79,15 @@ module.exports = React.createClass({
     height = elem.scrollHeight;
 
     // set up behaviors
-    zoom = d3.behavior.zoom()
+    _zoom = d3.behavior.zoom()
       .center([width / 2, height / 2])
       .on('zoom', this.handleZoom)
       .on('zoomstart', this.handleZoomStart)
       .on('zoomend', this.handleZoomEnd);
 
     // apply behaviors
-    _svg.call(zoom);
+    _svg.call(_zoom);
+
   },
 
   componentWillUnmount: function () {
