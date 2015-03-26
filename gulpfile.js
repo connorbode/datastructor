@@ -74,9 +74,11 @@ gulp.task('clean', function (callback) {
  */
 gulp.task('browserify', function () {
   var bundler = browserify({ 
-    debug:      true,
-    transform:  [ reactify ],
-    entries:    [ './app/public/app.js' ],
+    debug:        true,
+    transform:    [ reactify ],
+    entries:      [ './app/public/app.js' ],
+    cache:        {},
+    packageCache: {}
   });
   bundler.plugin('minifyify', { map: 'app.js.map', output: __dirname + '/dist/public/app.js.map' });
   var watcher = watchify(bundler);
