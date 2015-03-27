@@ -83,6 +83,27 @@ var SequenceActions = {
         actionType: SequenceConstants.GET_ERROR
       });
     });
+  },
+
+  update: function (data) {
+    return ApiActions.request({
+      method:     'PUT',
+      url:        '/api/sequences/' + data._id,
+      dataType:   'json',
+      data:       JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).success(function (data) {
+      dispatcher.dispatch({
+        actionType: SequenceConstants.UPDATE_SUCCESS,
+        data: data
+      });
+    }).error(function () {
+      dispatcher.dispatch({
+        actionType: SequenceConstants.UPDATE_ERROR
+      });
+    });
   }
 };
 

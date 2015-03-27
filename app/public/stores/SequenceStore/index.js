@@ -60,6 +60,10 @@ var SequenceStore = assign({}, EventEmitter.prototype, {
       case SequenceConstants.GET_SUCCESS:
         setSequence(payload.data);
         SequenceStore.emitChange();
+
+      case SequenceConstants.UPDATE_SUCCESS:
+        setSequence(payload.data);
+        SequenceStore.emitChange();
     }
 
     return true;
