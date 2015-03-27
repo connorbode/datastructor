@@ -16,6 +16,7 @@
       color: white;
       border-radius: 20px;
       margin-right: 18px;
+      @include transition(all 0.5s linear);
 
       &.selected {
         background: $color-focus;
@@ -44,7 +45,7 @@
         @include transition(all 2s linear);
         transition-property: max-width, opacity, max-height;
         transition-delay: 0.4s, 0, 0;
-        transition-duration: 1s, 1s, 1s;
+        transition-duration: 0.5s, 0.5s, 0.5s;
 
         &.show {
           max-width: 1000px;
