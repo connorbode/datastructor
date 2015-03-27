@@ -3,13 +3,13 @@
   bottom: 0;
   width: 100%;
 
-  ul {
+  ul.steps {
     bottom: 20px;
     position: absolute;
     text-align: center;
     width: 100%;
 
-    li {
+    li.step {
       display: inline-block;
       padding: 10px 20px 10px 20px;
       background: $color-fade;
@@ -55,6 +55,22 @@
           opacity: 1;
           transition-property: max-width, opacity, max-height, font-size;
           transition-delay: 0, 0, 0, 0;
+        }
+
+        ul {
+          text-align: left;
+
+          li {
+            input {
+              background: none;
+              font-size: 14px;
+              color: white;
+            }
+
+            span {
+              color: $color-fade;
+            }
+          }
         }
       }
     }

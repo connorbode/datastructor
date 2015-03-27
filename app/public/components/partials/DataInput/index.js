@@ -52,12 +52,20 @@ module.exports = React.createClass({
       val.value = [];
     }
     return (
-      <fieldset>
-        {val.value.map(function (value) {
-          return (<li>{this.buildItem(schema.items, value)}</li>);
+      <ul>
+        {schema.label ? <li>{schema.label}</li> : null}
+        {val.value.map(function (value, index) {
+          return (
+            <li>
+              <span>{index}: </span>
+              {this.buildItem(schema.items, value)}
+            </li>
+          );
         }.bind(this))}
-        <button onClick={this.addItemToArray.bind(this, val)}>Add Item</button>
-      </fieldset>
+        <li>
+          <button onClick={this.addItemToArray.bind(this, val)}>Add Item</button>
+        </li>
+      </ul>
     );
   },
 
@@ -89,9 +97,12 @@ module.exports = React.createClass({
 
       case "array":
         return this.buildArray(schema, val)
+
+      default:
+        return (<fieldset />);
     }
   },
-  
+
   render: function () {
     return this.buildItem(this.props, _val);
   }

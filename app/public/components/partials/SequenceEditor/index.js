@@ -1,6 +1,7 @@
-var React = require('react');
+var React           = require('react');
 var SequenceStore   = require('../../../stores/SequenceStore');
 var StructureStore  = require('../../../stores/StructureStore');
+var DataInput       = require('../DataInput');
 
 var INITIALIZATION_STEP_NAME = 'Initialization';
 
@@ -15,11 +16,7 @@ module.exports = React.createClass({
 
   loadInitializationStep: function () {
     var state = this.state;
-    if (state.step === INITIALIZATION_STEP_NAME) {
-      state.step = null;
-    } else {
-      state.step = INITIALIZATION_STEP_NAME;
-    }
+    state.step = INITIALIZATION_STEP_NAME;
     this.setState(state);
   },
 
@@ -54,19 +51,26 @@ module.exports = React.createClass({
     });
     var initializationStepClass = cx({
       'selected':   this.state.step === INITIALIZATION_STEP_NAME,
-      'clickable':  true
+      'clickable':  this.state.step !== INITIALIZATION_STEP_NAME,
+      'step':       true
     });
     var initializationContentClass = cx({
       'step-content': true,
       'show':         this.state.step === INITIALIZATION_STEP_NAME
     });
+    var initializationInput = this.state.structure ? this.state.structure.validation : {};
+    initializationInput.onChange = function (data) {
+      console.log(data);
+    }
+    console.log(this.state.structure);
+
     return (
       <div className="sequence-editor">
-        <ul>
+        <ul className="steps">
           <li className={initializationStepClass} onClick={this.loadInitializationStep}>
             <div className="step-name">{INITIALIZATION_STEP_NAME}</div>
             <div className={initializationContentClass}>
-              This is a bunch of text, hopefully we can expand to see it.
+              <DataInput {...initializationInput} />
             </div>
           </li>
           {operations.map(function (operation) {
