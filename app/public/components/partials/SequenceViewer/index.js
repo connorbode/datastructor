@@ -78,7 +78,7 @@ module.exports = React.createClass({
     _initialization({
       viewport:   _viewport,
       dragClass:  dragClass
-    });
+    }, this.state.sequence.data);
     this.setState(currentState);
 
     // center items in the viewport
