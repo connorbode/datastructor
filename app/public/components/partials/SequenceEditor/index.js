@@ -1,7 +1,8 @@
-var React           = require('react');
-var SequenceStore   = require('../../../stores/SequenceStore');
-var StructureStore  = require('../../../stores/StructureStore');
-var DataInput       = require('../DataInput');
+var React             = require('react');
+var SequenceStore     = require('../../../stores/SequenceStore');
+var StructureStore    = require('../../../stores/StructureStore');
+var DataInput         = require('../DataInput');
+var SequenceActions   = require('../../../actions/SequenceActions');
 
 var INITIALIZATION_STEP_NAME = 'Initialization';
 
@@ -18,6 +19,13 @@ module.exports = React.createClass({
     var state = this.state;
     state.step = INITIALIZATION_STEP_NAME;
     this.setState(state);
+  },
+
+  handleInitializationDataChange: function (data) {
+    var state = this.state;
+    state.sequence.data = data;
+    this.setState(state);
+    SequenceActions.update(state.sequence);
   },
 
   handleSequenceChange: function () {
@@ -58,11 +66,11 @@ module.exports = React.createClass({
       'step-content': true,
       'show':         this.state.step === INITIALIZATION_STEP_NAME
     });
-    var initializationInput = this.state.structure ? this.state.structure.validation : {};
-    initializationInput.onChange = function (data) {
-      console.log(data);
-    }
-    console.log(this.state.structure);
+    var initializationInput = {
+      validation: this.state.structure ? this.state.structure.validation : {},
+      data:       this.state.sequence ? this.state.sequence.data : {},
+      onChange:   this.handleInitializationDataChange
+    };
 
     return (
       <div className="sequence-editor">

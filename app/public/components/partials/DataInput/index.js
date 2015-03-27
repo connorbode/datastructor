@@ -68,26 +68,30 @@ module.exports = React.createClass({
    *
    * Params:
    *
-   * - __schema__: The schema for the array input
-   * - __val__: The value object to be used for the array
+   * - __schema__:        The schema for the array input
+   * - __currentValue__:  The current value of the object
+   * - __valueObject__:   The value object to be used for the array
    */
-  buildArray: function (schema, val) {
-    if (!val.value) {
-      val.value = [];
+  buildArray: function (schema, currentValue, valueObject) {
+    if (currentValue) {
+      valueObject.value = currentValue;
+    }
+    if (!valueObject.value) {
+      valueObject.value = [];
     }
     return (
       <ul>
         {schema.label ? <li>{schema.label}</li> : null}
-        {val.value.map(function (value, index) {
+        {valueObject.value.map(function (value, index) {
           return (
             <li>
               <span>{index}: </span>
-              {this.buildItem(schema.items, value)}
+              {this.buildItem(schema.items, currentValue[index], value)}
             </li>
           );
         }.bind(this))}
         <li>
-          <button onClick={this.addItemToArray.bind(this, val)}>Add Item</button>
+          <button onClick={this.addItemToArray.bind(this, valueObject)}>Add Item</button>
         </li>
       </ul>
     );
@@ -98,12 +102,23 @@ module.exports = React.createClass({
    *
    * Params:
    *
-   * - __schema__: The schema for the integer input
-   * - __val__: The value object to be used for the input
+   * - __schema__:        The schema for the integer input
+   * - __currentValue__:  The current value of the input
+   * - __valueObject__:   The value object to be used for the input
    */
-  buildInteger: function (schema, val) {
+  buildInteger: function (schema, currentValue, valueObject) {
     var placeholder = schema.label || '';
-    return (<input type="number" pattern="\d*" placeholder={placeholder} onChange={this.updateIntegerVal.bind(this, val)} />);
+    if (currentValue) {
+      valueObject.value = currentValue;
+    }
+    return (
+      <input 
+        type="number" 
+        pattern="\d*" 
+        placeholder={placeholder}  
+        value={currentValue}
+        onChange={this.updateIntegerVal.bind(this, valueObject)} />
+    );
   },
 
   /**
@@ -111,16 +126,17 @@ module.exports = React.createClass({
    *
    * Params:
    *
-   * - __schema__: The schema for the generic input item
-   * - __val__: The value object to be used for the item
+   * - __schema__:        The schema for the generic input item
+   * - __currentValue__:  The current value of the item
+   * - __valueObject__:   The value object to be used for the item
    */
-  buildItem: function (schema, val) {
+  buildItem: function (schema, currentValue, valueObject) {
     switch (schema.type) {
       case "integer":
-        return this.buildInteger(schema, val);
+        return this.buildInteger(schema, currentValue, valueObject);
 
       case "array":
-        return this.buildArray(schema, val)
+        return this.buildArray(schema, currentValue, valueObject);
 
       default:
         return (<fieldset />);
@@ -128,6 +144,6 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    return this.buildItem(this.props, _val);
+    return this.buildItem(this.props.validation, this.props.data, _val);
   }
 });
