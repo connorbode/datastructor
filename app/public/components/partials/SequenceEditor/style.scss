@@ -16,7 +16,6 @@
       color: white;
       border-radius: 20px;
       margin-right: 18px;
-      @include transition(all 0.5s linear);
 
       &.selected {
         background: $color-focus;
@@ -29,7 +28,7 @@
         content: '';
         position: absolute;
         right: -20px;
-        top: 50%;
+        bottom: 17px;
         margin-top: -1px;
       }
 

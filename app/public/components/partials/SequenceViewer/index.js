@@ -59,6 +59,22 @@ module.exports = React.createClass({
     _svg.style('cursor', 'default');
   },
 
+  clearViewPort: function () {
+    _viewport.selectAll('*').remove();
+  },
+
+  updateOperations: function () {
+    if (this.state.structure && this.state.sequence) {
+      this.clearViewPort();
+      _initialization = new Function("params", "data", this.state.structure.initialization);
+      _initialization({
+        viewport:   _viewport,
+        dragClass:  dragClass
+      }, this.state.sequence.data);
+      this.forceUpdate();
+    }
+  },
+
   /**
    * Loads the sequence into the state
    */
@@ -66,6 +82,7 @@ module.exports = React.createClass({
     var currentState = this.state;
     currentState.sequence = SequenceStore.getSequence();
     this.setState(currentState);
+    this.updateOperations();
   },
 
   /**
@@ -74,12 +91,9 @@ module.exports = React.createClass({
   handleStructureLoaded: function () {
     var currentState = this.state;
     currentState.structure = StructureStore.getStructure();
-    _initialization = new Function("params", "data", currentState.structure.initialization);
-    _initialization({
-      viewport:   _viewport,
-      dragClass:  dragClass
-    }, this.state.sequence.data);
     this.setState(currentState);
+
+    this.updateOperations();
 
     // center items in the viewport
     this.centerGroup();
