@@ -1,6 +1,7 @@
 var React       = require('react/addons');
 
 var _val = {};
+var firstRender = true;
 
 module.exports = React.createClass({
 
@@ -59,7 +60,8 @@ module.exports = React.createClass({
    * - __val__: The value object of the array to append to
    */
   addItemToArray: function (val) {
-    val.value.push({})
+    val.value.push({});
+    this.emitChange();
     this.forceUpdate();
   },
 
@@ -69,12 +71,14 @@ module.exports = React.createClass({
    * Params:
    *
    * - __schema__:        The schema for the array input
-   * - __currentValue__:  The current value of the object
    * - __valueObject__:   The value object to be used for the array
+   * - __currentValue__:  The current value of the object
    */
-  buildArray: function (schema, currentValue, valueObject) {
+  buildArray: function (schema, valueObject, currentValue) {
     if (currentValue) {
-      valueObject.value = currentValue;
+      valueObject.value = currentValue.map(function (item) {
+        return { value: item };
+      });
     }
     if (!valueObject.value) {
       valueObject.value = [];
@@ -86,7 +90,7 @@ module.exports = React.createClass({
           return (
             <li>
               <span>{index}: </span>
-              {this.buildItem(schema.items, currentValue[index], value)}
+              {this.buildItem(schema.items, value, currentValue[index])}
             </li>
           );
         }.bind(this))}
@@ -103,10 +107,10 @@ module.exports = React.createClass({
    * Params:
    *
    * - __schema__:        The schema for the integer input
-   * - __currentValue__:  The current value of the input
    * - __valueObject__:   The value object to be used for the input
+   * - __currentValue__:  The current value of the input
    */
-  buildInteger: function (schema, currentValue, valueObject) {
+  buildInteger: function (schema, valueObject, currentValue) {
     var placeholder = schema.label || '';
     if (currentValue) {
       valueObject.value = currentValue;
@@ -127,16 +131,16 @@ module.exports = React.createClass({
    * Params:
    *
    * - __schema__:        The schema for the generic input item
-   * - __currentValue__:  The current value of the item
    * - __valueObject__:   The value object to be used for the item
+   * - __currentValue__:  The current value of the item
    */
-  buildItem: function (schema, currentValue, valueObject) {
+  buildItem: function (schema, valueObject, currentValue) {
     switch (schema.type) {
       case "integer":
-        return this.buildInteger(schema, currentValue, valueObject);
+        return this.buildInteger(schema, valueObject, currentValue);
 
       case "array":
-        return this.buildArray(schema, currentValue, valueObject);
+        return this.buildArray(schema, valueObject, currentValue);
 
       default:
         return (<fieldset />);
@@ -144,6 +148,9 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    return this.buildItem(this.props.validation, this.props.data, _val);
+    var elem = firstRender 
+      ? this.buildItem(this.props.validation, _val, this.props.data) 
+      : this.buildItem(this.props.validation, _val);
+    return elem;
   }
 });
