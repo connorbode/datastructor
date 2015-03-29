@@ -4,7 +4,8 @@ var StructureStore    = require('../../../stores/StructureStore');
 var DataInput         = require('../DataInput');
 var SequenceActions   = require('../../../actions/SequenceActions');
 
-var INITIALIZATION_STEP_NAME = 'Initialization';
+var INITIALIZATION_STEP_NAME  = 'Initialization';
+var ADD_STEP_NAME             = 'Add Step';
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -13,6 +14,12 @@ module.exports = React.createClass({
       structure: null,
       step: null
     };
+  },
+
+  addStep: function () {
+    var state = this.state;
+    state.step = ADD_STEP_NAME;
+    this.setState(state);
   },
 
   loadInitializationStep: function () {
@@ -51,7 +58,8 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    var operations = this.state.sequence ? this.state.sequence.operations : [];
+    var steps = this.state.sequence ? this.state.sequence.operations : [];
+    var operations = this.state.structure ? this.state.structure.operations : [];
     var cx = React.addons.classSet;
     var stepEditorClass = cx({
       'step-editor':  true,
@@ -71,6 +79,19 @@ module.exports = React.createClass({
       data:       this.state.sequence ? this.state.sequence.data : {},
       onChange:   this.handleInitializationDataChange
     };
+    var addStepClass = cx({
+      'step':       true,
+      'selected':   this.state.step === ADD_STEP_NAME,
+      'clickable':  this.state.step !== ADD_STEP_NAME
+    });
+    var addStepContentClass = cx({
+      'step-content': true,
+      'show':         this.state.step === ADD_STEP_NAME
+    });
+    var addStepNameClass = cx({
+      'step-name':  true,
+      'hide':       this.state.step === ADD_STEP_NAME
+    });
 
     return (
       <div className="sequence-editor">
@@ -81,13 +102,21 @@ module.exports = React.createClass({
               <DataInput {...initializationInput} />
             </div>
           </li>
-          {operations.map(function (operation) {
+          {steps.map(function (step) {
             return (
               <li>
-                <div className="step-name">{operation.name}</div>
+                <div className="step-name">{step.name}</div>
               </li>
             );
           })}
+          <li className={addStepClass} onClick={this.addStep}>
+            <div className={addStepNameClass}>
+              <i className="fa fa-plus"></i>
+            </div>
+            <div className={addStepContentClass}>
+              Hi there this is content
+            </div>
+          </li>
         </ul>
       </div>
     );
