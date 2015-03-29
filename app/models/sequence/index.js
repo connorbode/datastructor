@@ -4,7 +4,7 @@ module.exports = function () {
     name: String,
     data: Schema.Types.Mixed,
     operations: [ Schema.Types.Mixed ],
-    type: { type: Schema.Types.ObjectId, ref: 'DataStructure' },
+    type: String,
     owner: { type: Schema.Types.ObjectId, ref: 'Account' }
   });
 
