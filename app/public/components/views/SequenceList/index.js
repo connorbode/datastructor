@@ -1,4 +1,4 @@
-var React         = require('react/addons');
+var React           = require('react/addons');
 var ViewActions     = require('../../../actions/ViewActions');
 var ViewConstants   = require('../../../constants/ViewConstants');
 var _               = require('lodash');
