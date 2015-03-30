@@ -25,12 +25,12 @@ describe('app.controllers.api.sequences.show', function () {
   it('returns the sequence if found', function (done) {
     helpers.session.create(function () {
       helpers.createSequence(function (IDs) {
-        var url = '/api/sequences/' + IDs.seq;
+        var url = '/api/sequences/' + IDs;
         session
           .get(url)
           .end(function (err, res) {
             assert.equal(res.status, 200);
-            assert.equal(res.body._id, IDs.seq);
+            assert.equal(res.body._id, IDs);
             done();
           });
       });

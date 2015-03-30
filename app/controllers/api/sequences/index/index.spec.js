@@ -3,66 +3,55 @@ describe('app.controllers.api.sequences.index', function () {
   var ids = {};
 
   beforeEach(function (done) {
-    app.models.Operation
+    app.models.Sequence
       .create({
-        validation: 'string'
-      }, function (err, op) {
-        app.models.DataStructure
-          .create({
-            validation: 'string',
-            operations: [ op._id ]
-          }, function (err, struct) {
-            app.models.Sequence
-              .create({
-                name: 'one',
-                type: struct._id
-              }, {
-                name: 'two',
-                type: struct._id
-              }, {
-                name: 'three',
-                type: struct._id
-              }, {
-                name: 'four',
-                type: struct._id
-              }, {
-                name: 'five',
-                type: struct._id
-              }, {
-                name: 'six',
-                type: struct._id
-              }, {
-                name: 'seven',
-                type: struct._id
-              }, {
-                name: 'eight',
-                type: struct._id
-              }, {
-                name: 'nine',
-                type: struct._id
-              }, {
-                name: 'ten',
-                type: struct._id
-              }, {
-                name: 'eleven',
-                type: struct._id
-              }, function (err, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11) {
-                ids = {
-                  s1: s1._id,
-                  s2: s2._id,
-                  s3: s3._id, 
-                  s4: s4._id,
-                  s5: s5._id,
-                  s6: s6._id,
-                  s7: s7._id,
-                  s8: s8._id,
-                  s9: s9._id,
-                  s10: s10._id,
-                  s11: s11._id
-                };
-                done();
-              });
-          });
+        name: 'one',
+        type: 'test'
+      }, {
+        name: 'two',
+        type: 'test'
+      }, {
+        name: 'three',
+        type: 'test'
+      }, {
+        name: 'four',
+        type: 'test'
+      }, {
+        name: 'five',
+        type: 'test'
+      }, {
+        name: 'six',
+        type: 'test'
+      }, {
+        name: 'seven',
+        type: 'test'
+      }, {
+        name: 'eight',
+        type: 'test'
+      }, {
+        name: 'nine',
+        type: 'test'
+      }, {
+        name: 'ten',
+        type: 'test'
+      }, {
+        name: 'eleven',
+        type: 'test'
+      }, function (err, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11) {
+        ids = {
+          s1: s1._id,
+          s2: s2._id,
+          s3: s3._id, 
+          s4: s4._id,
+          s5: s5._id,
+          s6: s6._id,
+          s7: s7._id,
+          s8: s8._id,
+          s9: s9._id,
+          s10: s10._id,
+          s11: s11._id
+        };
+        done();
       });
   });
   

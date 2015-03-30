@@ -1,26 +1,5 @@
 describe('app.controllers.api.sequences.create', function () {
 
-  var operationId;
-  var structureId; 
-
-  beforeEach(function (done) {
-    app.models.Operation
-      .create({
-        validation: { type: 'string' }
-      }, function (err, op) {
-        operationId = op._id;
-
-        app.models.DataStructure
-          .create({
-            validation: { type: 'string' },
-            operations: [ operationId ]
-          }, function (err, struct) {
-            structureId = struct._id;
-            done();
-          });
-      });
-  });
-
   it('fails if the user is not logged in', function (done) {
     session
       .post('/api/sequences')
@@ -28,9 +7,9 @@ describe('app.controllers.api.sequences.create', function () {
         name: 'fake',
         data: 'fake',
         operations: [
-          { type: operationId, data: 'fake' }
+          { type: 'test', data: 'fake' }
         ],
-        type: structureId
+        type: 'test'
       })
       .end(function (err, res) {
         assert.equal(res.status, 401);
@@ -57,9 +36,9 @@ describe('app.controllers.api.sequences.create', function () {
           name: 'fake',
           data: 'fake',
           operations: [
-            { type: operationId, data: 'fake' }
+            { type: 'test', data: 'fake' }
           ],
-          type: structureId
+          type: 'test'
         })
         .end(function (err, res) {
           assert.equal(res.status, 201);
