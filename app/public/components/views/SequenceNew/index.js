@@ -1,7 +1,6 @@
 var React             = require('react');
 var Dropdown          = require('react-select');
 var $                 = require('jquery');
-var StructureStore    = require('../../../stores/StructureStore');
 var SequenceActions   = require('../../../actions/SequenceActions');
 var _                 = require('lodash');
 
@@ -12,12 +11,6 @@ module.exports = React.createClass({
     return {
       list:      []
     };
-  },
-
-  handleListLoaded: function () {
-    this.setState({
-      list:      StructureStore.getList()
-    });
   },
 
   createSequence: function () {
@@ -34,12 +27,10 @@ module.exports = React.createClass({
   componentDidMount: function () {
     $('#sequence-title').trigger('focus');
     $('#create-sequence').on('click', this.createSequence);
-    StructureStore.addChangeListener(this.handleListLoaded);
   },
 
   componentWillUnmount: function () {
     $('#create-sequence').off('click', this.createSequence);
-    StructureStore.removeChangeListener(this.handleListLoaded);
   },
 
   render: function () {

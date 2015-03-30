@@ -1,6 +1,5 @@
 var React             = require('react');
 var SequenceStore     = require('../../../stores/SequenceStore');
-var StructureStore    = require('../../../stores/StructureStore');
 var DataInput         = require('../DataInput');
 var SequenceActions   = require('../../../actions/SequenceActions');
 
@@ -41,20 +40,12 @@ module.exports = React.createClass({
     this.setState(state);
   },
 
-  handleStructureChange: function () {
-    var state = this.state;
-    state.structure = StructureStore.getStructure();
-    this.setState(state);
-  },
-
   componentDidMount: function () {
     SequenceStore.addChangeListener(this.handleSequenceChange);
-    StructureStore.addChangeListener(this.handleStructureChange);
   },
 
   componentWillUnmount: function () {
     SequenceStore.removeChangeListener(this.handleSequenceChange);
-    StructureStore.removeChangeListener(this.handleStructureChange);
   },
 
   render: function () {

@@ -1,6 +1,5 @@
 var React           = require('react');
 var SequenceStore   = require('../../../stores/SequenceStore');
-var StructureStore  = require('../../../stores/StructureStore');
 
 var dragClass = 'draggable';
 var _viewport;
@@ -86,20 +85,6 @@ module.exports = React.createClass({
   },
 
   /**
-   * Loads the structure into the state
-   */
-  handleStructureLoaded: function () {
-    var currentState = this.state;
-    currentState.structure = StructureStore.getStructure();
-    this.setState(currentState);
-
-    this.updateOperations();
-
-    // center items in the viewport
-    this.centerGroup();
-  },
-
-  /**
    * Initialize the component
    */
   componentDidMount: function () {
@@ -108,7 +93,6 @@ module.exports = React.createClass({
 
     // add store listeners
     SequenceStore.addChangeListener(this.handleSequenceLoaded);
-    StructureStore.addChangeListener(this.handleStructureLoaded);
 
     // set up viewport
     _svg = d3.select('svg');
@@ -134,7 +118,6 @@ module.exports = React.createClass({
    */
   componentWillUnmount: function () {
     SequenceStore.removeChangeListener(this.handleSequenceLoaded);
-    StructureStore.removeChangeListener(this.handleStructureLoaded);
   },
 
   /**
