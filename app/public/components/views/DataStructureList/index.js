@@ -2,7 +2,6 @@ var React             = require('react/addons');
 var ViewActions       = require('../../../actions/ViewActions');
 var ViewConstants     = require('../../../constants/ViewConstants');
 var StructureStore    = require('../../../stores/StructureStore');
-var StructureActions  = require('../../../actions/StructureActions');
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -50,7 +49,6 @@ module.exports = React.createClass({
   },
 
   handleConfirmDelete: function () {
-    DataStructureActions.delete(this.state.delete.id);
     this.setState({
       dataStructures: this.state.dataStructures,
       delete: null

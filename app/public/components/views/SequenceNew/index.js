@@ -1,7 +1,6 @@
 var React             = require('react');
 var Dropdown          = require('react-select');
 var $                 = require('jquery');
-var StructureActions  = require('../../../actions/StructureActions');
 var StructureStore    = require('../../../stores/StructureStore');
 var SequenceActions   = require('../../../actions/SequenceActions');
 var _                 = require('lodash');

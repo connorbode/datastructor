@@ -1,6 +1,5 @@
 var React             = require('react');
 var Dropdown          = require('react-select');
-var StructureActions  = require('../../../actions/StructureActions');
 var StructureStore    = require('../../../stores/StructureStore');
 
 var structure = null;
@@ -21,9 +20,6 @@ module.exports = React.createClass({
   },
 
   createStructure: function () {
-    StructureActions.create({
-      name: titleElem.value
-    });
   },
 
   _onSelect: function (selection) {

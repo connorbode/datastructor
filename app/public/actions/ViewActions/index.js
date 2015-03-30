@@ -1,6 +1,5 @@
 var dispatcher       = require('../../dispatcher');
 var ViewConstants    = require('../../constants/ViewConstants');
-var StructureActions = require('../StructureActions');
 var SequenceActions  = require('../SequenceActions');
 
 var _id = function () {
@@ -42,27 +41,9 @@ var ViewActions = {
         SequenceActions.list();
         break;
 
-      case ViewConstants.views.SEQUENCE_NEW:
-        StructureActions.list();
-        break;
-
       case ViewConstants.views.SEQUENCE_EDIT:
         viewPath = viewPath.replace(/:id/, params._id);
-        SequenceActions.get(params._id).success(function (data) {
-          StructureActions.get(data.type);
-        });
         break;
-
-      case ViewConstants.views.DATA_STRUCTURE_LIST:
-        StructureActions.list();
-        break;
-
-      case ViewConstants.views.DATA_STRUCTURE_EDIT:
-        viewPath = viewPath.replace(/:id/, params._id);
-        StructureActions.get(params._id);
-        break;
-      
-      break;
 
     }
 

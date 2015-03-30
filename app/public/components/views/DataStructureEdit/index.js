@@ -2,7 +2,6 @@ var React             = require('react/addons');
 var StructureStore    = require('../../../stores/StructureStore');
 var CodeMirror        = require('codemirror');
 var cx                = React.addons.classSet;
-var StructureActions  = require('../../../actions/StructureActions');
 require('codemirror/mode/javascript/javascript');
 
 var _operationEditorElem;
@@ -22,7 +21,6 @@ module.exports = React.createClass({
 
   saveStructure: function () {
     this.getCodeMirrorValue();
-    StructureActions.update(this.state.structure);
   },
 
   setCodeMirrorSize: function () {
