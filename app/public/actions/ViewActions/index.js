@@ -43,6 +43,7 @@ var ViewActions = {
 
       case ViewConstants.views.SEQUENCE_EDIT:
         viewPath = viewPath.replace(/:id/, params._id);
+        SequenceActions.get(params._id);
         break;
 
     }

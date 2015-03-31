@@ -3,9 +3,9 @@ module.exports = {
     ARRAY: 'array'
   },
   viewers: {
-    ARRAY: 'ArrayViewer'
+    'array': 'ArrayViewer'
   },
   editors: {
-    ARRAY: 'ArrayEditor'
+    'array': 'ArrayEditor'
   }
 };
