@@ -68,6 +68,7 @@
     "minifyify": "^6.2.2",
     "minimist": "^1.1.0",
     "mockgoose": "^1.10.7",
+    "mongo-express": "^0.20.0",
     "nock": "^0.59.1",
     "react": "^0.12.2",
     "reactify": "^1.0.0",
