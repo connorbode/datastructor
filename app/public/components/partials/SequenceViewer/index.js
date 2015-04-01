@@ -63,14 +63,12 @@ module.exports = React.createClass({
   },
 
   updateOperations: function () {
-    if (this.state.structure && this.state.sequence) {
+    if (this.props.structure && this.props.sequence) {
       this.clearViewPort();
-      _initialization = new Function("params", "data", this.state.structure.initialization);
-      _initialization({
-        viewport:   _viewport,
-        dragClass:  dragClass
-      }, this.state.sequence.data);
+      _initialization = this.props.structure.initialization.operation;
+      _initialization(_viewport, this.props.sequence.data);
       this.forceUpdate();
+      this.centerGroup();
     }
   },
 
@@ -110,6 +108,9 @@ module.exports = React.createClass({
 
     // apply behaviors
     _svg.call(_zoom);
+
+    // update the view
+    this.updateOperations();
 
   },
 

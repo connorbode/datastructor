@@ -34,7 +34,7 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    var editor = this.state.sequence ? <SequenceEditor /> : <div>Loading</div>;
+    var editor = this.state.sequence ? <SequenceEditor {...this.state.sequence} /> : <div>Loading</div>;
     return (<div>{editor}</div>);
   }
 });

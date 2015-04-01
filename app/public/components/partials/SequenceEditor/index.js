@@ -1,16 +1,19 @@
 var React             = require('react');
 var SequenceStore     = require('../../../stores/SequenceStore');
+var SequenceViewer    = require('../SequenceViewer');
 var DataInput         = require('../DataInput');
 var SequenceActions   = require('../../../actions/SequenceActions');
 
 var INITIALIZATION_STEP_NAME  = 'Initialization';
 var ADD_STEP_NAME             = 'Add Step';
 
+var _sequence;
+
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      sequence: null,
-      structure: null,
+      sequence: this.props.sequence,
+      structure: this.props.structure,
       step: null
     };
   },
@@ -66,8 +69,8 @@ module.exports = React.createClass({
       'show':         this.state.step === INITIALIZATION_STEP_NAME
     });
     var initializationInput = {
-      validation: this.state.structure ? this.state.structure.validation : {},
-      data:       this.state.sequence ? this.state.sequence.data : {},
+      validation: this.state.structure.initialization.validation || {},
+      data:       this.state.sequence.data || {},
       onChange:   this.handleInitializationDataChange
     };
     var addStepClass = cx({
@@ -83,32 +86,39 @@ module.exports = React.createClass({
       'step-name':  true,
       'hide':       this.state.step === ADD_STEP_NAME
     });
+    var viewerProps = {
+      structure:  this.state.structure,
+      sequence:   this.state.sequence
+    };
 
     return (
-      <div className="sequence-editor">
-        <ul className="steps">
-          <li className={initializationStepClass} onClick={this.loadInitializationStep}>
-            <div className="step-name">{INITIALIZATION_STEP_NAME}</div>
-            <div className={initializationContentClass}>
-              <DataInput {...initializationInput} />
-            </div>
-          </li>
-          {steps.map(function (step) {
-            return (
-              <li>
-                <div className="step-name">{step.name}</div>
-              </li>
-            );
-          })}
-          <li className={addStepClass} onClick={this.addStep}>
-            <div className={addStepNameClass}>
-              <i className="fa fa-plus"></i>
-            </div>
-            <div className={addStepContentClass}>
-              Hi there this is content
-            </div>
-          </li>
-        </ul>
+      <div>
+        <SequenceViewer {...viewerProps} />
+        <div className="sequence-editor">
+          <ul className="steps">
+            <li className={initializationStepClass} onClick={this.loadInitializationStep}>
+              <div className="step-name">{INITIALIZATION_STEP_NAME}</div>
+              <div className={initializationContentClass}>
+                <DataInput {...initializationInput} />
+              </div>
+            </li>
+            {steps.map(function (step) {
+              return (
+                <li>
+                  <div className="step-name">{step.name}</div>
+                </li>
+              );
+            })}
+            <li className={addStepClass} onClick={this.addStep}>
+              <div className={addStepNameClass}>
+                <i className="fa fa-plus"></i>
+              </div>
+              <div className={addStepContentClass}>
+                Hi there this is content
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }

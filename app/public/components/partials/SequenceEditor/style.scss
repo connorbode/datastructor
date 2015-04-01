@@ -2,6 +2,34 @@
   position: absolute;
   bottom: 0;
   width: 100%;
+  z-index: 200;
+
+  .step-content {
+    max-height: 0px;
+    max-width: 0px;
+    font-size: 1px;
+    overflow: hidden;
+
+    &.show {
+      font-size: 14px;
+      max-width: 1000px;
+      max-height: 1000px;
+    }
+
+    input {
+      background: none;
+      font-size: 14px;
+      color: white;
+    }
+
+    span {
+      color: $color-fade;
+    }
+
+    ul {
+      text-align: left;
+    }
+  }
 
   ul.steps {
     bottom: 20px;
@@ -34,35 +62,6 @@
 
       &:last-child::after {
         display: none;
-      }
-
-      .step-content {
-        max-height: 0px;
-        max-width: 0px;
-        font-size: 1px;
-        overflow: hidden;
-
-        &.show {
-          font-size: 14px;
-          max-width: 1000px;
-          max-height: 1000px;
-        }
-
-        ul {
-          text-align: left;
-
-          li {
-            input {
-              background: none;
-              font-size: 14px;
-              color: white;
-            }
-
-            span {
-              color: $color-fade;
-            }
-          }
-        }
       }
     }
   }
