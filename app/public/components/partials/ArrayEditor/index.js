@@ -4,6 +4,10 @@ var SequenceEditor = require('../SequenceEditor');
 var _sequence;
 var _array = [];
 
+function updateSequence () {
+
+};
+
 var ArrayOperations = {
   initialization: {
     validation: {
@@ -34,16 +38,23 @@ var ArrayOperations = {
         .attr('cx', function (d, i) {
           return (i + 1) * 50;
         })
-        .attr('r', '20');
+        .attr('r', '20')
+        .attr('stroke', '#aaa')
+        .attr('stroke-width', '0')
+        .style('cursor', 'pointer')
+        .on('mouseover', function (d) {
+          d3.select(this)
+            .attr('stroke-width', '2');
+        })
+        .on('mouseout', function (d) {
+          d3.select(this)
+            .attr('stroke-width', '0');
+        });
 
       // add the value of the node
       nodes
         .append('text')
-        .attr('fill', function (d) {
-          return d.value === null
-            ? '#aaa'
-            : 'black';
-        })
+        .attr('fill', '#aaa')
         .style('font-size', '20px')
         .attr('x', function (d, i) {
           return ((i + 1) * 50);
@@ -52,6 +63,26 @@ var ArrayOperations = {
         .attr('text-anchor', 'middle')
         .text(function (d) {
           return (d.value || '_');
+        })
+        .style('cursor', 'pointer')
+        .on('mouseover', function (d) {
+          d3.select(this)
+            .attr('fill', 'black');
+        })
+        .on('mouseout', function (d) {
+          d3.select(this)
+            .attr('fill', '#aaa');
+        })
+        .on('click', function (d) {
+          var elem = d3.select('.edit-node-value')
+            .classed('open', true)
+            .style('top', d3.event.clientY)
+            .style('left', d3.event.clientX);
+
+          var node = elem.node();
+
+          node.focus();
+          node.value = '';
         });
 
       // add opening bracket
@@ -70,6 +101,18 @@ var ArrayOperations = {
         .attr('x', ((_array.length + 1) * 50) - 10)
         .style('font-size', '40px')
         .text(']');
+
+      // add a blur event for the node editor
+      d3.select('.edit-node-value')
+        .on('blur', function (d) {
+          d3.select(this)
+            .classed('open', false);
+        })
+        .on('keydown', function (d) {
+          if (d3.event.keyCode === 13) {
+            d3.select(this).classed('open', false);
+          }
+        });
     }
   }
 };
@@ -82,7 +125,8 @@ module.exports = React.createClass({
       structure:  ArrayOperations
     };
     return (
-      <div>
+      <div className="array-editor">
+        <input className="edit-node-value" placeholder="Update value" />
         <SequenceEditor {...props} />
       </div>
     );
