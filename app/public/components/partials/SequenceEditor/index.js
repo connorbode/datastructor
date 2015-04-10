@@ -33,8 +33,9 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    var steps = this.state.sequence ? this.state.sequence.operations : [];
-    var operations = this.state.structure ? this.state.structure.operations : [];
+    var structure   = this.state.structure;
+    var steps       = this.state.sequence ? this.state.sequence.operations : [];
+    var operations  = this.state.structure ? this.state.structure.operations : [];
     var cx = React.addons.classSet;
 
     return (
@@ -46,7 +47,7 @@ module.exports = React.createClass({
           {steps.map(function (step) {
             return (
               <li className="step">
-                <div className="step-name">{step.name}</div>
+                <div className="step-name">{structure[step.type].label}</div>
               </li>
             );
           })}

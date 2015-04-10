@@ -11,146 +11,152 @@ function updateSequence () {
 };
 
 var ArrayOperations = {
-  initialization: function (viewport, data) {
+  initialization: {
+    label: 'Initialization',
+    operation: function (viewport, data) {
 
-    // add a blur event for the node adder
-    d3.select('.edit-node-value')
-      .on('blur', function (d) {
-        d3.select(this)
-          .classed('open', false);
-      })
-      .on('keydown', function (d) {
-        if (d3.event.keyCode === 13) {
+      // add a blur event for the node adder
+      d3.select('.edit-node-value')
+        .on('blur', function (d) {
           d3.select(this)
             .classed('open', false);
-        }
-      });
-
-    // add a blur event for the array adder
-    function checkArraySize (obj) {
-      var sequence;
-      if (obj.value === '') {
-        d3.select(obj)
-          .classed('open', false)
-          .classed('error', false);
-
-      } else if (isNaN(parseInt(obj.value))) {
-        d3.select(obj)
-          .classed('error', true);
-
-        obj.focus();
-        obj.value = '';
-      } else {
-        d3.select(obj)
-          .classed('open', false)
-          .classed('error', false);
-
-        _sequence.operations.push({
-          data: parseInt(obj.value),
-          type: 'createArray'
+        })
+        .on('keydown', function (d) {
+          if (d3.event.keyCode === 13) {
+            d3.select(this)
+              .classed('open', false);
+          }
         });
 
-        updateSequence();
-      }
-    }
+      // add a blur event for the array adder
+      function checkArraySize (obj) {
+        var sequence;
+        if (obj.value === '') {
+          d3.select(obj)
+            .classed('open', false)
+            .classed('error', false);
 
-    d3.select('.add-array-size')
-      .on('blur', function (d) {
-        checkArraySize(this);
-      })
-      .on('keydown', function (d) {
-        if (d3.event.keyCode === 13) {
-          checkArraySize(this);
+        } else if (isNaN(parseInt(obj.value))) {
+          d3.select(obj)
+            .classed('error', true);
+
+          obj.focus();
+          obj.value = '';
+        } else {
+          d3.select(obj)
+            .classed('open', false)
+            .classed('error', false);
+
+          _sequence.operations.push({
+            data: parseInt(obj.value),
+            type: 'createArray'
+          });
+
+          updateSequence();
         }
-      });
-  },
+      }
 
-  createArray: function (viewport, data) {
-
-    // initialize empty array
-    var i = 0;
-    _array = [];
-    for (i; i < data; i += 1) {
-      _array.push({ value: null });
+      d3.select('.add-array-size')
+        .on('blur', function (d) {
+          checkArraySize(this);
+        })
+        .on('keydown', function (d) {
+          if (d3.event.keyCode === 13) {
+            checkArraySize(this);
+          }
+        });
     }
+  }, 
 
-    // add the groups for each node
-    var nodes = viewport
-      .selectAll('g')
-      .data(_array)
-      .enter()
-      .append('g');
+  createArray: {
+    label: 'Create Array',
+    operation: function (viewport, data) {
 
-    // add the background circle
-    nodes
-      .append('circle')
-      .attr('fill', '#ccc')
-      .attr('cx', function (d, i) {
-        return (i + 1) * 50;
-      })
-      .attr('r', '20')
-      .attr('stroke', '#aaa')
-      .attr('stroke-width', '0')
-      .style('cursor', 'pointer')
-      .on('mouseover', function (d) {
-        d3.select(this)
-          .attr('stroke-width', '2');
-      })
-      .on('mouseout', function (d) {
-        d3.select(this)
-          .attr('stroke-width', '0');
-      });
+      // initialize empty array
+      var i = 0;
+      _array = [];
+      for (i; i < data; i += 1) {
+        _array.push({ value: null });
+      }
 
-    // add the value of the node
-    nodes
-      .append('text')
-      .attr('fill', '#aaa')
-      .style('font-size', '20px')
-      .attr('x', function (d, i) {
-        return ((i + 1) * 50);
-      })
-      .attr('y', 10)
-      .attr('text-anchor', 'middle')
-      .text(function (d) {
-        return (d.value || '_');
-      })
-      .style('cursor', 'pointer')
-      .on('mouseover', function (d) {
-        d3.select(this)
-          .attr('fill', 'black');
-      })
-      .on('mouseout', function (d) {
-        d3.select(this)
-          .attr('fill', '#aaa');
-      })
-      .on('click', function (d) {
-        var elem = d3.select('.edit-node-value')
-          .classed('open', true)
-          .style('top', d3.event.clientY)
-          .style('left', d3.event.clientX);
+      // add the groups for each node
+      var nodes = viewport
+        .selectAll('g')
+        .data(_array)
+        .enter()
+        .append('g');
 
-        var node = elem.node();
+      // add the background circle
+      nodes
+        .append('circle')
+        .attr('fill', '#ccc')
+        .attr('cx', function (d, i) {
+          return (i + 1) * 50;
+        })
+        .attr('r', '20')
+        .attr('stroke', '#aaa')
+        .attr('stroke-width', '0')
+        .style('cursor', 'pointer')
+        .on('mouseover', function (d) {
+          d3.select(this)
+            .attr('stroke-width', '2');
+        })
+        .on('mouseout', function (d) {
+          d3.select(this)
+            .attr('stroke-width', '0');
+        });
 
-        node.focus();
-        node.value = '';
-      });
+      // add the value of the node
+      nodes
+        .append('text')
+        .attr('fill', '#aaa')
+        .style('font-size', '20px')
+        .attr('x', function (d, i) {
+          return ((i + 1) * 50);
+        })
+        .attr('y', 10)
+        .attr('text-anchor', 'middle')
+        .text(function (d) {
+          return (d.value || '_');
+        })
+        .style('cursor', 'pointer')
+        .on('mouseover', function (d) {
+          d3.select(this)
+            .attr('fill', 'black');
+        })
+        .on('mouseout', function (d) {
+          d3.select(this)
+            .attr('fill', '#aaa');
+        })
+        .on('click', function (d) {
+          var elem = d3.select('.edit-node-value')
+            .classed('open', true)
+            .style('top', d3.event.clientY)
+            .style('left', d3.event.clientX);
 
-    // add opening bracket
-    viewport
-      .append('text')
-      .attr('fill', 'black')
-      .attr('y', '12')
-      .style('font-size', '40px')
-      .text('[');
+          var node = elem.node();
 
-    // add closing bracket
-    viewport
-      .append('text')
-      .attr('fill', 'black')
-      .attr('y', '12')
-      .attr('x', ((_array.length + 1) * 50) - 10)
-      .style('font-size', '40px')
-      .text(']');
+          node.focus();
+          node.value = '';
+        });
+
+      // add opening bracket
+      viewport
+        .append('text')
+        .attr('fill', 'black')
+        .attr('y', '12')
+        .style('font-size', '40px')
+        .text('[');
+
+      // add closing bracket
+      viewport
+        .append('text')
+        .attr('fill', 'black')
+        .attr('y', '12')
+        .attr('x', ((_array.length + 1) * 50) - 10)
+        .style('font-size', '40px')
+        .text(']');
+    }
   }
 };
 

@@ -65,7 +65,7 @@ module.exports = React.createClass({
   updateOperations: function () {
     if (this.props.structure && this.props.sequence) {
       this.clearViewPort();
-      _initialization = this.props.structure.initialization;
+      _initialization = this.props.structure.initialization.operation;
       _initialization(_viewport, this.props.sequence.data);
       this.forceUpdate();
       this.centerGroup();
