@@ -12,8 +12,9 @@ var _operations = [];
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      sequence: {},
-      structure: {}
+      sequence:   this.props.sequence,
+      structure:  this.props.structure,
+      step:       'initialization'
     };
   },
 
@@ -125,11 +126,44 @@ module.exports = React.createClass({
    * Render the component
    */
   render: function () {
+    var structure   = this.state.structure;
+    var steps       = this.state.sequence ? this.state.sequence.operations : [];
+    var operations  = this.state.structure ? this.state.structure.operations : [];
+    var cx = React.addons.classSet;
 
+    var initializationClass = cx({
+      'selected': this.state.step === 'initialization',
+      'step':     true
+    });
+    
     return (
       <div className="sequence-viewer">
         <h1>{this.props.sequence.name}</h1>
-        <svg></svg>
+        <svg></svg>        
+        <ul className="steps">
+          <li className={initializationClass}>
+            <div className="step-name">Initialization</div>
+          </li>
+          {steps.map(function (step, index) {
+            var stepClass = cx({
+              'selected': this.state.step === index,
+              'step':     true
+            });
+
+            return (
+              <li className={stepClass}>
+                <div className="step-name">{structure[step.type].label}</div>
+              </li>
+            );
+          }.bind(this))}
+        </ul>
+        <ul className="options">
+          {this.props.options.map(function (option) {
+            return (
+              <li className="option" onClick={option.action}>{option.label}</li>
+            );
+          })}
+        </ul>
       </div>
     );
   }

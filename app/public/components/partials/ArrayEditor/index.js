@@ -183,14 +183,16 @@ module.exports = React.createClass({
     };
     var viewerProps = {
       sequence:   this.props,
-      structure:  ArrayOperations
+      structure:  ArrayOperations,
+      options: [
+        { label: '[ ]', action: this.addArray }
+      ]
     };
     _sequence = this.props;
     return (
       <div className="array-editor">
         <input className="edit-node-value value-input" placeholder="Update value" />
         <input className="add-array-size value-input" placeholder="Enter array size" />
-        <SequenceEditor {...editorProps} />
         <SequenceViewer {...viewerProps} />
       </div>
     );

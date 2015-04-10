@@ -1,6 +1,5 @@
 module.exports = {
   DataInput:      require('./DataInput'),
-  Header:         require('./Header'),
-  SequenceEditor: require('./SequenceEditor'),
+  Header:         require('./Header'),=
   SequenceViewer: require('./SequenceViewer')
 };
