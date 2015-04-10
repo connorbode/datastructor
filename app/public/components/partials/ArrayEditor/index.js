@@ -4,6 +4,7 @@ var SequenceActions = require('../../../actions/SequenceActions');
 
 var _sequence;
 var _arrays = [];
+var _groups = [];
 
 function updateSequence () {
   SequenceActions.update(_sequence);
@@ -73,15 +74,22 @@ var ArrayOperations = {
 
       // initialize empty array
       var i = 0;
-      _array = [];
+      var array = [];
       for (i; i < data; i += 1) {
-        _array.push({ value: null });
+        array.push({ value: null });
       }
 
+      _arrays.push(array);
+
+      var verticalOffset = (_arrays.length - 1) * 50;
+
       // add the groups for each node
-      var nodes = viewport
+      var group = viewport.append('g');
+      _groups.push(group);
+
+      var nodes = group
         .selectAll('g')
-        .data(_array)
+        .data(array)
         .enter()
         .append('g');
 
@@ -92,6 +100,7 @@ var ArrayOperations = {
         .attr('cx', function (d, i) {
           return (i + 1) * 50;
         })
+        .attr('cy', verticalOffset)
         .attr('r', '20')
         .attr('stroke', '#aaa')
         .attr('stroke-width', '0')
@@ -113,7 +122,7 @@ var ArrayOperations = {
         .attr('x', function (d, i) {
           return ((i + 1) * 50);
         })
-        .attr('y', 10)
+        .attr('y', verticalOffset + 10)
         .attr('text-anchor', 'middle')
         .text(function (d) {
           return (d.value || '_');
@@ -143,7 +152,7 @@ var ArrayOperations = {
       viewport
         .append('text')
         .attr('fill', 'black')
-        .attr('y', '12')
+        .attr('y', verticalOffset + 12)
         .style('font-size', '40px')
         .text('[');
 
@@ -151,8 +160,8 @@ var ArrayOperations = {
       viewport
         .append('text')
         .attr('fill', 'black')
-        .attr('y', '12')
-        .attr('x', ((_array.length + 1) * 50) - 10)
+        .attr('y', verticalOffset + 12)
+        .attr('x', ((array.length + 1) * 50) - 10)
         .style('font-size', '40px')
         .text(']');
     }
