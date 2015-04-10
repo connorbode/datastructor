@@ -1,5 +1,4 @@
 var React           = require('react/addons');
-var SequenceEditor  = require('../SequenceEditor');
 var SequenceViewer  = require('../SequenceViewer');
 var SequenceActions = require('../../../actions/SequenceActions');
 
