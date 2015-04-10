@@ -71,4 +71,25 @@
       cursor: pointer;
     }
   }
+
+  .arrow {
+    position: absolute;
+    top: 50%;
+    font-size: 40px;
+    color: $color-fade;
+    @include transform(translateY(-50%));
+
+    &:hover {
+      cursor: pointer;
+      color: $color-focus;
+    }
+  }
+
+  .arrow-right {
+    right: 20px;
+  }
+
+  .arrow-left {
+    left: 20px;
+  }
 }

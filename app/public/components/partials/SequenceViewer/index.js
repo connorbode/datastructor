@@ -135,6 +135,18 @@ module.exports = React.createClass({
       'selected': this.state.step === 'initialization',
       'step':     true
     });
+
+    var arrowLeftClass = cx({
+      'arrow-left': true,
+      'arrow':      true,
+      'hide':       this.state.step === 'initialization'
+    });
+
+    var arrowRightClass = cx({
+      'arrow-right':  true,
+      'arrow':        true,
+      'hide':         this.state.step === steps.length - 1
+    });
     
     return (
       <div className="sequence-viewer">
@@ -164,6 +176,12 @@ module.exports = React.createClass({
             );
           })}
         </ul>
+        <div className="arrow arrow-right">
+          <i className="fa fa-arrow-right" />
+        </div>
+        <div className={arrowLeftClass}>
+          <i className="fa fa-arrow-left" />
+        </div>
       </div>
     );
   }
