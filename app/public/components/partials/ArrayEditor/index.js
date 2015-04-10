@@ -2,6 +2,7 @@ var React           = require('react/addons');
 var SequenceViewer  = require('../SequenceViewer');
 var SequenceActions = require('../../../actions/SequenceActions');
 
+var _step = 'initialization'; // the step that the viewer is on
 var _sequence;
 var _arrays = [];
 var _groups = [];
@@ -9,6 +10,11 @@ var _groups = [];
 function updateSequence () {
   SequenceActions.update(_sequence);
 };
+
+function addOperation (op) {
+  _sequence.operations.push(op);
+  updateSequence();
+}
 
 var ArrayOperations = {
   initialization: {
@@ -47,12 +53,10 @@ var ArrayOperations = {
             .classed('open', false)
             .classed('error', false);
 
-          _sequence.operations.push({
+          addOperation({
             data: parseInt(obj.value),
             type: 'createArray'
           });
-
-          updateSequence();
         }
       }
 
@@ -190,20 +194,18 @@ module.exports = React.createClass({
     node.value = '';
   },
 
+  onChangeStep: function (step) {
+    _step = step;
+  },
+
   render: function () {
-    var editorProps = {
-      sequence:   this.props,
-      structure:  ArrayOperations,
-      options: [
-        { label: '[ ]', action: this.addArray }
-      ]
-    };
     var viewerProps = {
       sequence:   this.props,
       structure:  ArrayOperations,
       options: [
         { label: '[ ]', action: this.addArray }
-      ]
+      ],
+      onChangeStep: this.onChangeStep
     };
     _sequence = this.props;
     return (
