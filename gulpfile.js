@@ -86,7 +86,6 @@ gulp.task('browserify', function () {
   return watcher
     .on('error', function (err) {
       console.log(err.message);
-      this.emit('end');
     })
     .on('update', function () {
       console.log('updating bundle');
