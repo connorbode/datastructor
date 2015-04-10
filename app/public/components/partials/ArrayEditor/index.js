@@ -57,6 +57,8 @@ var ArrayOperations = {
             data: parseInt(obj.value),
             type: 'createArray'
           });
+
+          obj.value = '';
         }
       }
 
