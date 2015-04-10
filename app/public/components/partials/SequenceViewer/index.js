@@ -63,7 +63,7 @@ module.exports = React.createClass({
     _viewport.selectAll('*').remove();
   },
 
-  updateOperations: function () {
+  initializeViewport: function () {
     if (this.props.structure && this.props.sequence) {
       this.clearViewPort();
       _initialization = this.props.structure.initialization.operation;
@@ -80,17 +80,22 @@ module.exports = React.createClass({
     var currentState = this.state;
     currentState.sequence = SequenceStore.getSequence();
     this.setState(currentState);
-    this.updateOperations();
+    this.initializeViewport();
   },
 
   handleIncrementStep: function () {
     var state = this.state;
+    var step;  // the operation and its data
+    var op; // the function to execute
     if (state.step === 'initialization') {
       state.step = 0;
     } else {
       state.step += 1;
     }
     this.setState(state);
+    step = state.sequence.operations[state.step];
+    op = state.structure[step.type].operation;
+    op(_viewport, step.data);
   },
 
   handleDecrementStep: function () {
@@ -131,7 +136,7 @@ module.exports = React.createClass({
     _svg.call(_zoom);
 
     // update the view
-    this.updateOperations();
+    this.initializeViewport();
 
   },
 
