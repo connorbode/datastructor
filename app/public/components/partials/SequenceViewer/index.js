@@ -76,21 +76,6 @@ module.exports = React.createClass({
     }
   },
 
-  /**
-   * Loads the sequence into the state
-   */
-  handleSequenceLoaded: function () {
-    var currentState = this.state;
-    currentState.sequence = SequenceStore.getSequence();
-    this.setState(currentState);
-    this.initializeViewport();
-    if (_numOperations !== undefined && _numOperations < currentState.sequence.operations.length) {
-      console.log('increment?');
-      this.handleIncrementStep();
-    }
-    _numOperations = currentState.sequence.operations.length;
-  },
-
   handleIncrementStep: function () {
     var state = this.state;
     var step;  // the operation and its data
@@ -109,6 +94,7 @@ module.exports = React.createClass({
   },
 
   handleDecrementStep: function () {
+    console.log('called');
     var state = this.state;
     var step = state.sequence.operations[state.step];
     var op;
@@ -124,6 +110,30 @@ module.exports = React.createClass({
     this.setState(state);
     op = state.structure[step.type].reverse;
     op();
+  },
+
+  /**
+   * Loads the sequence into the state
+   */
+  handleSequenceLoaded: function () {
+    var currentState = this.state;
+    var currentOp;
+    var nextOp;
+
+    // get the current operation
+    if (this.state.step !== 'initialization') {
+      currentOp = this.state.sequence.operations[this.state.step];
+    }
+
+    currentState.sequence = SequenceStore.getSequence();
+    this.setState(currentState);
+    this.initializeViewport();
+
+    // handle incrementing the step
+    if (_numOperations !== undefined && _numOperations < currentState.sequence.operations.length) {
+      this.handleIncrementStep();
+    }
+    _numOperations = currentState.sequence.operations.length;
   },
 
   handleCancelDelete: function () {
@@ -165,6 +175,9 @@ module.exports = React.createClass({
       sequence.operations.splice(index, 1);
       SequenceActions.update(sequence);
       state.delete = null;
+      if (index <= this.state.step) {
+        this.handleDecrementStep();
+      }
     } else {
       state.delete = index;
     }

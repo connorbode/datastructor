@@ -4,7 +4,6 @@ var SequenceActions = require('../../../actions/SequenceActions');
 
 var _step = 'initialization'; // the step that the viewer is on
 var _sequence;
-var _arrays = [];
 var _groups = [];
 
 function updateSequence () {
@@ -85,9 +84,7 @@ var ArrayOperations = {
         array.push({ value: null });
       }
 
-      _arrays.push(array);
-
-      var verticalOffset = (_arrays.length - 1) * 50;
+      var verticalOffset = (_groups.length - 1) * 50;
       var horizontalOffset = array.length * 50 / 2;
 
       // add the groups for each node
@@ -178,7 +175,6 @@ var ArrayOperations = {
       d3.selectAll(_groups[lastIndex])[0]
         .remove();
       _groups.pop();
-      _arrays.pop();
     }
   }
 };
