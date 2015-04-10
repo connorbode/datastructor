@@ -82,6 +82,7 @@ var ArrayOperations = {
       _arrays.push(array);
 
       var verticalOffset = (_arrays.length - 1) * 50;
+      var horizontalOffset = array.length * 50 / 2;
 
       // add the groups for each node
       var group = viewport.append('g');
@@ -98,7 +99,7 @@ var ArrayOperations = {
         .append('circle')
         .attr('fill', '#ccc')
         .attr('cx', function (d, i) {
-          return (i + 1) * 50;
+          return ((i + 1) * 50) - horizontalOffset;
         })
         .attr('cy', verticalOffset)
         .attr('r', '20')
@@ -120,7 +121,7 @@ var ArrayOperations = {
         .attr('fill', '#aaa')
         .style('font-size', '20px')
         .attr('x', function (d, i) {
-          return ((i + 1) * 50);
+          return ((i + 1) * 50) - horizontalOffset;
         })
         .attr('y', verticalOffset + 10)
         .attr('text-anchor', 'middle')
@@ -152,6 +153,7 @@ var ArrayOperations = {
       group
         .append('text')
         .attr('fill', 'black')
+        .attr('x', - horizontalOffset)
         .attr('y', verticalOffset + 12)
         .style('font-size', '40px')
         .text('[');
@@ -161,7 +163,7 @@ var ArrayOperations = {
         .append('text')
         .attr('fill', 'black')
         .attr('y', verticalOffset + 12)
-        .attr('x', ((array.length + 1) * 50) - 10)
+        .attr('x', ((array.length + 1) * 50) - 10 - horizontalOffset)
         .style('font-size', '40px')
         .text(']');
     },
