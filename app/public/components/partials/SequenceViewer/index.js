@@ -87,6 +87,7 @@ module.exports = React.createClass({
     var state = this.state;
     var step;  // the operation and its data
     var op; // the function to execute
+    if (state.step === state.sequence.operations.length - 1) return;
     if (state.step === 'initialization') {
       state.step = 0;
     } else {
@@ -102,6 +103,9 @@ module.exports = React.createClass({
     var state = this.state;
     var step = state.sequence.operations[state.step];
     var op;
+
+    if (state.step === 'initialization') return;
+
     if (state.step === 0) {
       state.step = 'initialization';
     } else {
