@@ -149,7 +149,7 @@ var ArrayOperations = {
         });
 
       // add opening bracket
-      viewport
+      group
         .append('text')
         .attr('fill', 'black')
         .attr('y', verticalOffset + 12)
@@ -157,13 +157,20 @@ var ArrayOperations = {
         .text('[');
 
       // add closing bracket
-      viewport
+      group
         .append('text')
         .attr('fill', 'black')
         .attr('y', verticalOffset + 12)
         .attr('x', ((array.length + 1) * 50) - 10)
         .style('font-size', '40px')
         .text(']');
+    },
+    reverse: function (viewport) {
+      var lastIndex = _groups.length - 1;
+      d3.selectAll(_groups[lastIndex])[0]
+        .remove();
+      _groups.pop();
+      _arrays.pop();
     }
   }
 };

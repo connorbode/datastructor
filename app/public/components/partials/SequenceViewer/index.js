@@ -100,12 +100,16 @@ module.exports = React.createClass({
 
   handleDecrementStep: function () {
     var state = this.state;
+    var step = state.sequence.operations[state.step];
+    var op;
     if (state.step === 0) {
       state.step = 'initialization';
     } else {
       state.step -= 1;
     }
     this.setState(state);
+    op = state.structure[step.type].reverse;
+    op();
   },
 
   handleKeyDown: function (e) {
