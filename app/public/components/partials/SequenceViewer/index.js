@@ -108,6 +108,19 @@ module.exports = React.createClass({
     this.setState(state);
   },
 
+  handleKeyDown: function (e) {
+
+    // left key press
+    if (e.keyCode === 37) {
+      this.handleDecrementStep();
+    } 
+
+    // right key press
+    else if (e.keyCode === 39) {
+      this.handleIncrementStep();
+    }
+  },
+
   /**
    * Initialize the component
    */
@@ -117,6 +130,9 @@ module.exports = React.createClass({
 
     // add store listeners
     SequenceStore.addChangeListener(this.handleSequenceLoaded);
+
+    // add left / right key listeners
+    window.addEventListener('keydown', this.handleKeyDown);
 
     // set up viewport
     _svg = d3.select('svg');
@@ -145,6 +161,7 @@ module.exports = React.createClass({
    */
   componentWillUnmount: function () {
     SequenceStore.removeChangeListener(this.handleSequenceLoaded);
+    window.removeEventListener('keydown', this.handleKeyDown);
   },
 
   /**
