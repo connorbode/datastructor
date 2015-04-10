@@ -83,6 +83,26 @@ module.exports = React.createClass({
     this.updateOperations();
   },
 
+  handleIncrementStep: function () {
+    var state = this.state;
+    if (state.step === 'initialization') {
+      state.step = 0;
+    } else {
+      state.step += 1;
+    }
+    this.setState(state);
+  },
+
+  handleDecrementStep: function () {
+    var state = this.state;
+    if (state.step === 0) {
+      state.step = 'initialization';
+    } else {
+      state.step -= 1;
+    }
+    this.setState(state);
+  },
+
   /**
    * Initialize the component
    */
@@ -176,10 +196,10 @@ module.exports = React.createClass({
             );
           })}
         </ul>
-        <div className={arrowLeftClass}>
+        <div className={arrowLeftClass} onClick={this.handleDecrementStep}>
           <i className="fa fa-arrow-left" />
         </div>
-        <div className={arrowRightClass}>
+        <div className={arrowRightClass} onClick={this.handleIncrementStep}>
           <i className="fa fa-arrow-right" />
         </div>
       </div>
