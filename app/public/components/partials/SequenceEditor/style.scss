@@ -65,4 +65,21 @@
       }
     }
   }
+
+  ul.options {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+
+    li.option {
+      height: 40px;
+      width: 40px;
+      border-radius: 20px;
+      border: black 1px solid;
+      line-height: 40px;
+      text-align: center;
+      list-style-type: none;
+      cursor: pointer;
+    }
+  }
 }

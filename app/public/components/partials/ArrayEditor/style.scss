@@ -1,5 +1,5 @@
 .array-editor {
-  .edit-node-value {
+  .value-input {
     position: absolute;
     margin-top: -20px;
     height: 40px;
@@ -16,6 +16,10 @@
 
     &.open {
       opacity: 0.9;
+    }
+
+    &.error {
+      border: #7D0000 3px solid;
     }
   }
 }

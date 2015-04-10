@@ -128,7 +128,7 @@ module.exports = React.createClass({
 
     return (
       <div className="sequence-viewer">
-        <h1>{this.state.sequence.name}</h1>
+        <h1>{this.props.sequence.name}</h1>
         <svg></svg>
       </div>
     );

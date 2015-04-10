@@ -37,28 +37,27 @@ module.exports = React.createClass({
     var operations = this.state.structure ? this.state.structure.operations : [];
     var cx = React.addons.classSet;
 
-    var viewerProps = {
-      structure:  this.state.structure,
-      sequence:   this.state.sequence
-    };
-
     return (
-      <div>
-        <SequenceViewer {...viewerProps} />
-        <div className="sequence-editor">
-          <ul className="steps">
-            <li className="step">
-              <div className="step-name">Initialization</div>
-            </li>
-            {steps.map(function (step) {
-              return (
-                <li className="step">
-                  <div className="step-name">{step.name}</div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+      <div className="sequence-editor">
+        <ul className="steps">
+          <li className="step">
+            <div className="step-name">Initialization</div>
+          </li>
+          {steps.map(function (step) {
+            return (
+              <li className="step">
+                <div className="step-name">{step.name}</div>
+              </li>
+            );
+          })}
+        </ul>
+        <ul className="options">
+          {this.props.options.map(function (option) {
+            return (
+              <li className="option" onClick={option.action}>{option.label}</li>
+            );
+          })}
+        </ul>
       </div>
     );
   }

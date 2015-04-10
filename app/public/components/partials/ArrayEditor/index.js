@@ -1,16 +1,68 @@
-var React          = require('react/addons');
-var SequenceEditor = require('../SequenceEditor');
+var React           = require('react/addons');
+var SequenceEditor  = require('../SequenceEditor');
+var SequenceViewer  = require('../SequenceViewer');
+var SequenceActions = require('../../../actions/SequenceActions');
 
 var _sequence;
-var _array = [];
+var _arrays = [];
 
 function updateSequence () {
-
+  SequenceActions.update(_sequence);
 };
 
 var ArrayOperations = {
   initialization: function (viewport, data) {
 
+    // add a blur event for the node adder
+    d3.select('.edit-node-value')
+      .on('blur', function (d) {
+        d3.select(this)
+          .classed('open', false);
+      })
+      .on('keydown', function (d) {
+        if (d3.event.keyCode === 13) {
+          d3.select(this)
+            .classed('open', false);
+        }
+      });
+
+    // add a blur event for the array adder
+    function checkArraySize (obj) {
+      var sequence;
+      if (obj.value === '') {
+        d3.select(obj)
+          .classed('open', false)
+          .classed('error', false);
+
+      } else if (isNaN(parseInt(obj.value))) {
+        d3.select(obj)
+          .classed('error', true);
+
+        obj.focus();
+        obj.value = '';
+      } else {
+        d3.select(obj)
+          .classed('open', false)
+          .classed('error', false);
+
+        _sequence.operations.push({
+          data: parseInt(obj.value),
+          type: 'createArray'
+        });
+
+        updateSequence();
+      }
+    }
+
+    d3.select('.add-array-size')
+      .on('blur', function (d) {
+        checkArraySize(this);
+      })
+      .on('keydown', function (d) {
+        if (d3.event.keyCode === 13) {
+          checkArraySize(this);
+        }
+      });
   },
 
   createArray: function (viewport, data) {
@@ -99,32 +151,41 @@ var ArrayOperations = {
       .attr('x', ((_array.length + 1) * 50) - 10)
       .style('font-size', '40px')
       .text(']');
-
-    // add a blur event for the node editor
-    d3.select('.edit-node-value')
-      .on('blur', function (d) {
-        d3.select(this)
-          .classed('open', false);
-      })
-      .on('keydown', function (d) {
-        if (d3.event.keyCode === 13) {
-          d3.select(this).classed('open', false);
-        }
-      });
   }
 };
 
 module.exports = React.createClass({
 
+  addArray: function () {
+    var elem = d3.select('.add-array-size')
+      .classed('open', true)
+      .style('top', window.innerHeight / 2)
+      .style('left', window.innerWidth / 2);
+
+    var node = elem.node();
+    node.focus();
+    node.value = '';
+  },
+
   render: function () {
-    var props = {
+    var editorProps = {
+      sequence:   this.props,
+      structure:  ArrayOperations,
+      options: [
+        { label: '[ ]', action: this.addArray }
+      ]
+    };
+    var viewerProps = {
       sequence:   this.props,
       structure:  ArrayOperations
     };
+    _sequence = this.props;
     return (
       <div className="array-editor">
-        <input className="edit-node-value" placeholder="Update value" />
-        <SequenceEditor {...props} />
+        <input className="edit-node-value value-input" placeholder="Update value" />
+        <input className="add-array-size value-input" placeholder="Enter array size" />
+        <SequenceEditor {...editorProps} />
+        <SequenceViewer {...viewerProps} />
       </div>
     );
   }
