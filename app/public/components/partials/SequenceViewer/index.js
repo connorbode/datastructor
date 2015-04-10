@@ -1,5 +1,6 @@
 var React           = require('react');
 var SequenceStore   = require('../../../stores/SequenceStore');
+var SequenceActions = require('../../../actions/SequenceActions');
 
 var dragClass = 'draggable';
 var _viewport;
@@ -14,7 +15,8 @@ module.exports = React.createClass({
     return {
       sequence:   this.props.sequence,
       structure:  this.props.structure,
-      step:       'initialization'
+      step:       'initialization',
+      delete:     null
     };
   },
 
@@ -116,6 +118,12 @@ module.exports = React.createClass({
     op();
   },
 
+  handleCancelDelete: function () {
+    var state = this.state;
+    state.delete = null;
+    this.setState(state);
+  },
+
   handleKeyDown: function (e) {
 
     // left key press
@@ -127,6 +135,32 @@ module.exports = React.createClass({
     else if (e.keyCode === 39) {
       this.handleIncrementStep();
     }
+
+    // escape key press
+    else if (e.keyCode === 27) {
+      this.handleCancelDelete();
+    }
+
+    // enter key press
+    else if (e.keyCode === 13) {
+      if (this.state.delete !== null) {
+        this.handleDeleteStep(this.state.delete);
+      }
+    }
+  },
+
+  handleDeleteStep: function (index) {
+    var state = this.state;
+    var sequence;
+    if (state.delete === index) {
+      sequence = state.sequence;
+      sequence.operations.splice(index, 1);
+      SequenceActions.update(sequence);
+      state.delete = null;
+    } else {
+      state.delete = index;
+    }
+    this.setState(state);
   },
 
   /**
@@ -195,13 +229,21 @@ module.exports = React.createClass({
     var arrowRightClass = cx({
       'arrow-right':  true,
       'arrow':        true,
-      'hide':         this.state.step === steps.length - 1
+      'hide':         this.state.step === steps.length - 1 || steps.length === 0
     });
     
+    var deleteClass = cx({
+      'delete-overlay': true,
+      'hide':           this.state.delete === null
+    }); 
+
     return (
       <div className="sequence-viewer">
         <h1>{this.props.sequence.name}</h1>
-        <svg></svg>        
+        <svg></svg>
+        <div className={deleteClass}>
+          Click delete button again or press enter to confirm step deletion.  Otherwise, press escape.
+        </div>        
         <ul className="steps">
           <li className={initializationClass}>
             <div className="step-name">Initialization</div>
@@ -214,6 +256,9 @@ module.exports = React.createClass({
 
             return (
               <li className={stepClass}>
+                <div className="delete-step" onClick={this.handleDeleteStep.bind(this, index)}>
+                  <i className="fa fa-times" />
+                </div>
                 <div className="step-name">{structure[step.type].label}</div>
               </li>
             );

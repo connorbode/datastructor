@@ -52,6 +52,30 @@
       &:last-child::after {
         display: none;
       }
+
+      &:hover {
+        background: $color-focus;
+
+        .delete-step {
+          background: $color-fade;
+          color: white;
+          position: absolute;
+          top: 50%;
+          margin-top: -13px;
+          right: -8px;
+          font-size: 20px;
+          display: block;
+          border-radius: 15px;
+          padding: 5px;
+          padding-top: 3px;
+          padding-bottom: 3px;
+          cursor: pointer;
+        }
+      }
+
+      .delete-step {
+        display: none;
+      }
     }
   }
 
@@ -91,5 +115,19 @@
 
   .arrow-left {
     left: 20px;
+  }
+
+  .delete-overlay {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: $color-focus;
+    font-size: 20px;
+    color: $color-fade;
+    width: 400px;
+    text-align: center;
+    padding: 20px;
+    @include transform(translate(-50%));
+    @include radius(20px);
   }
 }
