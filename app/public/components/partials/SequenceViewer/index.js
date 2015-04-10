@@ -176,11 +176,11 @@ module.exports = React.createClass({
             );
           })}
         </ul>
-        <div className="arrow arrow-right">
-          <i className="fa fa-arrow-right" />
-        </div>
         <div className={arrowLeftClass}>
           <i className="fa fa-arrow-left" />
+        </div>
+        <div className={arrowRightClass}>
+          <i className="fa fa-arrow-right" />
         </div>
       </div>
     );
