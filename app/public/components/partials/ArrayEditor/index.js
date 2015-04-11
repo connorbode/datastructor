@@ -4,6 +4,10 @@ var SequenceActions = require('../../../actions/SequenceActions');
 
 var _step = 'initialization'; // the step that the viewer is on
 var _sequence;
+var _editVal = {
+  group: null,
+  index: null
+};
 var _groups = [];
 
 function updateSequence () {
@@ -20,16 +24,30 @@ var ArrayOperations = {
     label: 'Initialization',
     operation: function (viewport, data) {
 
+      function editNodeValue (val) {
+        addOperation({
+          type: 'editValue',
+          data: {
+            group: _editVal.group,
+            index: _editVal.index,
+            value: val
+          }
+        });
+      }
+
       // add a blur event for the node adder
       d3.select('.edit-node-value')
         .on('blur', function (d) {
           d3.select(this)
             .classed('open', false);
+
+          editNodeValue(this.value);
         })
         .on('keydown', function (d) {
           if (d3.event.keyCode === 13) {
             d3.select(this)
               .classed('open', false);
+            editNodeValue(this.value);
           }
         });
 
@@ -88,14 +106,18 @@ var ArrayOperations = {
       var horizontalOffset = array.length * 50 / 2;
 
       // add the groups for each node
-      var group = viewport.append('g');
+      var group = viewport
+        .append('g')
+        .classed('array', true);
+
       _groups.push(group);
 
       var nodes = group
         .selectAll('g')
         .data(array)
         .enter()
-        .append('g');
+        .append('g')
+        .classed('node', true);
 
       // add the background circle
       nodes
@@ -140,13 +162,15 @@ var ArrayOperations = {
           d3.select(this)
             .attr('fill', '#aaa');
         })
-        .on('click', function (d) {
+        .on('click', function (d, i) {
           var elem = d3.select('.edit-node-value')
             .classed('open', true)
             .style('top', d3.event.clientY)
             .style('left', d3.event.clientX);
 
           var node = elem.node();
+          _editVal.group = _groups.length - 1;
+          _editVal.index = i;
 
           node.focus();
           node.value = '';
@@ -175,6 +199,20 @@ var ArrayOperations = {
       d3.selectAll(_groups[lastIndex])[0]
         .remove();
       _groups.pop();
+    }
+  },
+
+  editValue: {
+
+    label: 'Edit Value',
+    operation: function (viewport, data) {
+      var arr = d3.selectAll('g.array')[0][data.group];
+      var node = d3.select(arr).selectAll('g.node')[0][data.index];
+      d3.select(node).selectAll('text')[0][0].innerHTML = data.value;
+    },
+
+    reverse: function (viewport, data) {
+
     }
   }
 };
