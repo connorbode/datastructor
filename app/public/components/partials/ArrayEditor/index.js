@@ -105,7 +105,7 @@ var ArrayOperations = {
       }
 
       var verticalOffset = (_groups.length - 1) * 50;
-      var horizontalOffset = array.length * 50 / 2;
+      var horizontalOffset = (array.length + 1) * 50 / 2;
 
       // add the groups for each node
       var group = viewport
