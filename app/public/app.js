@@ -1,4 +1,4 @@
-var React       = require('react');
+var React       = require('react/addons');
 var ViewPort    = require('./components/ViewPort');
 var queryString = require('querystring');
 var PathActions = require('./actions/PathActions');
