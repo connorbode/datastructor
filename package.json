@@ -2,12 +2,12 @@
   "name": "datastructor",
   "version": "1.0.0",
   "description": "## References",
-  "main": "index.js",
+  "main": "app/index.js",
   "directories": {
     "doc": "doc"
   },
   "scripts": {
-    "start": "gulp nodemon",
+    "start": "node app/index.js",
     "test": "gulp test",
     "start-db": "mongod --dbpath ~/.data/"
   },
