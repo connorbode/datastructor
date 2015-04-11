@@ -11,13 +11,16 @@ var _numOperations = 0; // used to see whether we need to increment the step whe
 var _initialization;
 var _operations = [];
 
+var _mouseCoordinates;
+
 module.exports = React.createClass({
   getInitialState: function () {
     return {
       sequence:   this.props.sequence,
       structure:  this.props.structure,
       step:       'initialization',
-      delete:     null
+      delete:     null,
+      options:    null
     };
   },
 
@@ -152,13 +155,32 @@ module.exports = React.createClass({
       this.handleIncrementStep();
     }
     _numOperations = currentState.sequence.operations.length;
-    console.log('num ops: ', _numOperations);
   },
 
   handleCancelDelete: function () {
     var state = this.state;
     state.delete = null;
     this.setState(state);
+  },
+
+  toggleOptions: function () {
+    var state = this.state;
+    if (state.options) {
+      state.options = null;
+    } else {
+      state.options = _mouseCoordinates;
+      document.getElementById('options').focus();
+    }
+    this.setState(state);
+  },
+
+  /**
+   * Hides the options panel before triggering the
+   * action
+   */
+  triggerAction: function (action) {
+    this.toggleOptions();
+    action();
   },
 
   handleKeyDown: function (e) {
@@ -188,6 +210,11 @@ module.exports = React.createClass({
         this.handleDeleteStep(this.state.delete);
       }
     }
+
+    // space key press
+    else if (e.keyCode === 32) {
+      this.toggleOptions();
+    }
   },
 
   handleDeleteStep: function (index) {
@@ -207,6 +234,19 @@ module.exports = React.createClass({
     this.setState(state);
   },
 
+  handleMouseMove: function (e) {
+    _mouseCoordinates = {
+      x: e.clientX,
+      y: e.clientY
+    };
+  },
+
+  handleOptionsBlur: function (e) {
+    if (this.state.options) {
+      this.toggleOptions();
+    }
+  },
+
   /**
    * Initialize the component
    */
@@ -219,6 +259,7 @@ module.exports = React.createClass({
 
     // add left / right key listeners
     window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('mousemove', this.handleMouseMove);
 
     // set up viewport
     _svg = d3.select('svg');
@@ -248,6 +289,7 @@ module.exports = React.createClass({
   componentWillUnmount: function () {
     SequenceStore.removeChangeListener(this.handleSequenceLoaded);
     window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('mousemove', this.handleMouseMove);
   },
 
   /**
@@ -281,6 +323,16 @@ module.exports = React.createClass({
       'hide':           this.state.delete === null
     }); 
 
+    var optionsClass = cx({
+      'hide':     !this.state.options,
+      'options':  true
+    });
+
+    var optionsStyle = {
+      left: this.state.options ? this.state.options.x : 0,
+      top:  this.state.options ? this.state.options.y : 0
+    };
+
     return (
       <div className="sequence-viewer">
         <h1>{this.props.sequence.name}</h1>
@@ -308,12 +360,12 @@ module.exports = React.createClass({
             );
           }.bind(this))}
         </ul>
-        <ul className="options">
+        <ul id="options" onMouseLeave={this.handleOptionsBlur} className={optionsClass} style={optionsStyle}>
           {this.props.options.map(function (option) {
             return (
-              <li className="option" onClick={option.action}>{option.label}</li>
+              <li className="option" onClick={this.triggerAction.bind(this, option.action)}>{option.label}</li>
             );
-          })}
+          }.bind(this))}
         </ul>
         <div className={arrowLeftClass} onClick={this.handleDecrementStep}>
           <i className="fa fa-arrow-left" />

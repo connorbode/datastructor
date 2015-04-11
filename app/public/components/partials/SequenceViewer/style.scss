@@ -88,8 +88,11 @@
 
   ul.options {
     position: absolute;
-    right: 20px;
-    bottom: 20px;
+    background: $color-focus;
+    opacity: 0.9;
+    padding: 20px;
+    @include radius(20px);
+    @include transform(translateX(-50%)translateY(-50%));
 
     li.option {
       height: 40px;
@@ -100,6 +103,7 @@
       text-align: center;
       list-style-type: none;
       cursor: pointer;
+      background-color: white;
     }
   }
 
