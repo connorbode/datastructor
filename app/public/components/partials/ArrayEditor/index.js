@@ -236,6 +236,10 @@ module.exports = React.createClass({
     _step = step;
   },
 
+  reset: function () {
+    _groups = [];
+  },
+
   render: function () {
     var viewerProps = {
       sequence:   this.props,
@@ -243,7 +247,8 @@ module.exports = React.createClass({
       options: [
         { label: '[ ]', action: this.addArray }
       ],
-      onChangeStep: this.onChangeStep
+      onChangeStep: this.onChangeStep,
+      reset: this.reset
     };
     _sequence = this.props;
     return (

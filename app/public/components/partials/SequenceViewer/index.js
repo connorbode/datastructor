@@ -73,6 +73,7 @@ module.exports = React.createClass({
       _initialization(_viewport, this.props.sequence.data);
       this.forceUpdate();
       this.centerGroup();
+      this.props.reset();
     }
   },
 
