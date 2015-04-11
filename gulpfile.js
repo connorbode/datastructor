@@ -66,13 +66,28 @@ gulp.task('lint-client', function (done) {
  * Cleans the dist directory
  */
 gulp.task('clean', function (callback) {
-  del(['./dist/**/*'], callback); 
+  return del(['./dist/**/*'], callback); 
+});
+
+gulp.task('browserify', function () {
+  var bundler = browserify({ 
+    debug:        true,
+    transform:    [ reactify ],
+    entries:      [ './app/public/app.js' ],
+    cache:        {},
+    packageCache: {}
+  });
+  bundler.plugin('minifyify', { map: 'app.js.map', output: __dirname + '/dist/public/app.js.map' });
+  return bundler
+    .bundle()
+    .pipe(source('public/app.js'))
+    .pipe(gulp.dest('./dist/'));
 });
 
 /**
  * Compiles the client javascript
  */
-gulp.task('browserify', function () {
+gulp.task('watchify', function () {
   var bundler = browserify({ 
     debug:        true,
     transform:    [ reactify ],
@@ -143,13 +158,17 @@ gulp.task('assets', function () {
  * Builds the application
  */
 gulp.task('build', function (done) {
-  runSequence('clean', 'copy-server', 'browserify', 'copy-client', 'sass', 'assets', done);
+  return runSequence('clean', 'copy-server', 'browserify', 'copy-client', 'sass', 'assets', done);
+});
+
+gulp.task('watch', function (done) {
+  return runSequence('clean', 'copy-server', 'watchify', 'copy-client', 'sass', 'assets', done);
 });
 
 /**
  * Automatic server reload
  */
-gulp.task('nodemon', ['build'], function (done) {
+gulp.task('nodemon', ['watch'], function (done) {
   var called = false;
   return nodemon({
     script: './dist/index.js',
