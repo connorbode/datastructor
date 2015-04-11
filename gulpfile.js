@@ -175,13 +175,13 @@ gulp.task('nodemon', ['watch'], function (done) {
     ext: 'js',
     ignore: ['dist/**/*', 'app/public/**/*', 'coverage/**/*', 'doc/**/*', 'node_modules/**/*', 'spec/**/*']
   }).on('change', ['lint-server', 'copy-server'])
-    .on('start', ['watch']);
+    .on('start', ['watch-assets']);
 });
 
 /**
  * Development task
  */
-gulp.task('watch', function () {
+gulp.task('watch-assets', function () {
   gulp.watch(['app/public/index.html'], ['copy-client']);
   gulp.watch(['app/public/**/*.scss'], ['sass']);
 });
