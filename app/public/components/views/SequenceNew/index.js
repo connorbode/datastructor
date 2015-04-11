@@ -1,4 +1,4 @@
-var React               = require('react');
+var React               = require('react/addons');
 var Dropdown            = require('react-select');
 var $                   = require('jquery');
 var SequenceActions     = require('../../../actions/SequenceActions');
