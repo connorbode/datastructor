@@ -44,12 +44,14 @@ var ArrayOperations = {
             .classed('open', false);
 
           editNodeValue(this.value);
+          this.value = '';
         })
         .on('keydown', function (d) {
           if (d3.event.keyCode === 13) {
             d3.select(this)
               .classed('open', false);
             editNodeValue(this.value);
+            this.value = '';
           }
         });
 
