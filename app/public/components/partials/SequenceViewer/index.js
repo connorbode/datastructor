@@ -76,6 +76,31 @@ module.exports = React.createClass({
     }
   },
 
+  loadStep: function (step) {
+    var i, op, stepObj, state;
+
+    if (step === this.state.step) {
+      return;
+    }
+
+    this.clearViewPort();
+    this.initializeViewport();
+
+    state = this.state;
+    state.step = step;
+    this.setState(state);
+
+    if (step === 'initialization') {
+      return;
+    }
+
+    for (var i = 0; i <= step; i += 1) {
+      stepObj = this.state.sequence.operations[i];
+      op = this.state.structure[stepObj.type].operation;
+      op(_viewport, stepObj.data);
+    }
+  },
+
   handleIncrementStep: function () {
     var state = this.state;
     var step;  // the operation and its data
@@ -266,7 +291,7 @@ module.exports = React.createClass({
           Click delete button again or press enter to confirm step deletion.  Otherwise, press escape.
         </div>        
         <ul className="steps">
-          <li className={initializationClass}>
+          <li className={initializationClass} onClick={this.loadStep.bind(this, "initialization")}>
             <div className="step-name">Initialization</div>
           </li>
           {steps.map(function (step, index) {
@@ -276,7 +301,7 @@ module.exports = React.createClass({
             });
 
             return (
-              <li className={stepClass}>
+              <li className={stepClass} onClick={this.loadStep.bind(this, index)}>
                 <div className="delete-step" onClick={this.handleDeleteStep.bind(this, index)}>
                   <i className="fa fa-times" />
                 </div>

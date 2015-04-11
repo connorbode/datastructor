@@ -72,6 +72,7 @@
           padding-bottom: 3px;
           cursor: pointer;
           border: white 1px solid;
+          z-index: 200;
 
           &:hover {
             background: $color-focus;
