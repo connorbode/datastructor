@@ -176,7 +176,11 @@ module.exports = React.createClass({
 
     // escape key press
     else if (e.keyCode === 27) {
-      this.handleCancelDelete();
+      if (this.state.delete !== null) {
+        this.handleCancelDelete();
+      } else if (this.state.step !== 'initialization') {
+        this.handleDeleteStep(this.state.step);
+      }
     }
 
     // enter key press
