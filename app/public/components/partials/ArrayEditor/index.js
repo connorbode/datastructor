@@ -25,14 +25,16 @@ var ArrayOperations = {
     operation: function (viewport, data) {
 
       function editNodeValue (val) {
-        addOperation({
-          type: 'editValue',
-          data: {
-            group: _editVal.group,
-            index: _editVal.index,
-            value: val
-          }
-        });
+        if (val !== '') {
+          addOperation({
+            type: 'editValue',
+            data: {
+              group: _editVal.group,
+              index: _editVal.index,
+              value: val
+            }
+          });
+        }
       }
 
       // add a blur event for the node adder
