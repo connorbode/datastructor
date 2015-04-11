@@ -107,6 +107,7 @@ module.exports = React.createClass({
     var step;  // the operation and its data
     var op; // the function to execute
     if (state.step === state.sequence.operations.length - 1) return;
+    if (state.sequence.operations.length === 0) return;
     if (state.step === 'initialization') {
       state.step = 0;
     } else {
