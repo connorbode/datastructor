@@ -54,7 +54,8 @@
       }
 
       &:hover {
-        background: $color-focus;
+        box-shadow: inset 0px 0px 0px 1px $color-focus;
+        cursor: pointer;
 
         .delete-step {
           background: $color-fade;
@@ -70,6 +71,11 @@
           padding-top: 3px;
           padding-bottom: 3px;
           cursor: pointer;
+          border: white 1px solid;
+
+          &:hover {
+            background: $color-focus;
+          }
         }
       }
 
