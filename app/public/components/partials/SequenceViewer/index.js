@@ -6,7 +6,7 @@ var dragClass = 'draggable';
 var _viewport;
 var _svg;
 var _zoom;
-var _numOperations; // used to see whether we need to increment the step when sequence is loaded
+var _numOperations = 0; // used to see whether we need to increment the step when sequence is loaded
 
 var _initialization;
 var _operations = [];
@@ -139,22 +139,20 @@ module.exports = React.createClass({
   handleSequenceLoaded: function () {
     var currentState = this.state;
     var currentOp;
-    var nextOp;
-
-    // get the current operation
-    if (this.state.step !== 'initialization') {
-      currentOp = this.state.sequence.operations[this.state.step];
-    }
 
     currentState.sequence = SequenceStore.getSequence();
     this.setState(currentState);
-    this.initializeViewport();
+
+    if (!_initialization) {
+      this.initializeViewport();
+    }
 
     // handle incrementing the step
     if (_numOperations !== undefined && _numOperations < currentState.sequence.operations.length) {
       this.handleIncrementStep();
     }
     _numOperations = currentState.sequence.operations.length;
+    console.log('num ops: ', _numOperations);
   },
 
   handleCancelDelete: function () {
