@@ -119,22 +119,16 @@ module.exports = React.createClass({
   },
 
   handleDecrementStep: function () {
-    console.log('called');
-    var state = this.state;
-    var step = state.sequence.operations[state.step];
-    var op;
-
-    if (state.step === 'initialization') return;
-
-    if (state.step === 0) {
-      state.step = 'initialization';
-    } else {
-      state.step -= 1;
+    if (this.state.step === 'initialization') {
+      return;
     }
-    this.props.onChangeStep(state.step);
-    this.setState(state);
-    op = state.structure[step.type].reverse;
-    op();
+
+    if (this.state.step === 0) {
+      this.loadStep('initialization');
+      return;
+    }
+
+    this.loadStep(this.state.step - 1);
   },
 
   /**
