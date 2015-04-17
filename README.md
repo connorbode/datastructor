@@ -21,3 +21,4 @@
       }
     }
     ```
+5. Create a reference to the editor component in `app/public/components/editors/index.js`
