@@ -1,5 +1,5 @@
 var React           = require('react/addons');
-var SequenceViewer  = require('../SequenceViewer');
+var SequenceViewer  = require('../../partials/SequenceViewer');
 var SequenceActions = require('../../../actions/SequenceActions');
 
 var _step = 'initialization'; // the step that the viewer is on

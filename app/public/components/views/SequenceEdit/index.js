@@ -3,9 +3,7 @@ var SequenceStore       = require('../../../stores/SequenceStore');
 var StructureConstants  = require('../../../constants/StructureConstants');
 
 var SequenceEditor;
-var editors = {
-  ArrayEditor: require('../../partials/ArrayEditor')
-};
+var editors = require('../../editors');
 
 module.exports = React.createClass({
 
