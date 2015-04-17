@@ -14,10 +14,10 @@
     ```
     {
       types: {
-        SINGLY_LINKED_LIST: 'this_value_doesnt_matter_as_long_as_its_unique'
+        'SINGLY_LINKED_LIST': 'this_value_is_displayed_to_the_user'
       },
       editors: {
-        this_value_doesnt_matter_as_long_as_its_unique: 'SinglyLinkedListEditor'
+        'this_value_is_displayed_to_the_user': 'SinglyLinkedListEditor'
       }
     }
     ```
