@@ -2,10 +2,16 @@ var React           = require('react/addons');
 var SequenceViewer  = require('../../partials/SequenceViewer');
 var SequenceActions = require('../../../actions/SequenceActions');
 
-var loners;     // these are nodes which are not part of lists
-var lists;      // this is a list of linked lists.  links go forward in the lists
-var _sequence;  // contains the sequence (passed through props)
-var _editVal;   // contains details on teh node that is being edited
+var loners;       // these are nodes which are not part of lists
+var lists;        // this is a list of linked lists.  links go forward in the lists
+var _sequence;    // contains the sequence (passed through props)
+var _editVal;     // contains details on teh node that is being edited
+var _dragging;    // whether the user is moving the mouse around
+var _clickedNode; // the node that a user initiated an action on
+var _mouseDown = false;
+var _arrowSet = false;
+var _startNode;
+var _arrow;
 
 /** 
  * initializes the data for the editor
@@ -146,6 +152,16 @@ var Operations = {
         .on('mouseout', function (d) {
           d3.select(this)
             .attr('stroke-width', '0');
+        })
+        .on('mousedown', function (d, i) {
+          d3.event.stopPropagation();
+          _dragging = false;
+          _mouseDown = true;
+          _arrowSet = false;
+          _startNode = d3.select(this).node();
+        })
+        .on('mouseup', function (d, i) {
+          _mouseDown = false;
         });
 
       // add the value of the node
@@ -158,7 +174,9 @@ var Operations = {
         })
         .attr('y', verticalOffset + 8)
         .attr('text-anchor', 'middle')
-        .text(data.value || '_')
+        .text(function () {
+          return data.value || '_';
+        })
         .style('cursor', 'pointer')
         .on('mouseover', function (d) {
           d3.select(this)
@@ -168,21 +186,31 @@ var Operations = {
           d3.select(this)
             .attr('fill', '#aaa');
         })
-        .on('click', function (d, i) {
-          var elem = d3.select('#edit-node-value')
-            .classed('open', true)
-            .style('top', d3.event.clientY)
-            .style('left', d3.event.clientX);
+        .on('mousedown', function (d, i) {
+          d3.event.stopPropagation();
+          _dragging = false;
+          _mouseDown = true;
+          _arrowSet = false;
+          _startNode = d3.select(this).node();
+        })
+        .on('mouseup', function (d) {
+          _mouseDown = false;
+          if (!_dragging) {
+            var elem = d3.select('#edit-node-value')
+              .classed('open', true)
+              .style('top', d3.event.clientY)
+              .style('left', d3.event.clientX);
 
-          _editVal = {
-            list: 'loners',
-            index: index
-          };
+            _editVal = {
+              list: 'loners',
+              index: index
+            };
 
-          var node = elem.node();
+            var node = elem.node();
 
-          node.focus();
-          node.value = '';
+            node.focus();
+            node.value = '';
+          }
         });
 
       // center!
@@ -207,7 +235,7 @@ var Operations = {
       var nodeGroup = group.selectAll('g.node')[0][data.index];
       d3.select(nodeGroup)
         .select('text')
-        .text(data.value)
+        .text(data.value || '_')
         .transition()
         .duration(1000)
         .attr('fill', '#000')
@@ -237,6 +265,68 @@ module.exports = React.createClass({
 
   onChangeStep: function () {
 
+  },
+
+  onMouseUp: function (e) {
+    _mouseDown = false;
+  },
+
+  onMouseMove: function (e) {
+    if (_mouseDown) {
+      _dragging = true;
+      console.log('dragging..');
+      if (!_arrowSet) {
+        var startBox = _startNode.getBBox();
+        var startRect = _startNode.getBoundingClientRect();
+        _arrow = d3.select('svg')
+          .append('g')
+          .classed('arrow', true);
+
+        _arrow
+          .append('line')
+          .attr('x1', (startBox.width / 2) + startRect.left)
+          .attr('y1', (startBox.height / 2) + startRect.top)
+          .attr('stroke', '#000')
+          .attr('stroke-width', '2');
+
+        _arrow
+          .append('polygon')
+          .attr('points', '0,-2 -10,10 10,10');
+
+        _arrowSet = true;
+      }
+
+      // update line
+      var line = _arrow.select('line');
+      line
+        .attr('x2', e.clientX)
+        .attr('y2', e.clientY);
+
+      // update arrow head 
+      var polygonTranslate = 'translate(' + e.clientX + ',' + e.clientY + ')';
+      var lineX = parseInt(line.attr('x1')) - parseInt(line.attr('x2'));
+      var lineY = parseInt(line.attr('y1')) - parseInt(line.attr('y2'));
+      var rotatorCuff = Math.atan2(-lineX, lineY);
+      var rotatorCuffInDegrees = (180 * rotatorCuff) / Math.PI;
+      var rotate = rotatorCuffInDegrees;
+      var polygonRotate = 'rotate(' + rotate + ')';
+
+      console.log('lineX: ', lineX, ' lineY: ', lineY, ' angle: ', rotatorCuffInDegrees, ' orig: ', rotatorCuff);
+
+      _arrow
+        .select('polygon')
+        .attr('transform', polygonTranslate + polygonRotate);
+    }
+  },
+
+  componentDidMount: function () {
+    window.addEventListener('mousemove', this.onMouseMove);
+    window.addEventListener('mouseup', this.onMouseUp);
+  },
+
+  componentWillUnmount: function () {
+    window.removeEventListener('mousemove', this.onMouseMove);
+    window.removeEventListener('mouseup', this.onMouseUp);
   },
 
   render: function () {
