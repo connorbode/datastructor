@@ -12,6 +12,7 @@ var _sequence;
 function reset () {
   loners = [];
   lists = [];
+  d3.select('g.loners').attr('transform', '');
 }
 
 /**
@@ -82,17 +83,19 @@ var Operations = {
         .select('g.loners');
 
       var verticalOffset = 0;
-      var horizontalOffset = (loners.length + 1) * 50 / 2;
+      var horizontalOffset = 0;
 
       var group = lonersElem
         .append('g')
         .classed('node', true);
-              // add the background circle
+
+      loners.push(group);
+
       group
         .append('circle')
         .attr('fill', '#ccc')
         .attr('cx', function (d, i) {
-          return ((i + 1) * 50) - horizontalOffset;
+          return ((loners.length - 1) * 50) - horizontalOffset;
         })
         .attr('cy', verticalOffset)
         .attr('r', '20')
@@ -114,9 +117,9 @@ var Operations = {
         .attr('fill', '#aaa')
         .style('font-size', '20px')
         .attr('x', function (d, i) {
-          return ((i + 1) * 50) - horizontalOffset;
+          return ((loners.length - 1) * 50) - horizontalOffset;
         })
-        .attr('y', verticalOffset + 10)
+        .attr('y', verticalOffset + 8)
         .attr('text-anchor', 'middle')
         .text(data.value || '_')
         .style('cursor', 'pointer')
@@ -142,6 +145,12 @@ var Operations = {
           node.value = '';
         });
 
+      // center!
+      var bbox = lonersElem.node().getBBox();
+      lonersElem
+        .transition()
+        .duration(1000)
+        .attr('transform', 'translate(' + (-bbox.width / 2) + ', 0)');
     }
   }
 };
@@ -160,7 +169,7 @@ module.exports = React.createClass({
   },
 
   reset: function () {
-
+    reset();
   },
 
   onChangeStep: function () {
