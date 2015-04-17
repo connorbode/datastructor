@@ -116,8 +116,14 @@ var Operations = {
       var horizontalOffset = 0;
 
       var group = lonersElem
-        .append('g')
-        .classed('node', true);
+        .append('g');
+
+      group
+        .classed('node', true)
+        .attr('opacity', '0')
+        .transition()
+        .duration(1000)
+        .attr('opacity', '1');
 
       loners.push(group);
       var index = loners.length - 1;
