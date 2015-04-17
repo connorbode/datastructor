@@ -1,0 +1,25 @@
+.singly-linked-list-editor {
+  .value-input {
+    position: absolute;
+    margin-top: -20px;
+    height: 40px;
+    background: $color-focus;
+    color: white;
+    z-index: 20;
+    padding-left: 10px;
+    font-size: 20px;
+    opacity: 0;
+    pointer-events: none;
+    @include radius(5px);
+    @include transition(opacity 200ms);
+    @include transform(translateX(-50%));
+
+    &.open {
+      opacity: 0.9;
+    }
+
+    &.error {
+      border: #7D0000 3px solid;
+    }
+  }
+}
