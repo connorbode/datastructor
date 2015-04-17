@@ -1,8 +1,10 @@
 module.exports = {
   types: {
-    ARRAY: 'array'
+    ARRAY:              'array',
+    SINGLY_LINKED_LIST: 'singly linked list'
   },
   editors: {
-    'array': 'ArrayEditor'
+    'array':              'ArrayEditor',
+    'singly linked list': 'SinglyLinkedListEditor'
   }
 };
