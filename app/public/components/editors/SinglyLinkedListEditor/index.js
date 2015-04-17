@@ -138,7 +138,7 @@ var Operations = {
         .append('circle')
         .attr('fill', '#ccc')
         .attr('cx', function (d, i) {
-          return (index * 50) - horizontalOffset;
+          return (index * 100) - horizontalOffset;
         })
         .attr('cy', verticalOffset)
         .attr('r', '20')
@@ -170,7 +170,7 @@ var Operations = {
         .attr('fill', '#aaa')
         .style('font-size', '20px')
         .attr('x', function (d, i) {
-          return (index * 50) - horizontalOffset;
+          return (index * 100) - horizontalOffset;
         })
         .attr('y', verticalOffset + 8)
         .attr('text-anchor', 'middle')
