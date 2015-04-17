@@ -279,7 +279,7 @@ module.exports = React.createClass({
         var startBox = _startNode.getBBox();
         var startRect = _startNode.getBoundingClientRect();
         _arrow = d3.select('svg')
-          .append('g')
+          .insert('g', ':first-child')
           .classed('arrow', true);
 
         _arrow
