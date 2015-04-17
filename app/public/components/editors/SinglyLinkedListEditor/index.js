@@ -2,9 +2,10 @@ var React           = require('react/addons');
 var SequenceViewer  = require('../../partials/SequenceViewer');
 var SequenceActions = require('../../../actions/SequenceActions');
 
-var loners;  // these are nodes which are not part of lists
-var lists;   // this is a list of linked lists.  links go forward in the lists
-var _sequence;
+var loners;     // these are nodes which are not part of lists
+var lists;      // this is a list of linked lists.  links go forward in the lists
+var _sequence;  // contains the sequence (passed through props)
+var _editVal;   // contains details on teh node that is being edited
 
 /** 
  * initializes the data for the editor
@@ -68,6 +69,35 @@ var Operations = {
         });
 
       /**
+       * Handler for entry of the edit node field
+       */
+      function editNode (elem) {
+        var d3elem = d3.select(elem);
+        if (d3elem.classed('open')) {
+          d3elem.classed('open', false);
+          _editVal.value = elem.value;
+          addOperation({
+            type: 'editValue', 
+            data: _editVal
+          });
+          elem.value = '';
+        }
+      }
+
+      /**
+       * Handler for actions on the edit node field
+       */
+      d3.select('#edit-node-value')
+        .on('blur', function () {
+          editNode(this);
+        })
+        .on('keydown', function () {
+          if (d3.event.keyCode === 13) {
+            editNode(this);
+          }
+        });
+
+      /**
        * Append the loners group
        */
       viewport
@@ -90,12 +120,13 @@ var Operations = {
         .classed('node', true);
 
       loners.push(group);
+      var index = loners.length - 1;
 
       group
         .append('circle')
         .attr('fill', '#ccc')
         .attr('cx', function (d, i) {
-          return ((loners.length - 1) * 50) - horizontalOffset;
+          return (index * 50) - horizontalOffset;
         })
         .attr('cy', verticalOffset)
         .attr('r', '20')
@@ -117,7 +148,7 @@ var Operations = {
         .attr('fill', '#aaa')
         .style('font-size', '20px')
         .attr('x', function (d, i) {
-          return ((loners.length - 1) * 50) - horizontalOffset;
+          return (index * 50) - horizontalOffset;
         })
         .attr('y', verticalOffset + 8)
         .attr('text-anchor', 'middle')
@@ -132,14 +163,17 @@ var Operations = {
             .attr('fill', '#aaa');
         })
         .on('click', function (d, i) {
-          var elem = d3.select('.edit-node-value')
+          var elem = d3.select('#edit-node-value')
             .classed('open', true)
             .style('top', d3.event.clientY)
             .style('left', d3.event.clientX);
 
+          _editVal = {
+            list: 'loners',
+            index: index
+          };
+
           var node = elem.node();
-          _editVal.group = _groups.length - 1;
-          _editVal.index = i;
 
           node.focus();
           node.value = '';
@@ -151,6 +185,29 @@ var Operations = {
         .transition()
         .duration(1000)
         .attr('transform', 'translate(' + (-bbox.width / 2) + ', 0)');
+    }
+  },
+
+  editValue: {
+    label: 'Edit Value',
+    operation: function (viewport, data) {
+      var group;
+      if (data.list === 'loners') {
+        group = d3.select('g.loners');
+      } else {
+
+      }
+
+      var nodeGroup = group.selectAll('g.node')[0][data.index];
+      d3.select(nodeGroup)
+        .select('text')
+        .text(data.value)
+        .transition()
+        .duration(1000)
+        .attr('fill', '#000')
+        .transition()
+        .duration(1000)
+        .attr('fill', '#aaa');
     }
   }
 };
@@ -193,6 +250,7 @@ module.exports = React.createClass({
     return (
       <div className="singly-linked-list-editor">
         <input className="value-input" id="initial-value" placeholder="Enter initial node value" />
+        <input className="value-input" id="edit-node-value" placeholder="Edit node value" />
         <SequenceViewer {...viewerProps} />
       </div>
     );
