@@ -12,8 +12,10 @@ var _clickedNode; // the node that a user initiated an action on
 var _mouseDown = false;
 var _arrowSet = false;
 var _startNode;
+var _startNodeVal;
 var _startPoint;
 var _endNode;
+var _endNodeVal;
 var _arrow;
 
 /** 
@@ -38,6 +40,22 @@ function updateSequence () {
 function addOperation (op) {
   _sequence.operations.push(op);
   updateSequence();
+}
+
+/**
+ * centers all the groups
+ */
+function centerGroups () {
+
+  // center!
+  d3.selectAll('g.loners, g.list').each(function () {
+    var elem = d3.select(this);
+    var bbox = elem.node().getBBox();
+    elem
+      .transition()
+      .duration(1000)
+      .attr('transform', 'translate(' + (-bbox.width / 2) + ', 0)');
+  });
 }
 
 var Operations = {
@@ -152,6 +170,10 @@ var Operations = {
           d3.select(this)
             .attr('stroke-width', '2');
           _endNode = d3.select(this).node();
+          _endNodeVal = {
+            list: 'loners',
+            index: index
+          };
         })
         .on('mouseout', function (d) {
           d3.select(this)
@@ -164,6 +186,10 @@ var Operations = {
           _mouseDown = true;
           _arrowSet = false;
           _startNode = d3.select(this).node();
+          _startNodeVal = {
+            list: 'loners',
+            index: index
+          };
         })
         .on('mouseup', function (d, i) {
           _mouseDown = false;
@@ -190,6 +216,10 @@ var Operations = {
           _endNode = d3.select(this.parentNode)
             .select('circle')
             .node();
+          _endNodeVal = {
+            list: 'loners',
+            index: index
+          };
         })
         .on('mouseout', function (d) {
           d3.select(this)
@@ -201,6 +231,10 @@ var Operations = {
           _mouseDown = true;
           _arrowSet = false;
           _startNode = d3.select(this).node();
+          _startNodeVal = {
+            list: 'loners',
+            index: index
+          };
         })
         .on('mouseup', function (d) {
           _mouseDown = false;
@@ -222,12 +256,7 @@ var Operations = {
           }
         });
 
-      // center!
-      var bbox = lonersElem.node().getBBox();
-      lonersElem
-        .transition()
-        .duration(1000)
-        .attr('transform', 'translate(' + (-bbox.width / 2) + ', 0)');
+        centerGroups();
     }
   },
 
@@ -251,6 +280,70 @@ var Operations = {
         .transition()
         .duration(1000)
         .attr('fill', '#aaa');
+    }
+  },
+
+  linkNodes: {
+    label: 'Create Link',
+    operation: function (viewport, data) {
+      var prev = data.previous;
+      var next = data.next;
+      var prevLength;
+      var nodes = [];
+      var nextLength;
+
+      if (prev.list === 'loners') {
+        nodes.push(loners[prev.index]);
+      }
+
+      if (next.list === 'loners') {
+        nodes.push(loners[next.index]);
+      }
+
+      var group = viewport.append('g');
+      group.classed('list', 'true');
+      lists.push(group);
+
+      var verticalOffset = lists.length * 70;
+
+      nodes.forEach(function (node, index) {
+
+        var currentOffsetLeft = -120;
+        var currentOffsetTop = node.select('circle').attr('cy');
+        var nextOffsetLeft = index * 100;
+        var nextOffsetTop = verticalOffset;
+        console.log('current offset left', currentOffsetLeft);
+        console.log('next offset left: ', nextOffsetLeft);
+
+        var translateX = nextOffsetLeft - currentOffsetLeft;
+        var translateY = nextOffsetTop - currentOffsetTop;
+        var transform = 'translate(' + translateX + ',' + translateY + ')';
+
+        node
+          .transition()
+          .duration(1000)
+          .attr('transform', transform)
+          .each('end', function () {
+
+            var removed = node.remove();
+            removed.attr('transform', '');
+            removed.select('circle')
+              .attr('cx', nextOffsetLeft)
+              .attr('cy', nextOffsetTop);
+
+            removed.select('text')
+              .attr('x', nextOffsetLeft)
+              .attr('y', nextOffsetTop + 8);
+
+
+            group.append(function () {
+              return removed.node();
+            });
+
+            centerGroups();
+          });
+      });
+
     }
   }
 };
@@ -279,6 +372,15 @@ module.exports = React.createClass({
   onMouseUp: function (e) {
     _mouseDown = false;
     if (_arrow) _arrow.remove();
+    if (_endNode && _startNode != _endNode) {
+      addOperation({
+        type: 'linkNodes',
+        data: {
+          previous: _startNodeVal,
+          next:     _endNodeVal, 
+        }
+      });
+    }
   },
 
   onMouseMove: function (e) {
