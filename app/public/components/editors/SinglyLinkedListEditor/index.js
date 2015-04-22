@@ -1,6 +1,7 @@
 var React           = require('react/addons');
 var SequenceViewer  = require('../../partials/SequenceViewer');
 var SequenceActions = require('../../../actions/SequenceActions');
+var TwoDee          = require('two-dee');
 
 var loners;       // these are nodes which are not part of lists
 var lists;        // this is a list of linked lists.  links go forward in the lists
@@ -11,6 +12,8 @@ var _clickedNode; // the node that a user initiated an action on
 var _mouseDown = false;
 var _arrowSet = false;
 var _startNode;
+var _startPoint;
+var _endNode;
 var _arrow;
 
 /** 
@@ -148,10 +151,12 @@ var Operations = {
         .on('mouseover', function (d) {
           d3.select(this)
             .attr('stroke-width', '2');
+          _endNode = d3.select(this).node();
         })
         .on('mouseout', function (d) {
           d3.select(this)
             .attr('stroke-width', '0');
+          _endNode = null;
         })
         .on('mousedown', function (d, i) {
           d3.event.stopPropagation();
@@ -181,6 +186,10 @@ var Operations = {
         .on('mouseover', function (d) {
           d3.select(this)
             .attr('fill', 'black');
+          
+          _endNode = d3.select(this.parentNode)
+            .select('circle')
+            .node();
         })
         .on('mouseout', function (d) {
           d3.select(this)
@@ -269,53 +278,84 @@ module.exports = React.createClass({
 
   onMouseUp: function (e) {
     _mouseDown = false;
+    if (_arrow) _arrow.remove();
   },
 
   onMouseMove: function (e) {
     if (_mouseDown) {
       _dragging = true;
-      console.log('dragging..');
+
       if (!_arrowSet) {
         var startBox = _startNode.getBBox();
         var startRect = _startNode.getBoundingClientRect();
+        var offsetLeft = (startBox.width / 2) + startRect.left;
+        var offsetTop = (startBox.height / 2) + startRect.top;
+        _startPoint = new TwoDee.Point(offsetLeft, offsetTop);
+
         _arrow = d3.select('svg')
           .insert('g', ':first-child')
           .classed('arrow', true);
 
         _arrow
           .append('line')
-          .attr('x1', (startBox.width / 2) + startRect.left)
-          .attr('y1', (startBox.height / 2) + startRect.top)
+          .attr('x1', _startPoint.x)
+          .attr('y1', _startPoint.y)
+          .attr('x2', _startPoint.x)
+          .attr('y2', _startPoint.y)
           .attr('stroke', '#000')
           .attr('stroke-width', '2');
 
         _arrow
           .append('polygon')
-          .attr('points', '0,-2 -10,10 10,10');
+          .attr('points', '0,0 -10,10 10,10')
+          .style('opacity', '0');
 
         _arrowSet = true;
       }
 
       // update line
+      var destX;
+      var destY;
       var line = _arrow.select('line');
-      line
-        .attr('x2', e.clientX)
-        .attr('y2', e.clientY);
 
-      // update arrow head 
-      var polygonTranslate = 'translate(' + e.clientX + ',' + e.clientY + ')';
-      var lineX = parseInt(line.attr('x1')) - parseInt(line.attr('x2'));
-      var lineY = parseInt(line.attr('y1')) - parseInt(line.attr('y2'));
-      var rotatorCuff = Math.atan2(-lineX, lineY);
-      var rotatorCuffInDegrees = (180 * rotatorCuff) / Math.PI;
-      var rotate = rotatorCuffInDegrees;
-      var polygonRotate = 'rotate(' + rotate + ')';
+      if (_endNode) {
+        var circle = d3.select(_endNode);
+        var circleNode = circle.node();
+        var rect = circleNode.getBoundingClientRect();
+        var centerX = rect.left + (rect.width / 2);
+        var centerY = rect.top + (rect.height / 2);
+        var radius = circle.attr('r');
+        var circleCenter = new TwoDee.Point(centerX, centerY);
+        var circleObj = new TwoDee.Circle(circleCenter, radius);
+        var lineObj = new TwoDee.Line.fromPoints(circleCenter, _startPoint);
+        var intersectionPoints = lineObj.intersectionWith(circleObj);
+        var closestPoint = _startPoint.closest(intersectionPoints);
+        destX = closestPoint.x;
+        destY = closestPoint.y;
+      } else {
+        destX = e.clientX;
+        destY = e.clientY;
+      }
 
-      console.log('lineX: ', lineX, ' lineY: ', lineY, ' angle: ', rotatorCuffInDegrees, ' orig: ', rotatorCuff);
+      if (!isNaN(destX)) {
+        line
+          .attr('x2', destX)
+          .attr('y2', destY);
 
-      _arrow
-        .select('polygon')
-        .attr('transform', polygonTranslate + polygonRotate);
+        // update arrow head 
+        var polygonTranslate = 'translate(' + destX + ',' + destY + ')';
+        var lineX = parseInt(line.attr('x1')) - parseInt(line.attr('x2'));
+        var lineY = parseInt(line.attr('y1')) - parseInt(line.attr('y2'));
+        var rotatorCuff = Math.atan2(-lineX, lineY);
+        var rotatorCuffInDegrees = (180 * rotatorCuff) / Math.PI;
+        var rotate = rotatorCuffInDegrees;
+        var polygonRotate = 'rotate(' + rotate + ')';
+
+        _arrow
+          .select('polygon')
+          .attr('transform', polygonTranslate + polygonRotate)
+          .style('opacity', '1');
+      }
     }
   },
 
