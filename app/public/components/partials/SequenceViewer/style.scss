@@ -22,9 +22,12 @@
 
   ul.steps {
     bottom: 20px;
+    left: 50%;
     position: absolute;
     text-align: center;
-    width: 100%;
+    white-space: nowrap;
+    overflow-x: hidden;
+    @include transition(transform 0.5s);
 
     li.step {
       display: inline-block;

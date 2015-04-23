@@ -11,6 +11,8 @@ var _numOperations = 0; // used to see whether we need to increment the step whe
 var _initialization;
 var _operations = [];
 
+var _stepsOffset = 0;
+
 var _mouseCoordinates;
 
 module.exports = React.createClass({
@@ -94,15 +96,21 @@ module.exports = React.createClass({
     state.step = step;
     this.setState(state);
 
-    if (step === 'initialization') {
-      return;
+    var steps = d3.selectAll('li.step')[0];
+    var s;
+    _stepsOffset = - steps[0].getBoundingClientRect().width / 2;
+
+    if (step !== 'initialization') {
+      for (var i = 0; i <= step; i += 1) {
+        s = steps[i + 1];
+        _stepsOffset -= s.getBoundingClientRect().width + 20;
+        stepObj = this.state.sequence.operations[i];
+        op = this.state.structure[stepObj.type].operation;
+        op(_viewport, stepObj.data, 0);
+      }
     }
 
-    for (var i = 0; i <= step; i += 1) {
-      stepObj = this.state.sequence.operations[i];
-      op = this.state.structure[stepObj.type].operation;
-      op(_viewport, stepObj.data, 1);
-    }
+    this.forceUpdate();
   },
 
   handleIncrementStep: function () {
@@ -116,8 +124,13 @@ module.exports = React.createClass({
     } else {
       state.step += 1;
     }
+
     this.props.onChangeStep(state.step);
     this.setState(state);
+
+    _stepsOffset -= d3.select('li.step.selected').node().getBoundingClientRect().width + 20;
+    this.forceUpdate();
+
     step = state.sequence.operations[state.step];
     op = state.structure[step.type].operation;
     op(_viewport, step.data, 1000);
@@ -278,6 +291,9 @@ module.exports = React.createClass({
     // apply behaviors
     _svg.call(_zoom);
 
+    // set the step offset
+    _stepsOffset = -d3.select('li.step').node().getBoundingClientRect().width / 2;
+
     // update the view
     this.initializeViewport();
 
@@ -333,6 +349,10 @@ module.exports = React.createClass({
       top:  this.state.options ? this.state.options.y : 0
     };
 
+    var stepStyle = {
+      transform: 'translateX(' + _stepsOffset + 'px)'
+    };
+
     return (
       <div className="sequence-viewer">
         <h1>{this.props.sequence.name}</h1>
@@ -340,7 +360,7 @@ module.exports = React.createClass({
         <div className={deleteClass}>
           Click delete button again or press enter to confirm step deletion.  Otherwise, press escape.
         </div>        
-        <ul className="steps">
+        <ul className="steps" style={stepStyle}>
           <li className={initializationClass} onClick={this.loadStep.bind(this, "initialization")}>
             <div className="step-name">Initialization</div>
           </li>
