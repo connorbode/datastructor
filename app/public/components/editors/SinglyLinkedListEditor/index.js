@@ -310,19 +310,26 @@ var Operations = {
   linkNodes: {
     label: 'Create Link',
     operation: function (viewport, data, transitionDuration) {
-      var prev = data.previous;
+      var prev = data.prev;
       var next = data.next;
       var prevLength;
       var nodes = [];
       var nextLength;
 
+      // populate lists
       if (prev.list === 'loners') {
         nodes.push(loners[prev.index]);
-        loners.splice(prev.index, 1);
       }
 
       if (next.list === 'loners') {
         nodes.push(loners[next.index]);
+      }
+
+      // splice lists
+      if (prev.list === 'loners') {
+        loners.splice(prev.index, 1);
+      }
+      if (next.list === 'loners') {
         loners.splice(next.index, 1);
       }
 
@@ -431,8 +438,8 @@ module.exports = React.createClass({
       addOperation({
         type: 'linkNodes',
         data: {
-          previous: _startNodeVal,
-          next:     _endNodeVal, 
+          prev: _startNodeVal,
+          next: _endNodeVal, 
         }
       });
     }
