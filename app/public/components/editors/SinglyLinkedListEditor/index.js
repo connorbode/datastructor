@@ -331,6 +331,36 @@ var Operations = {
               .attr('x', nextOffsetLeft)
               .attr('y', nextOffsetTop + 8);
 
+            if (index < nodes.length - 1) {
+
+              var arrow = removed
+                .insert('g', ':first-child')
+                .classed('arrow', true);
+
+              arrow
+                .append('line')
+                .attr('x1', nextOffsetLeft)
+                .attr('y1', nextOffsetTop)
+                .attr('x2', nextOffsetLeft + 72)
+                .attr('y2', nextOffsetTop)
+                .attr('stroke', '#000')
+                .attr('stroke-width', '2')
+                .style('opacity', '0')
+                .transition()
+                .duration(1000)
+                .style('opacity', '1');
+
+              var transformStr = 'translate(' + (nextOffsetLeft + 81) + ',' + nextOffsetTop + ')';
+
+              arrow
+                .append('polygon')
+                .attr('points', '0,0 -10,-10 -10,10')
+                .style('opacity', '0')
+                .attr('transform', transformStr)
+                .transition()
+                .duration(1000)
+                .style('opacity', '1');
+            }
 
             group.append(function () {
               return removed.node();
