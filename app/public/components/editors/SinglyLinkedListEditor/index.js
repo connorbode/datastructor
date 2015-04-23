@@ -193,7 +193,7 @@ var Operations = {
         .on('mouseover', function (d) {
           d3.select(this)
             .attr('stroke-width', '2');
-          _endNode = d3.select(this).node();
+          _endNode = this.parentNode;
           _endNodeVal = {
             list: 'loners',
             index: index
@@ -209,7 +209,7 @@ var Operations = {
           _dragging = false;
           _mouseDown = true;
           _arrowSet = false;
-          _startNode = d3.select(this).node();
+          _startNode = this.parentNode;
           _startNodeVal = {
             list: 'loners',
             index: index
@@ -237,9 +237,7 @@ var Operations = {
           d3.select(this)
             .attr('fill', 'black');
           
-          _endNode = d3.select(this.parentNode)
-            .select('circle')
-            .node();
+          _endNode = this.parentNode;
           _endNodeVal = {
             list: 'loners',
             index: index
@@ -254,7 +252,7 @@ var Operations = {
           _dragging = false;
           _mouseDown = true;
           _arrowSet = false;
-          _startNode = d3.select(this).node();
+          _startNode = this.parentNode;
           _startNodeVal = {
             list: 'loners',
             index: index
@@ -484,7 +482,7 @@ module.exports = React.createClass({
       var line = _arrow.select('line');
 
       if (_endNode) {
-        var circle = d3.select(_endNode);
+        var circle = d3.select(_endNode).select('circle');
         var circleNode = circle.node();
         var rect = circleNode.getBoundingClientRect();
         var centerX = rect.left + (rect.width / 2);
