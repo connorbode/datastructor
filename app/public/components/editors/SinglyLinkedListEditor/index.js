@@ -45,18 +45,41 @@ function addOperation (op) {
 /**
  * centers all the groups
  */
-function centerGroups () {
+function centerGroups (duration) {
 
   // center!
   d3.selectAll('g.loners, g.list').each(function () {
     var elem = d3.select(this);
-    var bbox = elem.node().getBBox();
     var elems = elem.selectAll('g.node');
     var size = elems[0].length;
     var translateX = -((size - 1) * 100 + 4) / 2;
+    var cIndex = 0;
+    var tIndex = 0;
+    elems
+      .selectAll('circle')
+      .each(function () {
+        var circle = d3.select(this);
+        circle
+          .transition()
+          .duration(duration)
+          .attr('cx', cIndex * 100);
+        cIndex += 1;
+      });
+
+    elems
+      .selectAll('text')
+      .each(function () {
+        var text = d3.select(this);
+        text
+          .transition()
+          .duration(duration)
+          .attr('x', tIndex * 100);
+        tIndex += 1;
+      });
+
     elems
       .transition()
-      .duration(1000)
+      .duration(duration)
       .attr('opacity', '1')
       .attr('transform', 'translate(' + translateX + ', 0)');
   });
@@ -65,7 +88,7 @@ function centerGroups () {
 var Operations = {
   initialization: {
     label: 'initialization',
-    operation: function (viewport, data) {
+    operation: function (viewport, data, transitionDuration) {
 
       reset();
 
@@ -139,7 +162,7 @@ var Operations = {
 
   createNode: {
     label: 'Create Node',
-    operation: function (viewport, data) {
+    operation: function (viewport, data, transitionDuration) {
       var lonersElem = viewport
         .select('g.loners');
 
@@ -257,13 +280,13 @@ var Operations = {
           }
         });
       
-      centerGroups();
+      centerGroups(transitionDuration);
     }
   },
 
   editValue: {
     label: 'Edit Value',
-    operation: function (viewport, data) {
+    operation: function (viewport, data, transitionDuration) {
       var group;
       if (data.list === 'loners') {
         group = d3.select('g.loners');
@@ -276,17 +299,17 @@ var Operations = {
         .select('text')
         .text(data.value || '_')
         .transition()
-        .duration(1000)
+        .duration(transitionDuration)
         .attr('fill', '#000')
         .transition()
-        .duration(1000)
+        .duration(transitionDuration)
         .attr('fill', '#aaa');
     }
   },
 
   linkNodes: {
     label: 'Create Link',
-    operation: function (viewport, data) {
+    operation: function (viewport, data, transitionDuration) {
       var prev = data.previous;
       var next = data.next;
       var prevLength;
@@ -322,7 +345,7 @@ var Operations = {
 
         node
           .transition()
-          .duration(1000)
+          .duration(transitionDuration)
           .attr('transform', transform)
           .each('end', function () {
 
@@ -352,7 +375,7 @@ var Operations = {
                 .attr('stroke-width', '2')
                 .style('opacity', '0')
                 .transition()
-                .duration(1000)
+                .duration(transitionDuration)
                 .style('opacity', '1');
 
               var transformStr = 'translate(' + (nextOffsetLeft + 81) + ',' + nextOffsetTop + ')';
@@ -364,7 +387,7 @@ var Operations = {
                 .style('color', '#555')
                 .attr('transform', transformStr)
                 .transition()
-                .duration(1000)
+                .duration(transitionDuration)
                 .style('opacity', '1');
             }
 
@@ -372,7 +395,7 @@ var Operations = {
               return removed.node();
             });
 
-            centerGroups();
+            centerGroups(transitionDuration);
           });
       });
 

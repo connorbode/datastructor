@@ -101,7 +101,7 @@ module.exports = React.createClass({
     for (var i = 0; i <= step; i += 1) {
       stepObj = this.state.sequence.operations[i];
       op = this.state.structure[stepObj.type].operation;
-      op(_viewport, stepObj.data);
+      op(_viewport, stepObj.data, 1);
     }
   },
 
@@ -120,7 +120,7 @@ module.exports = React.createClass({
     this.setState(state);
     step = state.sequence.operations[state.step];
     op = state.structure[step.type].operation;
-    op(_viewport, step.data);
+    op(_viewport, step.data, 1000);
   },
 
   handleDecrementStep: function () {
