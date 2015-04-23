@@ -343,7 +343,7 @@ var Operations = {
                 .attr('y1', nextOffsetTop)
                 .attr('x2', nextOffsetLeft + 72)
                 .attr('y2', nextOffsetTop)
-                .attr('stroke', '#000')
+                .attr('stroke', '#555')
                 .attr('stroke-width', '2')
                 .style('opacity', '0')
                 .transition()
@@ -356,6 +356,7 @@ var Operations = {
                 .append('polygon')
                 .attr('points', '0,0 -10,-10 -10,10')
                 .style('opacity', '0')
+                .style('color', '#555')
                 .attr('transform', transformStr)
                 .transition()
                 .duration(1000)
@@ -430,12 +431,13 @@ module.exports = React.createClass({
           .attr('y1', _startPoint.y)
           .attr('x2', _startPoint.x)
           .attr('y2', _startPoint.y)
-          .attr('stroke', '#000')
+          .attr('stroke', '#555')
           .attr('stroke-width', '2');
 
         _arrow
           .append('polygon')
           .attr('points', '0,0 -10,10 10,10')
+          .style('color', '#555')
           .style('opacity', '0');
 
         _arrowSet = true;
