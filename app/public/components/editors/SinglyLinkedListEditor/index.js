@@ -60,7 +60,7 @@ function centerGroups (duration) {
       .each(function () {
         var circle = d3.select(this);
         circle
-          .transition()
+          .transition('center')
           .duration(duration)
           .attr('cx', cIndex * 100);
         cIndex += 1;
@@ -71,14 +71,14 @@ function centerGroups (duration) {
       .each(function () {
         var text = d3.select(this);
         text
-          .transition()
+          .transition('center')
           .duration(duration)
           .attr('x', tIndex * 100);
         tIndex += 1;
       });
 
     elems
-      .transition()
+      .transition('center')
       .duration(duration)
       .attr('opacity', '1')
       .attr('transform', 'translate(' + translateX + ', 0)');
