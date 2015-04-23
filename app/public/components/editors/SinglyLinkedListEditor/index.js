@@ -51,9 +51,10 @@ function centerGroups () {
   d3.selectAll('g.loners, g.list').each(function () {
     var elem = d3.select(this);
     var bbox = elem.node().getBBox();
-    elem
+    elem.selectAll('g.node')
       .transition()
       .duration(1000)
+      .attr('opacity', '1')
       .attr('transform', 'translate(' + (-bbox.width / 2) + ', 0)');
   });
 }
@@ -147,10 +148,7 @@ var Operations = {
 
       group
         .classed('node', true)
-        .attr('opacity', '0')
-        .transition()
-        .duration(1000)
-        .attr('opacity', '1');
+        .attr('opacity', '0');
 
       loners.push(group);
       var index = loners.length - 1;
@@ -255,8 +253,8 @@ var Operations = {
             node.value = '';
           }
         });
-
-        centerGroups();
+      
+      centerGroups();
     }
   },
 
@@ -307,13 +305,11 @@ var Operations = {
       var verticalOffset = lists.length * 70;
 
       nodes.forEach(function (node, index) {
-
-        var currentOffsetLeft = -120;
+        var currentOffsetLeft = parseInt(node.select('circle').attr('cx'));
         var currentOffsetTop = node.select('circle').attr('cy');
+        var translateLeft = - ((nodes.length - 1) * 100 + 40) / 2;
         var nextOffsetLeft = index * 100;
         var nextOffsetTop = verticalOffset;
-        console.log('current offset left', currentOffsetLeft);
-        console.log('next offset left: ', nextOffsetLeft);
 
         var translateX = nextOffsetLeft - currentOffsetLeft;
         var translateY = nextOffsetTop - currentOffsetTop;
