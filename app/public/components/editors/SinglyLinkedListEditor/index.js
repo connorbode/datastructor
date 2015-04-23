@@ -51,11 +51,14 @@ function centerGroups () {
   d3.selectAll('g.loners, g.list').each(function () {
     var elem = d3.select(this);
     var bbox = elem.node().getBBox();
-    elem.selectAll('g.node')
+    var elems = elem.selectAll('g.node');
+    var size = elems[0].length;
+    var translateX = -((size - 1) * 100 + 4) / 2;
+    elems
       .transition()
       .duration(1000)
       .attr('opacity', '1')
-      .attr('transform', 'translate(' + (-bbox.width / 2) + ', 0)');
+      .attr('transform', 'translate(' + translateX + ', 0)');
   });
 }
 
@@ -292,10 +295,12 @@ var Operations = {
 
       if (prev.list === 'loners') {
         nodes.push(loners[prev.index]);
+        loners.splice(prev.index, 1);
       }
 
       if (next.list === 'loners') {
         nodes.push(loners[next.index]);
+        loners.splice(next.index, 1);
       }
 
       var group = viewport.append('g');
