@@ -89,6 +89,22 @@ DomainObject.prototype.sendToBack = function () {
   }
 };
 
+/** 
+ * Given a DOM element, traverses up the DOM
+ * tree until it finds an element of a given type.
+ */
+DomainObject.prototype.findElemOfType = function (elem, type) {
+  do {
+    if (elem.classList.contains(type)) {
+      return elem;
+    } else {
+      elem = elem.parentNode;
+    }
+  } while (elem !== null);
+
+  return null;
+};
+
 /**
  * Sets the coordinates of the object
  */
