@@ -88,7 +88,7 @@ DomainObject.prototype.addEventListener = function (event, callback) {
   this.eventIdCounter += 1;
 
   // add the listeners to the d3 elements
-  this._addEvent(eventStr, callback);
+  this._addEvent(event, eventStr, callback);
 };
 
 /**
@@ -102,7 +102,7 @@ DomainObject.prototype.removeEventListener = function (event, callback) {
   var eventStr = this.events[event][callback];
 
   // remove listeners from d3 elements
-  this._removeEvent(eventStr, callback);
+  this._removeEvent(event, eventStr, callback);
 };
 
 module.exports = DomainObject;

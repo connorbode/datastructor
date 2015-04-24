@@ -55,7 +55,13 @@ var Node = function (container) {
     .on('mouseout', function () {
       d3.select(this)
         .attr('fill', '#aaa');
-    });
+    })
+    .on('click', function () {
+      this._openEditor(d3.event.clientX, d3.event.clientY);
+    }.bind(this));
+
+  // add a dispatcher for valuechanged event
+  this.dispatcher = d3.dispatch('valuechanged');
 };
 
 // Inherit from Domain Object
@@ -95,22 +101,79 @@ Node.prototype.setValue = function (value) {
  * Adds an event listener.  This method should never
  * be called directly.
  */
-Node.prototype._addEvent = function (event, callback) {
+Node.prototype._addEvent = function (event, eventStr, callback) {
 
   // register the callbacks
-  this.circle.on(event, callback);
-  this.text.on(event, callback);
+  this.circle.on(eventStr, callback);
+  this.text.on(eventStr, callback);
+  if (this.dispatcher[event]) {
+    this.dispatcher.on(eventStr, callback);
+  }
 };
 
 /**
  * Removes an event listener.  This method should never
  * be called directly.
  */
-Node.prototype._removeEvent = function (event, callback) {
+Node.prototype._removeEvent = function (event, eventStr, callback) {
 
   // delete the callbacks
-  this.circle.on(event, null);
-  this.text.on(event, null);
+  this.circle.on(eventStr, null);
+  this.text.on(eventStr, null);
+  if (this.dispatcher[event]) {
+    this.dispatcher.on(eventStr, callback);
+  }
+};
+
+/**
+ * Displays the edit node value input
+ */
+Node.prototype._openEditor = function (left, top) {
+
+  this.editor = d3.select('body')
+    .append('input');
+
+  this.editor
+    .classed('value-input', true)
+    .classed('open', true)
+    .attr('placeholder', 'Update value')
+    .style('top', top)
+    .style('left', left)
+    .on('keydown', function () {
+      if (d3.event.keyCode === 13) {
+        this._getEditorValue();
+        this._closeEditor();
+      }
+    }.bind(this))
+    .on('blur', this._closeEditor.bind(this))
+    .on('mousedown', function () {
+      d3.event.stopPropagation();
+    });
+
+  var elem = this.editor.node();
+  elem.focus();
+  elem.value = '';
+};
+
+/**
+ * Closes the edit node input
+ */
+Node.prototype._closeEditor = function () {
+  if (this.editor) {
+    this.editor.on('blur', null);
+    this.editor.remove();
+    this.editor = undefined;
+  }
+};
+
+/**
+ * Retrieves the value of the editor
+ */
+Node.prototype._getEditorValue = function () {
+  if (this.editor) {
+    var value = this.editor.node().value;
+    this.dispatcher.valuechanged(value);
+  }
 };
 
 module.exports = Node;

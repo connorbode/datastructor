@@ -20,6 +20,10 @@ var TreeOperations = {
         console.log('removing listener');
         node.removeEventListener('mouseover', mouseover);
       });
+      var value = function (v) {
+        console.log('value is: ' + v)
+      }
+      node.addEventListener('valuechanged', value);
 
     }
   }
