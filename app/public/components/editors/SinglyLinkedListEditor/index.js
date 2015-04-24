@@ -334,7 +334,7 @@ var Operations = {
         nodes.push(loners[prev.index]);
       } else {
         lists[prev.list].selectAll('g.node')[0].forEach(function (n, i) {
-          if (i <= next.index) {
+          if (i <= prev.index) {
             nodes.push(d3.select(n));
           }
         });
