@@ -47,6 +47,9 @@ Node.prototype.setXY = function (x, y) {
   this.text
     .attr('x', x)
     .attr('y', y + 8);
+
+  this.x = x;
+  this.y = y;
 };
 
 module.exports = Node;
