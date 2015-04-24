@@ -448,8 +448,10 @@ module.exports = React.createClass({
       _dragging = true;
 
       if (!_arrowSet) {
-        var startBox = _startNode.getBBox();
-        var startRect = _startNode.getBoundingClientRect();
+        var circle = d3.select(_endNode).select('circle');
+        var circleNode = circle.node();
+        var startBox = circleNode.getBBox();
+        var startRect = circleNode.getBoundingClientRect();
         var offsetLeft = (startBox.width / 2) + startRect.left;
         var offsetTop = (startBox.height / 2) + startRect.top;
         _startPoint = new TwoDee.Point(offsetLeft, offsetTop);
