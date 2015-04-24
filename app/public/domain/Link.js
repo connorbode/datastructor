@@ -3,11 +3,8 @@ var TwoDee        = require('two-dee');
 
 var Link = function (container) {
 
-  this._type = 'Link';
-
-  // append the group
-  this.group = container.append('g');
-  this.group.classed('arrow', true);
+  // call the parent constructor
+  DomainObject.call(this, 'Link', container);
 
   // append the line
   this.line = this.group
@@ -26,7 +23,7 @@ var Link = function (container) {
 };
 
 // inherit from DomainObject
-Link.prototype = new DomainObject();
+Link.prototype = Object.create(DomainObject.prototype);
 Link.prototype.constructor = Link;
 
 /**

@@ -1,12 +1,18 @@
+var uuid = require('node-uuid');
+
 /**
  * All domain objects should implement
  * this class
  */
-var DomainObject = function () {
+var DomainObject = function (type, container) {
+  this._type = type;        // the type of the object; used for debugging.
   this.duration = 1000;     // the duration of animations
-  this.group = null;        // the container d3 element for the object
   this.events = {};         // an object for tracking events
   this.eventIdCounter = 0;  // see addEventListener for more details
+  this.id = uuid.v4();
+  this.group = container.append('g')
+    .attr('data-id', this.id)
+    .classed(type, true);
 };
 
 /**

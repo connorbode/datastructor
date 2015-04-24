@@ -7,13 +7,8 @@ var TwoDee       = require('two-dee');
  */
 var Node = function (container) {
 
-  // a type reference
-  this._type = 'Node';
-
-  // initialize the group element
-  this.group = container.append('g');
-  this.group 
-    .classed('node', true);
+  // call the parent constructor
+  DomainObject.call(this, 'Node', container);
 
   // append the circle
   this.circle = this.group
@@ -66,7 +61,7 @@ var Node = function (container) {
 };
 
 // Inherit from Domain Object
-Node.prototype = new DomainObject();
+Node.prototype = Object.create(DomainObject.prototype);
 Node.prototype.constructor = Node;
 
 /**
