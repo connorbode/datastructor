@@ -29,8 +29,8 @@ DomainObject.prototype.checkInterface = function () {
   if (!this.group)
     throw "All domain objects must set the `group` property! " + noComply;
 
-  if (!this.setXY)
-    throw "All domain objects must set the `setXY` method! " + noComply;
+  if (!this.setCoordinates)
+    throw "All domain objects must set the `setCoordinates` method! " + noComply;
 
   if (!this._addEvent)
     throw "All domain objects must set the `_addEvent` method! " + noComply;
@@ -73,7 +73,7 @@ DomainObject.prototype.remove = function () {
 /**
  * Sets the coordinates of the object
  */
-DomainObject.prototype.setXY = function (x, y) {
+DomainObject.prototype.setCoordinates = function () {
   this.checkInterface();
 };
 

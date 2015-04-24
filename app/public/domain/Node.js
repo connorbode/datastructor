@@ -1,4 +1,5 @@
 var DomainObject = require('./DomainObject');
+var TwoDee       = require('two-dee');
 
 /**
  * It is expected that container is a d3
@@ -32,7 +33,7 @@ var Node = function (container) {
     .style('cursor', 'pointer');
 
   // set defaults
-  this.setXY(0, 0);
+  this.setCoordinates(new TwoDee.Point(0,0));
   this.setValue('_');
 
   // add event listeners to circle
@@ -71,18 +72,17 @@ Node.prototype.constructor = Node;
 /**
  * Sets the coordinates of the node
  */
-Node.prototype.setXY = function (x, y) {
+Node.prototype.setCoordinates = function (point) {
 
-  this.x = x;
-  this.y = y;
+  this.center = point;
 
   this.circle
-    .attr('cx', x)
-    .attr('cy', y);
+    .attr('cx', point.x)
+    .attr('cy', point.y);
 
   this.text
-    .attr('x', x)
-    .attr('y', y + 8);
+    .attr('x', point.x)
+    .attr('y', point.y + 8);
 };
 
 /**
