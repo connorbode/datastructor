@@ -293,7 +293,6 @@ var Operations = {
           };
         });
       
-      updateHoverEvents(group, 'loners', index);
       centerGroups(transitionDuration);
     }
   },
