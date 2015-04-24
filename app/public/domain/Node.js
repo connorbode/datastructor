@@ -35,7 +35,7 @@ var Node = function (container) {
   this.setXY(0, 0);
   this.setValue('_');
 
-  // add event listeners
+  // add event listeners to circle
   this.circle
     .on('mouseover', function () {
       d3.select(this)
@@ -44,6 +44,17 @@ var Node = function (container) {
     .on('mouseout', function () {
       d3.select(this)
         .attr('stroke-width', '0');
+    });
+
+  // add event listeners to text
+  this.text
+    .on('mouseover', function () {
+      d3.select(this)
+        .attr('fill', '#000');
+    })
+    .on('mouseout', function () {
+      d3.select(this)
+        .attr('fill', '#aaa');
     });
 };
 
