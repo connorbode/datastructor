@@ -1,4 +1,5 @@
 module.exports = {
   'ArrayEditor':              require('./ArrayEditor'),
-  'SinglyLinkedListEditor':   require('./SinglyLinkedListEditor')
+  'SinglyLinkedListEditor':   require('./SinglyLinkedListEditor'),
+  'TreeEditor':               require('./TreeEditor')
 };
