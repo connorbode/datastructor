@@ -18,7 +18,10 @@ var LinkableNode = function (container) {
   this.node.addEventListener('mousedown', this._startDragging.bind(this));
 
   // dispatcher
-  this.dispatcher = d3.dispatch('linkcreated');
+  this.dispatcher = d3.dispatch('linkcreated', 'moved');
+
+  // existing links
+  this.links = {};
 };
 
 // inherit from DomainObject
@@ -100,7 +103,17 @@ LinkableNode.prototype._onHoverOtherNode = function () {
   elem.on('mouseup.LinkableNode', this._onLinkOtherNode.bind(this));
 
   // Snap the arrowhead to the other node
-  var circle = elem.select('g.Node').select('circle');
+  this._snapArrowheadToOtherNode(this.draggableLink, elem);
+};
+
+/**
+ * Snaps the arrowhead to another node
+ * `link` should be an instance of a Link
+ * `other` should be a d3 selection of a LinkableNode DOM element
+ */
+LinkableNode.prototype._snapArrowheadToOtherNode = function (link, other) {
+
+  var circle = other.select('g.Node').select('circle');
   var x = circle.attr('cx');
   var y = circle.attr('cy');
   var r = circle.attr('r');
@@ -111,7 +124,7 @@ LinkableNode.prototype._onHoverOtherNode = function () {
   var intersectionPoints = arrowLine.intersectionWith(otherNodeCircle);
   var closestPoint = this.node.center.closest(intersectionPoints);
   var arrowStart = this.draggableLink.start;
-  this.draggableLink.setCoordinates(arrowStart, closestPoint);
+  link.setCoordinates(arrowStart, closestPoint);
 };
 
 /**
@@ -131,9 +144,9 @@ LinkableNode.prototype._onExitOtherNode = function () {
 LinkableNode.prototype._onLinkOtherNode = function () {
   var target = d3.event.target;
   var linkableNodeElem = this.findElemOfType(target, this._type);
-  var id = d3.select(linkableNodeElem).attr('data-id');
+  var otherId = d3.select(linkableNodeElem).attr('data-id');
   this._onExitOtherNode();
-  this.dispatcher.linkcreated(this.id, id);
+  this.dispatcher.linkcreated(this.id, otherId);
 };
 
 /** 
@@ -143,6 +156,7 @@ LinkableNode.prototype.setCoordinates = function (point) {
   var end = this.draggableLink.end;
   this.draggableLink.setCoordinates(point, end);
   this.node.setCoordinates(point);
+  this.dispatcher.moved(point);
 };
 
 /**
@@ -172,6 +186,38 @@ LinkableNode.prototype._removeEvent = function (event, eventStr, callback) {
   if (this.dispatcher[event]) {
     this.dispatcher.on(eventStr, null);
   }
+};
+
+/**
+ * Creates a link with another node.
+ * - `other` should be an instance of a LinkableNode
+ */
+LinkableNode.prototype.createLink = function (other) {
+
+  // create the link
+  var link = new Link(this.group);
+  var start = this.node.center;
+  var end = link.end;
+  link.sendToBack();
+  link.setCoordinates(start, end);
+  this._snapArrowheadToOtherNode(link, other.group);
+
+  // save the link
+  this.links[other.id] = link;
+
+  // register an event listeners to update the arrowhead
+  other.addEventListener('moved', this._updateLink.bind(this, other));
+};
+
+/**
+ * Updates the head of a link
+ */
+LinkableNode.prototype._updateLink = function (other) {
+  var link = this.links[other.id];
+  var start = this.node.center;
+  var end = link.end;
+  link.setCoordinates(start, end);
+  this._snapArrowheadToOtherNode(link, other.group);
 };
 
 module.exports = LinkableNode;

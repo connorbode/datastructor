@@ -49,8 +49,8 @@ Link.prototype.setCoordinates = function (start, end) {
   var rotationInDegrees = (180 * rotationInRadians) / Math.PI;
 
   // get the appropriate translation for the arrowhead
-  var translateX = -dx;
-  var translateY = -dy;
+  var translateX = end.x;
+  var translateY = end.y;
 
   // build the transform string for the arrow head
   var rotationStr = 'rotate(' + rotationInDegrees + ')';
