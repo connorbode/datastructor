@@ -172,14 +172,17 @@ var Operations = {
       var group = lonersElem
         .append('g');
 
+      var index = loners.length;
+
       group
         .classed('node', true)
-        .attr('opacity', '0');
+        .attr('opacity', '0')
+        .attr('data-group', 'loners')
+        .attr('data-index', index);
 
       loners.push(group);
-      var index = loners.length - 1;
 
-      group
+      var node = group
         .append('circle')
         .attr('fill', '#ccc')
         .attr('cx', function (d, i) {
@@ -190,34 +193,41 @@ var Operations = {
         .attr('stroke', '#aaa')
         .attr('stroke-width', '0')
         .style('cursor', 'pointer')
-        .on('mouseover', function (d) {
-          d3.select(this)
-            .attr('stroke-width', '2');
-          _endNode = this.parentNode;
-          _endNodeVal = {
-            list: 'loners',
-            index: index
-          };
-        })
         .on('mouseout', function (d) {
           d3.select(this)
             .attr('stroke-width', '0');
           _endNode = null;
         })
+        .on('mouseup', function (d, i) {
+          _mouseDown = false;
+        })    
+        .on('mouseover', function (d) {
+          var node = d3.select(this.parentNode);
+          var group = node.attr('data-group');
+          var index = node.attr('data-index');
+          d3.select(this)
+            .attr('stroke-width', '2');
+          _endNode = this.parentNode;
+          _endNodeVal = {
+            list: group,
+            index: index
+          };
+        })
         .on('mousedown', function (d, i) {
+          var node = d3.select(this.parentNode);
+          var group = node.attr('data-group');
+          var index = node.attr('data-index');
           d3.event.stopPropagation();
           _dragging = false;
           _mouseDown = true;
           _arrowSet = false;
           _startNode = this.parentNode;
           _startNodeVal = {
-            list: 'loners',
+            list: group,
             index: index
           };
-        })
-        .on('mouseup', function (d, i) {
-          _mouseDown = false;
         });
+
 
       // add the value of the node
       group
@@ -233,30 +243,9 @@ var Operations = {
           return data.value || '_';
         })
         .style('cursor', 'pointer')
-        .on('mouseover', function (d) {
-          d3.select(this)
-            .attr('fill', 'black');
-          
-          _endNode = this.parentNode;
-          _endNodeVal = {
-            list: 'loners',
-            index: index
-          };
-        })
         .on('mouseout', function (d) {
           d3.select(this)
             .attr('fill', '#aaa');
-        })
-        .on('mousedown', function (d, i) {
-          d3.event.stopPropagation();
-          _dragging = false;
-          _mouseDown = true;
-          _arrowSet = false;
-          _startNode = this.parentNode;
-          _startNodeVal = {
-            list: 'loners',
-            index: index
-          };
         })
         .on('mouseup', function (d) {
           _mouseDown = false;
@@ -276,8 +265,35 @@ var Operations = {
             node.focus();
             node.value = '';
           }
+        })    
+        .on('mouseover', function (d) {
+          var node = d3.select(this.parentNode);
+          var group = node.attr('data-group');
+          var index = node.attr('data-index');
+          d3.select(this)
+            .attr('fill', '#000');
+          _endNode = this.parentNode;
+          _endNodeVal = {
+            list: group,
+            index: index
+          };
+        })
+        .on('mousedown', function (d, i) {
+          var node = d3.select(this.parentNode);
+          var group = node.attr('data-group');
+          var index = node.attr('data-index');
+          d3.event.stopPropagation();
+          _dragging = false;
+          _mouseDown = true;
+          _arrowSet = false;
+          _startNode = this.parentNode;
+          _startNodeVal = {
+            list: group,
+            index: index
+          };
         });
       
+      updateHoverEvents(group, 'loners', index);
       centerGroups(transitionDuration);
     }
   },
@@ -317,6 +333,12 @@ var Operations = {
       // populate lists
       if (prev.list === 'loners') {
         nodes.push(loners[prev.index]);
+      } else {
+        lists[prev.list].selectAll('g.node')[0].forEach(function (n, i) {
+          if (i <= next.index) {
+            nodes.push(d3.select(n));
+          }
+        });
       }
 
       if (next.list === 'loners') {
@@ -330,12 +352,24 @@ var Operations = {
       }
 
       // splice lists
-      if (prev.list === 'loners') {
+      var splicePrev = prev.list === 'loners';
+      var spliceNext = next.list === 'loners';
+      if (splicePrev && spliceNext) {
+        if (prev.index > next.index) {
+          loners.splice(prev.index, 1);
+          loners.splice(next.index, 1);
+        } else {
+          loners.splice(next.index, 1);
+          loners.splice(prev.index, 1);
+        }
+      } else if (splicePrev) {
         loners.splice(prev.index, 1);
-      }
-      if (next.list === 'loners') {
+      } else if (spliceNext) {
         loners.splice(next.index, 1);
       }
+      loners.forEach(function (l, i) {
+        l.attr('data-index', i);
+      });
 
       var group = viewport.append('g');
       var groupNum = lists.length;
@@ -359,6 +393,8 @@ var Operations = {
           .transition()
           .duration(transitionDuration)
           .attr('transform', transform)
+          .attr('data-group', groupNum)
+          .attr('data-index', index)
           .each('end', function () {
 
             var removed = node.remove();
@@ -418,52 +454,6 @@ var Operations = {
             });
 
             centerGroups(transitionDuration);
-          });
-
-        node
-          .select('circle')
-          .on('mouseover', function (d) {
-            d3.select(this)
-              .attr('stroke-width', '2');
-            _endNode = this.parentNode;
-            _endNodeVal = {
-              list: groupNum,
-              index: index
-            };
-          })
-          .on('mousedown', function (d, i) {
-            d3.event.stopPropagation();
-            _dragging = false;
-            _mouseDown = true;
-            _arrowSet = false;
-            _startNode = this.parentNode;
-            _startNodeVal = {
-              list: groupNum,
-              index: index
-            };
-          });
-
-        node
-          .select('text')
-          .on('mouseover', function (d) {
-            d3.select(this)
-              .attr('stroke-width', '2');
-            _endNode = this.parentNode;
-            _endNodeVal = {
-              list: groupNum,
-              index: index
-            };
-          })
-          .on('mousedown', function (d, i) {
-            d3.event.stopPropagation();
-            _dragging = false;
-            _mouseDown = true;
-            _arrowSet = false;
-            _startNode = this.parentNode;
-            _startNodeVal = {
-              list: groupNum,
-              index: index
-            };
           });
       });
 
