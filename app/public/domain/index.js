@@ -1,4 +1,5 @@
 module.exports = {
-  Link: require('./Link'),
-  Node: require('./Node')
+  Link:           require('./Link'),
+  LinkableNode:   require('./LinkableNode'),
+  Node:           require('./Node')
 };
