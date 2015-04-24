@@ -3,6 +3,8 @@ var TwoDee        = require('two-dee');
 
 var Link = function (container) {
 
+  this._type = 'Link';
+
   // append the group
   this.group = container.append('g');
   this.group.classed('arrow', true);
@@ -61,6 +63,26 @@ Link.prototype.setCoordinates = function (start, end) {
   // set the arrow heads coordinates
   this.polygon
     .attr('transform', transformStr);
+};
+
+/**
+ * Adds an event; should not be called directly
+ */
+Link.prototype._addEvent = function (event, eventStr, callback) {
+
+  // add the event
+  this.line.on(eventStr, callback);
+  this.polygon.on(eventStr, callback);
+};
+
+/**
+ * Removes an event; should not be called directly
+ */
+Link.prototype._removeEvent = function (event, eventStr, callback) {
+
+  // remove the event
+  this.line.on(eventStr, null);
+  this.line.on(eventStr, null);
 };
 
 module.exports = Link;
