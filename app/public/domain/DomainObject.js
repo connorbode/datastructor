@@ -71,6 +71,19 @@ DomainObject.prototype.remove = function () {
 };
 
 /**
+ * Send a domain object to the back of the group
+ */
+DomainObject.prototype.sendToBack = function () {
+  var node = this.group.node();
+  var parent = node.parentNode;
+  var firstChild = parent.firstChild;
+  if (firstChild) {
+    node.remove();
+    parent.insertBefore(node, firstChild);
+  }
+};
+
+/**
  * Sets the coordinates of the object
  */
 DomainObject.prototype.setCoordinates = function () {
