@@ -64,6 +64,13 @@ DomainObject.prototype.show = function () {
 };
 
 /**
+ * Remove the domain object
+ */
+DomainObject.prototype.remove = function () {
+  return this.group.remove();
+};
+
+/**
  * Sets the coordinates of the object
  */
 DomainObject.prototype.setXY = function (x, y) {
