@@ -321,6 +321,12 @@ var Operations = {
 
       if (next.list === 'loners') {
         nodes.push(loners[next.index]);
+      } else {
+        lists[next.list].selectAll('g.node')[0].forEach(function (n, i) {
+          if (i >= next.index) {
+            nodes.push(d3.select(n));
+          }
+        });
       }
 
       // splice lists
@@ -332,6 +338,7 @@ var Operations = {
       }
 
       var group = viewport.append('g');
+      var groupNum = lists.length;
       group.classed('list', 'true');
       lists.push(group);
 
@@ -366,31 +373,41 @@ var Operations = {
 
             if (index < nodes.length - 1) {
 
-              var arrow = removed
-                .insert('g', ':first-child')
-                .classed('arrow', true);
+              var arrow = removed.select('g.arrow');
+              var line = arrow.select('line');
+              var polygon = arrow.select('polygon');
 
-              arrow
-                .append('line')
+              if (arrow.empty()) {
+                arrow = removed
+                  .insert('g', ':first-child')
+                  .classed('arrow', true);
+
+                line = arrow
+                  .append('line')
+                  .style('opacity', '0');
+
+                polygon = arrow
+                  .append('polygon')
+                  .style('opacity', '0');
+              }
+
+              line
                 .attr('x1', nextOffsetLeft)
                 .attr('y1', nextOffsetTop)
                 .attr('x2', nextOffsetLeft + 72)
                 .attr('y2', nextOffsetTop)
                 .attr('stroke', '#555')
                 .attr('stroke-width', '2')
-                .style('opacity', '0')
                 .transition()
                 .duration(transitionDuration)
                 .style('opacity', '1');
 
               var transformStr = 'translate(' + (nextOffsetLeft + 81) + ',' + nextOffsetTop + ')';
 
-              arrow
-                .append('polygon')
-                .attr('points', '0,0 -10,-10 -10,10')
-                .style('opacity', '0')
-                .style('color', '#555')
+              polygon
                 .attr('transform', transformStr)
+                .attr('points', '0,0 -10,-10 -10,10')
+                .style('color', '#555')
                 .transition()
                 .duration(transitionDuration)
                 .style('opacity', '1');
@@ -401,6 +418,52 @@ var Operations = {
             });
 
             centerGroups(transitionDuration);
+          });
+
+        node
+          .select('circle')
+          .on('mouseover', function (d) {
+            d3.select(this)
+              .attr('stroke-width', '2');
+            _endNode = this.parentNode;
+            _endNodeVal = {
+              list: groupNum,
+              index: index
+            };
+          })
+          .on('mousedown', function (d, i) {
+            d3.event.stopPropagation();
+            _dragging = false;
+            _mouseDown = true;
+            _arrowSet = false;
+            _startNode = this.parentNode;
+            _startNodeVal = {
+              list: groupNum,
+              index: index
+            };
+          });
+
+        node
+          .select('text')
+          .on('mouseover', function (d) {
+            d3.select(this)
+              .attr('stroke-width', '2');
+            _endNode = this.parentNode;
+            _endNodeVal = {
+              list: groupNum,
+              index: index
+            };
+          })
+          .on('mousedown', function (d, i) {
+            d3.event.stopPropagation();
+            _dragging = false;
+            _mouseDown = true;
+            _arrowSet = false;
+            _startNode = this.parentNode;
+            _startNodeVal = {
+              list: groupNum,
+              index: index
+            };
           });
       });
 
