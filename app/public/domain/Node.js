@@ -34,6 +34,17 @@ var Node = function (container) {
   // set defaults
   this.setXY(0, 0);
   this.setValue('_');
+
+  // add event listeners
+  this.circle
+    .on('mouseover', function () {
+      d3.select(this)
+        .attr('stroke-width', '2');
+    })
+    .on('mouseout', function () {
+      d3.select(this)
+        .attr('stroke-width', '0');
+    });
 };
 
 // Inherit from Domain Object
@@ -67,6 +78,28 @@ Node.prototype.setValue = function (value) {
     .text(function () {
       return value;
     });
+};
+
+/** 
+ * Adds an event listener.  This method should never
+ * be called directly.
+ */
+Node.prototype._addEvent = function (event, callback) {
+
+  // register the callbacks
+  this.circle.on(event, callback);
+  this.text.on(event, callback);
+};
+
+/**
+ * Removes an event listener.  This method should never
+ * be called directly.
+ */
+Node.prototype._removeEvent = function (event, callback) {
+
+  // delete the callbacks
+  this.circle.on(event, null);
+  this.text.on(event, null);
 };
 
 module.exports = Node;

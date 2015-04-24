@@ -3,8 +3,10 @@
  * this class
  */
 var DomainObject = function () {
-  this.duration = 1000;
-  this.group = null;
+  this.duration = 1000;     // the duration of animations
+  this.group = null;        // the container d3 element for the object
+  this.events = {};         // an object for tracking events
+  this.eventIdCounter = 0;  // see addEventListener for more details
 };
 
 /**
@@ -29,6 +31,12 @@ DomainObject.prototype.checkInterface = function () {
 
   if (!this.setXY)
     throw "All domain objects must set the `setXY` method! " + noComply;
+
+  if (!this._addEvent)
+    throw "All domain objects must set the `_addEvent` method! " + noComply;
+
+  if (!this._removeEvent)
+    throw "All domain objects must set the `_removeEvent` method! " + noComply;
 };
 
 /**
@@ -56,10 +64,45 @@ DomainObject.prototype.show = function () {
 };
 
 /**
- * Sets the coordinates of the group
+ * Sets the coordinates of the object
  */
 DomainObject.prototype.setXY = function (x, y) {
   this.checkInterface();
+};
+
+/**
+ * Adds event listener to the object.  The odd method of storing
+ * callback references is because d3 only allows one
+ * callback per event, but you can namespace events.
+ * For example, the events 'click', and 'click.a' 
+ * will both fire when on a click.
+ */
+DomainObject.prototype.addEventListener = function (event, callback) {
+  this.checkInterface();
+
+  // store the reference to the event
+  var eventStr = event + '.' + this.eventIdCounter;
+  if (!this.events[event])
+    this.events[event] = {};
+  this.events[event][callback] = eventStr;
+  this.eventIdCounter += 1;
+
+  // add the listeners to the d3 elements
+  this._addEvent(eventStr, callback);
+};
+
+/**
+ * Remove event listener from the object. See the description for 
+ * addEventListener to understand the oddities in adding the event.
+ */
+DomainObject.prototype.removeEventListener = function (event, callback) {
+  this.checkInterface();
+
+  // retrieve the reference to the event
+  var eventStr = this.events[event][callback];
+
+  // remove listeners from d3 elements
+  this._removeEvent(eventStr, callback);
 };
 
 module.exports = DomainObject;

@@ -12,6 +12,15 @@ var TreeOperations = {
       var node = new Domain.Node(viewport);
       node.setXY(0, 0);
       node.setValue('9');
+      var mouseover = function () {
+        console.log('mouseover');
+      }
+      node.addEventListener('mouseover', mouseover);
+      node.addEventListener('mousedown', function () {
+        console.log('removing listener');
+        node.removeEventListener('mouseover', mouseover);
+      });
+
     }
   }
 
