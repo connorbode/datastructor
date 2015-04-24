@@ -17,6 +17,8 @@ var LinkableNode = function (container) {
   this.node = new Node(this.group);
   this.node.addEventListener('mousedown', this._startDragging.bind(this));
 
+  // dispatcher
+  this.dispatcher = d3.dispatch('linkcreated');
 };
 
 // inherit from DomainObject
@@ -94,6 +96,9 @@ LinkableNode.prototype._onHoverOtherNode = function () {
   // Add a listener to remove the snap when no longer hovering
   elem.on('mouseout.LinkableNode', this._onExitOtherNode.bind(this));
 
+  // Add a listener to capture linking to the other node
+  elem.on('mouseup.LinkableNode', this._onLinkOtherNode.bind(this));
+
   // Snap the arrowhead to the other node
   var circle = elem.select('g.Node').select('circle');
   var x = circle.attr('cx');
@@ -115,7 +120,20 @@ LinkableNode.prototype._onHoverOtherNode = function () {
 LinkableNode.prototype._onExitOtherNode = function () {
   var target = d3.event.target;
   this._snap = false;
-  d3.select(target).on('mouseout.LinkableNode', null);
+  d3.select(target)
+    .on('mouseout.LinkableNode', null)
+    .on('mouseup.LinkableNode', null);
+};
+
+/**
+ * Responds to the mouseup event on another linkable node
+ */
+LinkableNode.prototype._onLinkOtherNode = function () {
+  var target = d3.event.target;
+  var linkableNodeElem = this.findElemOfType(target, this._type);
+  var id = d3.select(linkableNodeElem).attr('data-id');
+  this._onExitOtherNode();
+  this.dispatcher.linkcreated(this.id, id);
 };
 
 /** 
@@ -132,6 +150,28 @@ LinkableNode.prototype.setCoordinates = function (point) {
  */
 LinkableNode.prototype.setValue = function (value) {
   this.node.setValue(value);
+};
+
+/**
+ * Adds an event listener; SHOULD NOT BE CALLED DIRECTLY
+ */
+LinkableNode.prototype._addEvent = function (event, eventStr, callback) {
+
+  // add the events
+  if (this.dispatcher[event]) {
+    this.dispatcher.on(eventStr, callback);
+  }
+};
+
+/**
+ * Removes an event listener; SHOULD NOT BE CALLED DIRECTLY
+ */
+LinkableNode.prototype._removeEvent = function (event, eventStr, callback) {
+
+  // remove the events
+  if (this.dispatcher[event]) {
+    this.dispatcher.on(eventStr, null);
+  }
 };
 
 module.exports = LinkableNode;
