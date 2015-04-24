@@ -30,6 +30,10 @@ var Node = function (container) {
     .attr('text-anchor', 'middle')
     .style('font-size', '20px')
     .style('cursor', 'pointer');
+
+  // set defaults
+  this.setXY(0, 0);
+  this.setValue('_');
 };
 
 // Inherit from Domain Object
@@ -40,6 +44,10 @@ Node.prototype.constructor = Node;
  * Sets the coordinates of the node
  */
 Node.prototype.setXY = function (x, y) {
+
+  this.x = x;
+  this.y = y;
+
   this.circle
     .attr('cx', x)
     .attr('cy', y);
@@ -47,9 +55,18 @@ Node.prototype.setXY = function (x, y) {
   this.text
     .attr('x', x)
     .attr('y', y + 8);
+};
 
-  this.x = x;
-  this.y = y;
+/**
+ * Sets the value of the node
+ */
+Node.prototype.setValue = function (value) {
+
+  this.value = value;
+  this.text
+    .text(function () {
+      return value;
+    });
 };
 
 module.exports = Node;

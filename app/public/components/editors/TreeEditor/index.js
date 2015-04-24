@@ -10,7 +10,8 @@ var TreeOperations = {
     label: "Initialization",
     operation: function (viewport, data, duration) {
       var node = new Domain.Node(viewport);
-      node.setXY(1000, 100);
+      node.setXY(0, 0);
+      node.setValue('9');
     }
   }
 
