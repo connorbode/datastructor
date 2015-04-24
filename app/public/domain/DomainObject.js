@@ -19,7 +19,7 @@ var DomainObject = function (type, container) {
  * Set the duration for d3 transitions
  */
 DomainObject.prototype.setTransitionDuration = function (duration) {
-  this.duration = 1000;
+  this.duration = duration;
 };
 
 /**
