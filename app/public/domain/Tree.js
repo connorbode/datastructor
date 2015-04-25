@@ -139,7 +139,7 @@ Tree.prototype._organizeLevel = function (measurements, level) {
   if (!level)
     level = 1;
 
-  var totalX = 0;
+  var totalX = measurements.totalX || 0;
   this.children.forEach(function (child, index) {
     var measurement = measurements.children[index];
     var thisX = measurement.width / 2;
@@ -147,6 +147,7 @@ Tree.prototype._organizeLevel = function (measurements, level) {
     var y = level * 80;
     var point = new TwoDee.Point(x, y);
 
+    measurement.totalX = totalX;
     totalX += measurement.width;
 
     child.setCoordinates(point);
@@ -201,7 +202,7 @@ Tree.prototype.setCoordinates = function (point) {
   var rootPoint = this.root.node.center;
   var dx = point.x - rootPoint.x;
   var dy = point.y - rootPoint.y;
-  var linkableNodesToMove = this.children.concat([this.root]);
+  var linkableNodesToMove = [this.root];
   linkableNodesToMove.forEach(function (linkableNode) {
     var newPoint = linkableNode.node.center;
     newPoint.x += dx;
