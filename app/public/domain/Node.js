@@ -27,6 +27,7 @@ var Node = function (container) {
     .append('text')
     .attr('fill', '#aaa')
     .attr('text-anchor', 'middle')
+    .attr('y', '8')
     .style('font-size', '20px')
     .style('cursor', 'pointer');  
 
@@ -73,17 +74,17 @@ Node.prototype.setCoordinates = function (point) {
 
   this.center = point;
 
+  var translateStr = 'translate(' + point.x + ',' + point.y + ')';
+
   this.circle
     .transition()
-    .duration(this.duration)
-    .attr('cx', point.x)
-    .attr('cy', point.y);
+    .duration(1000)
+    .attr('transform', translateStr);
 
   this.text
     .transition()
-    .duration(this.duration)
-    .attr('x', point.x)
-    .attr('y', point.y + 8);
+    .duration(1000)
+    .attr('transform', translateStr);
 };
 
 /**
