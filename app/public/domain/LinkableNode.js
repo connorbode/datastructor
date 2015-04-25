@@ -174,7 +174,7 @@ LinkableNode.prototype._addEvent = function (event, eventStr, callback) {
   // add the events
   if (this.dispatcher[event]) {
     this.dispatcher.on(eventStr, callback);
-  }
+  } 
 };
 
 /**
@@ -221,13 +221,28 @@ LinkableNode.prototype.createLink = function (other) {
 
 /**
  * Updates the head of a link
+ * `other` should be an instance of a LinkableNode
  */
 LinkableNode.prototype._updateLink = function (other) {
   var link = this.links[other.id];
-  var start = this.node.center;
-  var end = link.end;
-  link.setCoordinates(start, end);
-  this._snapArrowheadToOtherNode(link, other.group);
+  if (link) {
+    var start = this.node.center;
+    var end = link.end;
+    link.setCoordinates(start, end);
+    this._snapArrowheadToOtherNode(link, other.group);
+  }
+}; 
+
+/**
+ * Removes a link
+ */
+LinkableNode.prototype.removeLink = function (other) {
+  if (this.links[other.id]) {
+    other.removeEventListener('moved', this._updateLink.bind(this, other));
+    this.removeEventListener('moved', this._updateLink.bind(this, other));
+    this.links[other.id].remove();
+    this.links[other.id] = undefined;
+  }
 };
 
 module.exports = LinkableNode;

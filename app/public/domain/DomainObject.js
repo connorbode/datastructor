@@ -122,16 +122,52 @@ DomainObject.prototype.setCoordinates = function () {
 DomainObject.prototype.addEventListener = function (event, callback) {
   this.checkInterface();
 
-  // store the reference to the event
-  var eventStr = event + '.' + this.eventIdCounter;
-  if (!this.events[event])
-    this.events[event] = {};
-  this.events[event][callback] = eventStr;
-  this.eventIdCounter += 1;
+  // if the callback already exists, we increment that count.
+  // there are instances where the same callback gets added
+  // multiple times, and should be cancelled only when it is
+  // removed as many times as it was added.
+  var callbackIndex = this._findIndexOfEventListener(event, callback);
+  if (callbackIndex > -1) {
+    this.events[event][callbackIndex].count += 1;
+  } 
 
-  // add the listeners to the d3 elements
-  this._addEvent(event, eventStr, callback);
+  // if the callback doesn't exist, we need to create it.
+  else {
+
+    // namespace the event so we can add multiple listeners
+    // for the same event
+    var eventStr = event + '.' + this.eventIdCounter;
+    this.eventIdCounter += 1;
+
+    // add the event to the events object
+    if (!this.events[event])
+      this.events[event] = [];
+
+    this.events[event].push({
+      str:      eventStr,
+      count:    1,
+      callback: callback
+    });
+
+    // add the listeners to the d3 elements
+    this._addEvent(event, eventStr, callback);
+  }
 };
+
+/**
+ * Finds the index of an event callback
+ */
+DomainObject.prototype._findIndexOfEventListener = function (event, callback) {
+  if (!this.events[event])
+    return -1;
+
+  return this.events[event].reduce(function (sum, callbackObj, index) {
+    if (callbackObj.callback == callback)
+      sum = index;
+    return sum;
+  }, -1);
+};
+
 
 /**
  * Remove event listener from the object. See the description for 
@@ -141,10 +177,23 @@ DomainObject.prototype.removeEventListener = function (event, callback) {
   this.checkInterface();
 
   // retrieve the reference to the event
-  var eventStr = this.events[event][callback];
+  var callbackIndex = this._findIndexOfEventListener(event, callback);
+  if (callbackIndex === -1)
+    return;
+  
+  var e = this.events[event][callbackIndex];
 
-  // remove listeners from d3 elements
-  this._removeEvent(event, eventStr, callback);
+  // decrement the counter
+  e.count -= 1;
+
+  console.log('decrementing count for', event, 'count:', e.count);
+
+  // remove the event if the counter is at 0
+  if (e.count === 0) {
+    console.log('removing', event);
+    this._removeEvent(event, e.str, callback);
+    this.events[event].splice(callbackIndex, 1);
+  }
 };
 
 module.exports = DomainObject;
