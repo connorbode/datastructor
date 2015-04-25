@@ -10,11 +10,14 @@ var Node = function (container) {
   // call the parent constructor
   DomainObject.call(this, 'Node', container);
 
+  // set defaults
+  this.radius = 20;
+
   // append the circle
   this.circle = this.group
     .append('circle')
     .attr('fill', '#ccc')
-    .attr('r', '20')
+    .attr('r', this.radius)
     .attr('stroke', '#aaa')
     .attr('stroke-width', '0')
     .style('cursor', 'pointer');
@@ -25,9 +28,8 @@ var Node = function (container) {
     .attr('fill', '#aaa')
     .attr('text-anchor', 'middle')
     .style('font-size', '20px')
-    .style('cursor', 'pointer');
+    .style('cursor', 'pointer');  
 
-  // set defaults
   this.setCoordinates(new TwoDee.Point(0,0));
   this.setValue('_');
 
@@ -72,10 +74,14 @@ Node.prototype.setCoordinates = function (point) {
   this.center = point;
 
   this.circle
+    .transition()
+    .duration(this.duration)
     .attr('cx', point.x)
     .attr('cy', point.y);
 
   this.text
+    .transition()
+    .duration(this.duration)
     .attr('x', point.x)
     .attr('y', point.y + 8);
 };

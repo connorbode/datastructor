@@ -13,6 +13,23 @@ var DomainObject = function (type, container) {
   this.group = container.append('g')
     .attr('data-id', this.id)
     .classed(type, true);
+
+  window.Datastructor.objects[this.id] = this;
+};
+
+if (!window.Datastructor) {
+  window.Datastructor = {};
+}
+
+if (!window.Datastructor.objects) {
+  window.Datastructor.objects = {};
+}
+
+/**
+ * Retrieves an object by ID
+ */
+DomainObject.getObject = function (id) {
+  return window.Datastructor.objects[id];
 };
 
 /**
@@ -180,7 +197,7 @@ DomainObject.prototype.removeEventListener = function (event, callback) {
   var callbackIndex = this._findIndexOfEventListener(event, callback);
   if (callbackIndex === -1)
     return;
-  
+
   var e = this.events[event][callbackIndex];
 
   // decrement the counter

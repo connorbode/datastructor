@@ -22,6 +22,7 @@ var LinkableNode = function (container) {
 
   // existing links
   this.links = {};
+  this.linkedToBy = {};
 };
 
 // inherit from DomainObject
@@ -117,10 +118,10 @@ LinkableNode.prototype._snapArrowheadToOtherNode = function (link, other) {
   var arrowEnd;
 
   // get the details of the other node
-  var circle = other.select('g.Node').select('circle');
-  var x = parseInt(circle.attr('cx'));
-  var y = parseInt(circle.attr('cy'));
-  var r = parseInt(circle.attr('r'));
+  var circle = other.select('g.Node').select('circle').node();
+  var x = parseFloat(circle.getAttribute('cx'));
+  var y = parseFloat(circle.getAttribute('cy'));
+  var r = parseFloat(circle.getAttribute('r'));
 
   // check if the arrowhead start is the same as the link
   if (arrowStart.x === x && arrowStart.y === y) {
@@ -171,6 +172,25 @@ LinkableNode.prototype.setCoordinates = function (point) {
   this.draggableLink.setCoordinates(point, end);
   this.node.setCoordinates(point);
   this.dispatcher.moved(point);
+  
+  // update each of the links
+  var key;
+  for (key in this.links) {
+    var link = this.links[key];
+    var end = link.end;
+    link.setCoordinates(point, end);
+  }
+
+  // update each of the "linkedToBy" links
+  for (key in this.linkedToBy) {
+    var link = this.linkedToBy[key];
+    var start = link.start;
+    var nextCircle = new TwoDee.Circle(point, this.node.radius);
+    var lineToNextCircle = TwoDee.Line.fromPoints(point, start);
+    var intersectionPoints = lineToNextCircle.intersectionWith(nextCircle);
+    var closestPoint = start.closest(intersectionPoints);
+    link.setCoordinates(start, closestPoint);
+  }
 };
 
 /**
@@ -221,16 +241,18 @@ LinkableNode.prototype.createLink = function (other) {
   var link = new Link(this.group);
   var start = this.node.center;
   var end = link.end;
+
   link.sendToBack();
   link.setCoordinates(start, end);
   this._snapArrowheadToOtherNode(link, other.group);
 
   // save the link
   this.links[other.id] = link;
+  other.linkedToBy[this.id] = link;
 
   // register an event listeners to update the arrowhead
-  other.addEventListener('moved', this._updateLink.bind(this, other));
-  this.addEventListener('moved', this._updateLink.bind(this, other));
+  // other.addEventListener('moved', this._updateLink.bind(this, other));
+  // this.addEventListener('moved', this._updateLink.bind(this, other));
 };
 
 /**
@@ -242,7 +264,6 @@ LinkableNode.prototype._updateLink = function (other) {
   if (link) {
     var start = this.node.center;
     var end = link.end;
-    link.setCoordinates(start, end);
     this._snapArrowheadToOtherNode(link, other.group);
   }
 }; 
