@@ -193,6 +193,15 @@ LinkableNode.prototype._removeEvent = function (event, eventStr, callback) {
  * - `other` should be an instance of a LinkableNode
  */
 LinkableNode.prototype.createLink = function (other) {
+ 
+  // check if link is bi-directional
+  var bidirectional = false;
+  if (other.links[this.id]) {
+    if (this.allowBidirectional === false)
+      return;
+
+    bidirectional = true;
+  }
 
   // create the link
   var link = new Link(this.group);
