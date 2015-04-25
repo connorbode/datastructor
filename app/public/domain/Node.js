@@ -12,6 +12,7 @@ var Node = function (container) {
 
   // set defaults
   this.radius = 20;
+  this.center = new TwoDee.Point(0,0);
 
   // append the circle
   this.circle = this.group
@@ -20,6 +21,8 @@ var Node = function (container) {
     .attr('r', this.radius)
     .attr('stroke', '#aaa')
     .attr('stroke-width', '0')
+    .attr('cx', '0')
+    .attr('cy', '0')
     .style('cursor', 'pointer');
 
   // append the text
@@ -27,11 +30,11 @@ var Node = function (container) {
     .append('text')
     .attr('fill', '#aaa')
     .attr('text-anchor', 'middle')
+    .attr('x', '0')
     .attr('y', '8')
     .style('font-size', '20px')
-    .style('cursor', 'pointer');  
+    .style('cursor', 'pointer'); 
 
-  this.setCoordinates(new TwoDee.Point(0,0));
   this.setValue('_');
 
   // add event listeners to circle
@@ -74,17 +77,17 @@ Node.prototype.setCoordinates = function (point) {
 
   this.center = point;
 
-  var translateStr = 'translate(' + point.x + ',' + point.y + ')';
-
   this.circle
     .transition()
-    .duration(1000)
-    .attr('transform', translateStr);
+    .duration(this.duration)
+    .attr('cx', point.x)
+    .attr('cy', point.y);
 
   this.text
     .transition()
-    .duration(1000)
-    .attr('transform', translateStr);
+    .duration(this.duration)
+    .attr('x', point.x)
+    .attr('y', point.y + 8);
 };
 
 /**

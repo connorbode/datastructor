@@ -6,7 +6,7 @@ var uuid = require('node-uuid');
  */
 var DomainObject = function (type, container) {
   this._type = type;        // the type of the object; used for debugging.
-  this.duration = 1000;     // the duration of animations
+  this.duration = 0;     // the duration of animations
   this.events = {};         // an object for tracking events
   this.eventIdCounter = 0;  // see addEventListener for more details
   this.id = uuid.v4();

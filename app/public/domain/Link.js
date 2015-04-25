@@ -31,19 +31,9 @@ Link.prototype.constructor = Link;
  */
 Link.prototype.setCoordinates = function (start, end) {
 
-
   // save the points
   this.start = start;
   this.end = end;
-
-  // set the points for the line
-  this.line
-    .transition()
-    .duration(this.duration)
-    .attr('x1', start.x)
-    .attr('y1', start.y)
-    .attr('x2', end.x)
-    .attr('y2', end.y);
 
   // get the appropriate rotation for the arrowhead
   var dx = start.x - end.x;
@@ -65,6 +55,15 @@ Link.prototype.setCoordinates = function (start, end) {
     .transition()
     .duration(this.duration)
     .attr('transform', transformStr);
+
+  // set the points for the line
+  this.line
+    .transition()
+    .duration(this.duration)
+    .attr('x1', start.x)
+    .attr('y1', start.y)
+    .attr('x2', end.x)
+    .attr('y2', end.y);
 };
 
 /**

@@ -237,10 +237,12 @@ LinkableNode.prototype.createLink = function (other) {
     bidirectional = true;
   }
 
+  // console.log(other);
+
   // create the link
   var link = new Link(this.group);
   var start = this.node.center;
-  var end = link.end;
+  var end = other.node.center;
 
   link.sendToBack();
   link.setCoordinates(start, end);
@@ -278,6 +280,13 @@ LinkableNode.prototype.removeLink = function (other) {
     this.links[other.id].remove();
     this.links[other.id] = undefined;
   }
+};
+
+/**
+ * Sets the transition duration
+ */
+LinkableNode.prototype.setTransitionDuration = function (duration) {
+  this.node.setTransitionDuration(duration);
 };
 
 module.exports = LinkableNode;
