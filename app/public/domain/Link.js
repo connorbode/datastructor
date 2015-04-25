@@ -30,7 +30,7 @@ Link.prototype.constructor = Link;
  * Draws the coordinates of the link
  */
 Link.prototype.setCoordinates = function (start, end) {
-  
+
   // save the points
   this.start = start;
   this.end = end;

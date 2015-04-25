@@ -113,18 +113,32 @@ LinkableNode.prototype._onHoverOtherNode = function () {
  */
 LinkableNode.prototype._snapArrowheadToOtherNode = function (link, other) {
 
-  var circle = other.select('g.Node').select('circle');
-  var x = circle.attr('cx');
-  var y = circle.attr('cy');
-  var r = circle.attr('r');
-  var otherNodeCenter = new TwoDee.Point(x, y);
-  var otherNodeCircle = new TwoDee.Circle(otherNodeCenter, r);
-  var arrowStartPoint = this.draggableLink.start;
-  var arrowLine = new TwoDee.Line.fromPoints(arrowStartPoint, otherNodeCenter);
-  var intersectionPoints = arrowLine.intersectionWith(otherNodeCircle);
-  var closestPoint = this.node.center.closest(intersectionPoints);
   var arrowStart = this.draggableLink.start;
-  link.setCoordinates(arrowStart, closestPoint);
+  var arrowEnd;
+
+  // get the details of the other node
+  var circle = other.select('g.Node').select('circle');
+  var x = parseInt(circle.attr('cx'));
+  var y = parseInt(circle.attr('cy'));
+  var r = parseInt(circle.attr('r'));
+
+  // check if the arrowhead start is the same as the link
+  if (arrowStart.x === x && arrowStart.y === y) {
+    arrowEnd = arrowStart;
+  }
+
+  // otherwise, find the snap point
+  else {
+    var otherNodeCenter = new TwoDee.Point(x, y);
+    var otherNodeCircle = new TwoDee.Circle(otherNodeCenter, r);
+    var arrowStartPoint = this.draggableLink.start;
+    var arrowLine = new TwoDee.Line.fromPoints(arrowStartPoint, otherNodeCenter);
+    var intersectionPoints = arrowLine.intersectionWith(otherNodeCircle);
+    arrowEnd = this.node.center.closest(intersectionPoints);
+  }
+
+  // set the link coordinates
+  link.setCoordinates(arrowStart, arrowEnd);
 };
 
 /**
@@ -193,7 +207,7 @@ LinkableNode.prototype._removeEvent = function (event, eventStr, callback) {
  * - `other` should be an instance of a LinkableNode
  */
 LinkableNode.prototype.createLink = function (other) {
- 
+
   // check if link is bi-directional
   var bidirectional = false;
   if (other.links[this.id]) {

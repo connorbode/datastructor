@@ -1,4 +1,5 @@
-var DomainObject = require('./DomainObject');
+var DomainObject  = require('./DomainObject');
+var TwoDee        = require('two-dee');
 
 var Tree = function (container) {
   
@@ -56,7 +57,12 @@ Tree.prototype.setChildren = function (children) {
   this.children.forEach(function (child) {
 
     // create a link from the root to the child
-    this.root.createLink(child);
+    if (child._type === 'Tree') {
+      this.root.createLink(child.root);
+    }
+    else if (child._type === 'LinkableNode') {
+      this.root.createLink(child);
+    }
 
     // move the child to this tree's svg group
     var group = child.group.remove();
@@ -111,7 +117,99 @@ Tree.prototype.removeChild = function (child) {
  */
 Tree.prototype.sitPretty = function () {
 
+  // get the measurements for the levels
+  var measurements = this._getMeasurements(this);
+  var rootX = measurements.width / 2;
+  var rootY = 0;
+  var rootPoint = new TwoDee.Point(rootX, rootY);
+  this.root.setCoordinates(rootPoint);
+  this._organizeLevel(measurements);
 };
+
+/**
+ * SHOULD NOT BE CALLED DIRECTLY
+ *
+ * Organizes a level of the tree (by spacing it according to measurements)
+ * - `measurements` should be a Measurement object as produced by Tree._getChildMeasurements
+ * - `level` should be the depth of the node
+ */
+
+Tree.prototype._organizeLevel = function (measurements, level) {
+
+  if (!level)
+    level = 1;
+
+  var totalX = 0;
+  this.children.forEach(function (child, index) {
+    var measurement = measurements.children[index];
+    var thisX = measurement.width / 2;
+    var x = totalX + thisX;
+    var y = level * 80;
+    var point = new TwoDee.Point(x, y);
+
+    totalX += measurement.width;
+
+    child.setCoordinates(point);
+
+    if (child._type === 'Tree') {
+      child._organizeLevel(measurement, level + 1);
+    }
+  });
+};
+
+/**
+ * SHOULD NOT BE CALLED DIRECTLY
+ *
+ * Gets the measurements of a node including width's at 
+ * each depth of the node
+ * - `node` should be an instance of a LinkableNode or a Tree
+ * - `m` should be an array of Measurements.
+ */
+Tree.prototype._getMeasurements = function (node) {
+  var NODE_WIDTH = 100;
+
+  // `width` should represent the width of this particular node
+  // `children` should be an array of Measurement objects for this node's children
+  var Measurement = function (width, children) {
+    this.width = width;
+    this.children = children;
+  };
+
+  // check the case that the node is a LinkableNode
+  if (node._type === 'LinkableNode') {
+    var measurement = new Measurement(NODE_WIDTH, []);
+    return measurement;
+  }
+
+  // check the case that the node is a Tree
+  if (node._type === 'Tree') {
+    var children = node.children.map(node._getMeasurements.bind(node));
+    var width;
+    if (children.length === 0)
+      width = NODE_WIDTH;
+    else 
+      width = children.reduce(function (sum, child) { return sum + child.width; }, 0);
+    var measurement = new Measurement(width, children);
+    return measurement;
+  }
+};
+
+/**
+ * Sets the coordinates of a trees root node
+ */
+Tree.prototype.setCoordinates = function (point) {
+  var rootPoint = this.root.node.center;
+  var dx = point.x - rootPoint.x;
+  var dy = point.y - rootPoint.y;
+  var linkableNodesToMove = this.children.concat([this.root]);
+  linkableNodesToMove.forEach(function (linkableNode) {
+    var newPoint = linkableNode.node.center;
+    newPoint.x += dx;
+    newPoint.y += dy;
+    linkableNode.setCoordinates(newPoint);
+  });
+};
+
 
 
 module.exports = Tree;
