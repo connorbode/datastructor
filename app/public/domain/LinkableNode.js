@@ -207,6 +207,7 @@ LinkableNode.prototype.createLink = function (other) {
 
   // register an event listeners to update the arrowhead
   other.addEventListener('moved', this._updateLink.bind(this, other));
+  this.addEventListener('moved', this._updateLink.bind(this, other));
 };
 
 /**
