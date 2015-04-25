@@ -63,8 +63,8 @@ LinkableNode.prototype._onDrag = function () {
   var offsetTop = boundingRect.top + boundingRect.height / 2;
 
   // set the arrowhead coordinates
-  var x = d3.event.clientX - offsetLeft;
-  var y = d3.event.clientY - offsetTop;
+  var x = d3.event.clientX - offsetLeft + this.node.center.x;
+  var y = d3.event.clientY - offsetTop + this.node.center.y;
   var point = new TwoDee.Point(x, y);
   var start = this.draggableLink.start;
   this.draggableLink.setCoordinates(start, point);
