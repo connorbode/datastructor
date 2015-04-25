@@ -2,29 +2,34 @@ var React           = require('react/addons');
 var SequenceViewer  = require('../../partials/SequenceViewer');
 var SequenceActions = require('../../../actions/SequenceActions');
 var Domain          = require('../../../domain');
+var TwoDee          = require('two-dee');
+
 var _sequence;
+var _NodeCollection;
+var _Trees;
+
+var updateSequence = function () {
+  SequenceActions.update(_sequence);
+};
+
+var addOperation = function (op) {
+  _sequence.operations.push(op);
+  updateSequence();
+};
 
 var TreeOperations = {
 
   "initialization": {
     label: "Initialization",
     operation: function (viewport, data, duration) {
-      var node = new Domain.Node(viewport);
-      node.setXY(0, 0);
-      node.setValue('9');
-      var mouseover = function () {
-        console.log('mouseover');
-      }
-      node.addEventListener('mouseover', mouseover);
-      node.addEventListener('mousedown', function () {
-        console.log('removing listener');
-        node.removeEventListener('mouseover', mouseover);
-      });
-      var value = function (v) {
-        console.log('value is: ' + v)
-      }
-      node.addEventListener('valuechanged', value);
+      _NodeCollection = new Domain.NodeCollection(viewport);
+    }
+  },
 
+  "addNode": {
+    label: "Create Node",
+    operation: function (viewport, data, duration) {
+      _NodeCollection.add(new Domain.LinkableNode(viewport));
     }
   }
 
@@ -39,12 +44,18 @@ module.exports = React.createClass({
 
   },
 
+  addNode: function () {
+    addOperation({
+      type: 'addNode'
+    });
+  },
+
   render: function () {
     var viewerProps = {
       sequence:   this.props,
       structure:  TreeOperations,
       options: [
-        { label: '[ ]', action: this.addArray }
+        { label: '+', action: this.addNode }
       ],
       onChangeStep: this.onChangeStep,
       reset: this.reset
