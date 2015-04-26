@@ -240,10 +240,12 @@ LinkableNode.prototype.createLink = function (other) {
   var link = new Link(this.group);
   var start = this.node.center;
   var end = LinkableNode._getSnapPoint(this, other);
+
+  // temporarily set the transition time to 0
+  link.setTransitionDuration(0);
   var transition = link.setCoordinates(start, end);
   link.sendToBack();
   link.show();
-  link.setTransitionDuration(this.duration);
 
   // save the link to this node and the other
   this.links[other.id] = {
@@ -258,6 +260,7 @@ LinkableNode.prototype.createLink = function (other) {
 
   // resolve the promise once the link has been placed appropriately
   return new Promise(function (resolve) {
+    link.setTransitionDuration(undefined);
     transition.each('end', resolve);
   }.bind(this));
 };

@@ -26,6 +26,9 @@ Collection.prototype.add = function (node) {
   // add the node to the collection
   this.nodes.push(node);
 
+  // set the appropriate transition duration
+  // node.setTransitionDuration(this.duration);
+
   // remove the node from the DOM and add it to this group
   node.group.node().remove();
   this.group.node().appendChild(node.group.node());
@@ -92,6 +95,34 @@ Collection.prototype.contains = function (node) {
   // find the node
   var index = this.nodes.indexOf(node);
   return index > -1;
+};
+
+/**
+ * Sets the transition duration for a collection
+ */
+Collection.prototype.setTransitionDuration = function (duration) {
+  this.duration = duration;
+  this.nodes.forEach(function (node) {
+    node.setTransitionDuration(duration);
+  });
+};
+
+/**
+ * SHOULD NOT BE CALLED DIRECTLY
+ *
+ * Adds a listener to the collection
+ */
+Collection.prototype._addEvent = function (event, eventStr, callback) {
+
+};
+
+/**
+ * SHOULD NOT BE CALLED DIRECTLY
+ *
+ * Removes a listener from the collection
+ */
+Collection.prototype._removeEvent = function (event, eventStr, callback) {
+
 };
 
 module.exports = Collection;

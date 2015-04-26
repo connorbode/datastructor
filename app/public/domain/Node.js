@@ -81,14 +81,14 @@ Node.prototype.setCoordinates = function (point) {
     // move the circle
     this.circle
       .transition()
-      .duration(this.duration)
+      .duration(this.getTransitionDuration())
       .attr('cx', point.x)
       .attr('cy', point.y);
 
     // move the node text
     var transition = this.text
       .transition()
-      .duration(this.duration)
+      .duration(this.getTransitionDuration())
       .attr('x', point.x)
       .attr('y', point.y + 8);
 

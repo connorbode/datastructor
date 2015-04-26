@@ -7,7 +7,7 @@ var Promise = require('es6-promise').Promise;
  */
 var DomainObject = function (type, container) {
   this._type = type;        // the type of the object; used for debugging.
-  this.duration = 0;     // the duration of animations
+  this.duration;            // the duration of animations
   this.events = {};         // an object for tracking events
   this.eventIdCounter = 0;  // see addEventListener for more details
   this.id = uuid.v4();
@@ -42,6 +42,26 @@ DomainObject.prototype.setId = function (id) {
  */
 DomainObject.prototype.setTransitionDuration = function (duration) {
   this.duration = duration;
+};
+
+/**
+ * Gets the duration for d3 transitions
+ */
+DomainObject.prototype.getTransitionDuration = function () {
+  if (this.duration !== undefined)
+    return this.duration;
+
+  if (window.Datastructor.transitionDuration !== undefined)
+    return window.Datastructor.transitionDuration;
+
+  return 0;
+}; 
+
+/**
+ * Sets the global duration
+ */
+DomainObject.setGlobalTransitionDuration = function (duration) {
+  window.Datastructor.transitionDuration = duration;
 };
 
 /**
