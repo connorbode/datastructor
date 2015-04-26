@@ -270,12 +270,11 @@ LinkableNode.prototype.createLink = function (other) {
   // create the link
   var link = new Link(this.group);
   var start = this.node.center;
-  var end = other.node.center;
+  var end = LinkableNode._getSnapPoint(this, other);
 
   link.setTransitionDuration(this.duration);
   link.sendToBack();
-  link.setCoordinates(start, end);
-  this._snapArrowheadToOtherNode(link, other.group);
+  var transition = link.setCoordinates(start, end);
 
   // save the links
   this.links[other.id] = {
@@ -287,6 +286,8 @@ LinkableNode.prototype.createLink = function (other) {
     link: link,
     node: this
   };
+
+  return transition;
 };
 
 /**

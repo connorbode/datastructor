@@ -74,7 +74,8 @@ Tree.prototype.addChild = function (child) {
     throw "Child must be a Tree!";
 
   // create a link from the root to the child
-  this.node.createLink(child.node);
+  var transition = this.node.createLink(child.node);
+  this.node.setTransitionDuration(1000);
 
   // set the parent in the child
   child.setParent(this);
@@ -83,7 +84,8 @@ Tree.prototype.addChild = function (child) {
   var group = child.group.remove();
   this.group.node().appendChild(child.group.node());
   this.children.push(child);
-  this.getRoot()._sitPretty();
+
+  return transition;
 };
 
 /**
@@ -102,6 +104,8 @@ Tree.prototype.removeChild = function (child) {
 };
 
 /**
+ * SHOULD NOT BE CALLED DIRECTLY
+ *
  * Organizes the nodes of the tree (by spacing them appropriately)
  */
 Tree.prototype._sitPretty = function () {
@@ -111,9 +115,12 @@ Tree.prototype._sitPretty = function () {
   var rootX = measurements.width / 2;
   var rootY = 0;
   var rootPoint = new TwoDee.Point(rootX, rootY);
-  this.node.setCoordinates(rootPoint);
+  var transition = this.node.setCoordinates(rootPoint);
   this._organizeLevel(measurements);
+
+  return transition;
 };
+
 
 /** 
  * Finds the root of the tree
@@ -124,6 +131,15 @@ Tree.prototype.getRoot = function () {
     curr = curr.parent;
   }
   return curr;
+};
+
+/**
+ * Finds the root of the tree, then calls _sitPretty
+ * to organize the entire tree
+ */
+ 
+Tree.prototype.sitPretty = function () {
+  return this.getRoot()._sitPretty();
 };
 
 /**
@@ -202,13 +218,11 @@ Tree.prototype.setCoordinates = function (point) {
   var rootPoint = this.node.node.center;
   var dx = point.x - rootPoint.x;
   var dy = point.y - rootPoint.y;
-  var linkableNodesToMove = [this.node];
-  linkableNodesToMove.forEach(function (linkableNode) {
-    var newPoint = linkableNode.node.center;
-    newPoint.x += dx;
-    newPoint.y += dy;
-    linkableNode.setCoordinates(newPoint);
-  });
+  var center = this.node.node.center;
+  center.x += dx;
+  center.y += dy;
+  var transition = this.node.setCoordinates(center);
+  return transition;
 };
 
 /**
@@ -271,6 +285,16 @@ Tree.prototype._emitLinkCreated = function (id, otherId) {
   var treeId = treeDOM.getAttribute('data-id');
   var tree = DomainObject.getObject(treeId);
   this.dispatcher.linkcreated(this.id, tree.id);
+};
+
+/**
+ * Sets the transition duration for a tree
+ */
+Tree.prototype.setTransitionDuration = function (duration) {
+  this.node.setTransitionDuration(duration);
+  this.children.forEach(function (child) {
+    child.setTransitionDuration(duration);
+  });
 };
 
 
