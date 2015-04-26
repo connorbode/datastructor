@@ -83,7 +83,7 @@ Tree.prototype.addChild = function (child) {
   var group = child.group.remove();
   this.group.node().appendChild(child.group.node());
   this.children.push(child);
-  this._sitPretty();
+  this.getRoot()._sitPretty();
 };
 
 /**
@@ -113,6 +113,17 @@ Tree.prototype._sitPretty = function () {
   var rootPoint = new TwoDee.Point(rootX, rootY);
   this.node.setCoordinates(rootPoint);
   this._organizeLevel(measurements);
+};
+
+/** 
+ * Finds the root of the tree
+ */
+Tree.prototype.getRoot = function () {
+  var curr = this;
+  while(curr.parent !== null) {
+    curr = curr.parent;
+  }
+  return curr;
 };
 
 /**
