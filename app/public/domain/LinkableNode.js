@@ -73,7 +73,7 @@ LinkableNode.prototype._onDrag = function () {
   var x = d3.event.clientX - offsetLeft + this.node.center.x;
   var y = d3.event.clientY - offsetTop + this.node.center.y;
   var point = new TwoDee.Point(x, y);
-  var start = this.draggableLink.start;
+  var start = this.node.center;
   this.draggableLink.setCoordinates(start, point);
 };
 
@@ -203,9 +203,7 @@ LinkableNode.prototype._onLinkOtherNode = function () {
  * Sets the center of the node
  */
 LinkableNode.prototype.setCoordinates = function (point) {
-  var end = this.draggableLink.end;
   var promise = this.node.setCoordinates(point);
-  this.draggableLink.setCoordinates(point, end);
   this.dispatcher.moved(point);
   
   // update each of the links
