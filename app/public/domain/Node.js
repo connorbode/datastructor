@@ -1,5 +1,6 @@
 var DomainObject  = require('./DomainObject');
 var TwoDee        = require('two-dee');
+var Promise       = require('es6-promise').Promise;
 
 /**
  * It is expected that container is a d3
@@ -74,25 +75,26 @@ Node.prototype.constructor = Node;
  * Sets the coordinates of the node
  */
 Node.prototype.setCoordinates = function (point) {
+  return new Promise(function (resolve, reject) {
+    this.center = point;
 
-  this.center = point;
+    // move the circle
+    this.circle
+      .transition()
+      .duration(this.duration)
+      .attr('cx', point.x)
+      .attr('cy', point.y);
 
-  // move the circle
-  this.circle
-    .transition()
-    .duration(this.duration)
-    .attr('cx', point.x)
-    .attr('cy', point.y);
-
-  // move the node text
-  var transition = this.text
-    .transition()
-    .duration(this.duration)
-    .attr('x', point.x)
-    .attr('y', point.y + 8);
-
-  // return the transition so that the end event can be caught
-  return transition;
+    // move the node text
+    this.text
+      .transition()
+      .duration(this.duration)
+      .attr('x', point.x)
+      .attr('y', point.y + 8)
+      .each('end', function () {
+        resolve();
+      });
+  }.bind(this));
 };
 
 /**
