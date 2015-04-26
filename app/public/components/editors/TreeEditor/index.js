@@ -52,15 +52,21 @@ var TreeOperations = {
   "initialization": {
     label: "Initialization",
     operation: function (viewport, data, duration) {
+      Datastructor.DomainObject.setGlobalTransitionDuration(duration);
       _NodeCollection = new Domain.Collection(viewport);
+      _NodeCollection.setTransitionDuration(duration);
+      _NodeCollection.show();
     }
   },
 
   "createNode": {
     label: "Create Node",
     operation: function (viewport, data, duration) {
+      Datastructor.DomainObject.setGlobalTransitionDuration(duration);
       var node = new Domain.Tree(viewport);
       node.setId(data.id);
+      node.show();
+      node.setTransitionDuration(duration);
       node.addEventListener('valuechanged', changeNodeValue);
       node.addEventListener('linkcreated', createLink);
       _NodeCollection.add(node);
@@ -70,6 +76,7 @@ var TreeOperations = {
   "changeNodeValue": {
     label: "Change Value",
     operation: function (viewport, data, duration) {
+      Datastructor.DomainObject.setGlobalTransitionDuration(duration);
       var node = Domain.getObject(data.id);
       node.setValue(data.value);
     }
@@ -78,10 +85,13 @@ var TreeOperations = {
   "createLink": {
     label: "Create Link",
     operation: function (viewport, data, duration) {
+      Datastructor.DomainObject.setGlobalTransitionDuration(duration);
       var first = Domain.getObject(data.firstId);
       var second = Domain.getObject(data.secondId);
 
-      first.addChild(second);
+      first
+        .addChild(second)
+        .then(first.sitPretty.bind(first));
 
       _NodeCollection.remove(first);
       _NodeCollection.remove(second);
