@@ -52,10 +52,14 @@ Link.prototype.setCoordinates = function (start, end) {
 
   // set the arrow heads coordinates
   this.polygon
+    .transition()
+    .duration(this.duration)
     .attr('transform', transformStr);
 
   // set the points for the line
-  this.line
+  return this.line
+    .transition()
+    .duration(this.duration)
     .attr('x1', start.x)
     .attr('y1', start.y)
     .attr('x2', end.x)
