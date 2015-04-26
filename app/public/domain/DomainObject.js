@@ -18,11 +18,10 @@ var DomainObject = function (type, container) {
 };
 
 if (!window.Datastructor) {
-  window.Datastructor = {};
-}
-
-if (!window.Datastructor.objects) {
-  window.Datastructor.objects = {};
+  window.Datastructor = {
+    DomainObject: DomainObject,
+    objects: {}
+  };
 }
 
 /**
@@ -207,14 +206,26 @@ DomainObject.prototype.removeEventListener = function (event, callback) {
   // decrement the counter
   e.count -= 1;
 
-  console.log('decrementing count for', event, 'count:', e.count);
-
   // remove the event if the counter is at 0
   if (e.count === 0) {
     console.log('removing', event);
     this._removeEvent(event, e.str, callback);
     this.events[event].splice(callbackIndex, 1);
   }
+};
+
+/**
+ * Retrieves an object by ID
+ */
+DomainObject.getObject = function (id) {
+  return window.Datastructor.objects[id];
+};
+
+/**
+ * Generates an ID
+ */
+DomainObject.genId = function () {
+  return uuid.v4();
 };
 
 module.exports = DomainObject;

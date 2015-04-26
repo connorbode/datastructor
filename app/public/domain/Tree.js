@@ -1,4 +1,5 @@
 var DomainObject  = require('./DomainObject');
+var LinkableNode  = require('./LinkableNode');
 var TwoDee        = require('two-dee');
 
 var Tree = function (container) {
@@ -7,34 +8,27 @@ var Tree = function (container) {
   DomainObject.call(this, 'Tree', container);
 
   // set defaults
-  this.root = null;
+  this.parent = null;
   this.children = [];
+
+  // event dispatcher
+  this.dispatcher = d3.dispatch('valuechanged', 'linkcreated', 'moved');
+
+  // add the node
+  this.node = new LinkableNode(this.group);
+  this.node.addEventListener('valuechanged', this._emitValueChanged.bind(this));
+  this.node.addEventListener('linkcreated', this._emitLinkCreated.bind(this));
 };
 
-Tree.prototype = Object.create(DomainObject);
+Tree.prototype = Object.create(DomainObject.prototype);
 Tree.prototype.constructor = Tree;
 
-/**
- * Sets the root node of the tree
- * - `root` should be an instance of a LinkableNode
+/** 
+ * Sets the parent tree of this tree
+ * - `parent` should be an instance of a Tree
  */
-
-Tree.prototype.setRoot = function (root) {
-  
-  // typecheck
-  if (root !== null && root._type !== 'LinkableNode')
-    throw "Root of a tree can only be a LinkableNode (or null)!";
-
-  if (this.root)
-    this.root._isRoot = undefined;
-
-  // set the root
-  this.root = root;
-  this.root._isRoot = true;
-
-  // move the root to this tree's svg group
-  var group = root.group.remove();
-  this.group.node().appendChild(group.node());
+Tree.prototype.setParent = function (tree) {
+  this.parent = tree;
 };
 
 /**
@@ -48,33 +42,16 @@ Tree.prototype.setChildren = function (children) {
   var err = "Children must an array of LinkableNodes and Trees!"
   if (!Array.isArray(children))
     throw err;
+
+  // typecheck all objects in the array
   children.forEach(function (child) {
     if (child._type !== 'LinkableNode' && child._type !== 'Tree')
       throw err;
   });
 
-  // verify root is set
-  if (!this.root)
-    throw "cannot add children before setting root!";
-
+  // blabla
   this.children = children;
-  this.children.forEach(function (child) {
-
-    // create a link from the root to the child
-    if (child._type === 'Tree') {
-      this.root.createLink(child.root);
-    }
-    else if (child._type === 'LinkableNode') {
-      this.root.createLink(child);
-    }
-
-    // move the child to this tree's svg group
-    console.log(child);
-    var group = child.group.remove();
-    this.group.node().appendChild(child.group.node());
-  }.bind(this));
-
-  this._sitPretty();
+  this.children.forEach(this.addChild.bind(this));
 };
 
 
@@ -88,20 +65,25 @@ Tree.prototype.isEmpty = function () {
 
 /**
  * Appends a child to a the tree
- * - `child` should be an instance of a LinkableNode or a Tree
+ * - `child` should be an instance of a Tree
  */
 Tree.prototype.addChild = function (child) {
 
   // typecheck
-  if (child._type !== 'LinkableNode' && child._type !== 'Tree')
-    throw "Child must be a LinkableNode or a Tree!";
+  if (child._type !== 'Tree')
+    throw "Child must be a Tree!";
 
-  // verify root is set
-  if (!this.root)
-    throw "cannot add children before setting root!";
+  // create a link from the root to the child
+  this.node.createLink(child.node);
 
+  // set the parent in the child
+  child.setParent(this);
+
+  // move the child to this tree's svg group
+  var group = child.group.remove();
+  this.group.node().appendChild(child.group.node());
   this.children.push(child);
-  this.root.createLink(child);
+  this._sitPretty();
 };
 
 /**
@@ -129,7 +111,7 @@ Tree.prototype._sitPretty = function () {
   var rootX = measurements.width / 2;
   var rootY = 0;
   var rootPoint = new TwoDee.Point(rootX, rootY);
-  this.root.setCoordinates(rootPoint);
+  this.node.setCoordinates(rootPoint);
   this._organizeLevel(measurements);
 };
 
@@ -206,10 +188,10 @@ Tree.prototype._getMeasurements = function (node) {
  * Sets the coordinates of a trees root node
  */
 Tree.prototype.setCoordinates = function (point) {
-  var rootPoint = this.root.node.center;
+  var rootPoint = this.node.node.center;
   var dx = point.x - rootPoint.x;
   var dy = point.y - rootPoint.y;
-  var linkableNodesToMove = [this.root];
+  var linkableNodesToMove = [this.node];
   linkableNodesToMove.forEach(function (linkableNode) {
     var newPoint = linkableNode.node.center;
     newPoint.x += dx;
@@ -219,16 +201,66 @@ Tree.prototype.setCoordinates = function (point) {
 };
 
 /**
+ * Sets the value of this tree
+ */
+Tree.prototype.setValue = function (value) {
+  this.node.setValue(value);
+};
+
+/**
+ * Adds an event listener; SHOULD NOT BE CALLED DIRECTLY
+ */
+Tree.prototype._addEvent = function (event, eventStr, callback) {
+
+  // add the events
+  if (this.dispatcher[event]) {
+    this.dispatcher.on(eventStr, callback);
+  }
+};
+
+/**
+ * Removes an event listener; SHOULD NOT BE CALLED DIRECTLY
+ */
+Tree.prototype._removeEvent = function (event, eventStr, callback) {
+
+  // remove the events
+  if (this.dispatcher[event]) {
+    this.dispatcher.on(eventStr, null);
+  }
+};
+
+
+/**
  * Finds a tree that a given node belongs to.  If 
  * the node does not belong to a tree, return null.
  */
 Tree.findTreeFromRoot = function (node) {
   if (node._isRoot) {
-    return DomainObject.findElemOfType(node, 'Tree');
+    var element = DomainObject.findElemOfType(node.group.node(), 'Tree');
+    var id = element.getAttribute('data-id');
+    return DomainObject.getObject(id);
   }
   return null;
 };
 
+/**
+ * Re-emits the value changed event coming from the LinkableNode
+ */
+Tree.prototype._emitValueChanged = function (id, value) {
+  this.dispatcher.valuechanged(this.id, value);
+};
+
+/**
+ * Re-emits the link created event coming from the LinkableNode
+ */
+Tree.prototype._emitLinkCreated = function (id, otherId) {
+  var otherObj = DomainObject.getObject(otherId);
+  var otherDOM = otherObj.group.node();
+  var treeDOM = DomainObject.findElemOfType(otherDOM, 'Tree');
+  var treeId = treeDOM.getAttribute('data-id');
+  var tree = DomainObject.getObject(treeId);
+  this.dispatcher.linkcreated(this.id, tree.id);
+};
 
 
 module.exports = Tree;

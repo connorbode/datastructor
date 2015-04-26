@@ -59,11 +59,9 @@ var TreeOperations = {
   "createNode": {
     label: "Create Node",
     operation: function (viewport, data, duration) {
-      var node = new Domain.LinkableNode(viewport);
+      var node = new Domain.Tree(viewport);
       node.setId(data.id);
-      node.addEventListener('valuechanged', function (value) {
-        changeNodeValue(node.id, value);
-      });
+      node.addEventListener('valuechanged', changeNodeValue);
       node.addEventListener('linkcreated', createLink);
       _NodeCollection.add(node);
     }
@@ -83,16 +81,7 @@ var TreeOperations = {
       var first = Domain.getObject(data.firstId);
       var second = Domain.getObject(data.secondId);
 
-      var tree = Domain.Tree.findTreeFromRoot(first);
-
-      if (!tree) {
-        tree = new Domain.Tree(viewport);
-        tree.setRoot(first);
-      }
-
-      var children = tree.children;
-      children.push(second);
-      tree.setChildren(children);
+      first.addChild(second);
 
       _NodeCollection.remove(first);
       _NodeCollection.remove(second);

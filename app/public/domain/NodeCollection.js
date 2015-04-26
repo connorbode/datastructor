@@ -23,8 +23,8 @@ Node.prototype.constructor = Node;
 NodeCollection.prototype.add = function (node) {
 
   // typecheck
-  if (node._type !== 'Node' && node._type !== 'LinkableNode')
-    throw "Only Nodes and LinkableNodes can be added to NodeCollections";
+  if (node._type !== 'Node' && node._type !== 'LinkableNode' && node._type !== 'Tree')
+    throw "Only Nodes, LinkableNodes and Trees can be added to NodeCollections";
 
   // add the node to the collection
   this.nodes.push(node);
@@ -53,7 +53,6 @@ NodeCollection.prototype.remove = function (node) {
   if (index === -1)
     return;
   
-  // this.nodes[index].group.node().remove();
   this.nodes.splice(index, 1);
 };
 

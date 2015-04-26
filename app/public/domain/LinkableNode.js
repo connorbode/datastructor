@@ -13,12 +13,13 @@ var LinkableNode = function (container) {
   this.draggableLink.setTransitionDuration(0);
   this.draggableLink.hide();
 
+  // event dispatcher
+  this.dispatcher = d3.dispatch('linkcreated', 'moved', 'valuechanged');
+
   // append a node
   this.node = new Node(this.group);
   this.node.addEventListener('mousedown', this._startDragging.bind(this));
-
-  // dispatcher
-  this.dispatcher = d3.dispatch('linkcreated', 'moved');
+  this.node.addEventListener('valuechanged', this._emitValueChanged.bind(this));
 
   // existing links
   this.links = {};
@@ -186,9 +187,7 @@ LinkableNode.prototype.setCoordinates = function (point) {
     var link = this.linkedToBy[key];
     var start = link.start;
     var nextCircle = new TwoDee.Circle(point, this.node.radius);
-    console.log(point, start);
     var lineToNextCircle = TwoDee.Line.fromPoints(point, start);
-    console.log(lineToNextCircle);
     var intersectionPoints = lineToNextCircle.intersectionWith(nextCircle);
     var closestPoint = start.closest(intersectionPoints);
     link.setCoordinates(start, closestPoint);
@@ -210,8 +209,7 @@ LinkableNode.prototype._addEvent = function (event, eventStr, callback) {
   // add the events
   if (this.dispatcher[event]) {
     this.dispatcher.on(eventStr, callback);
-  } 
-  this.node._addEvent(event, eventStr, callback);
+  }
 };
 
 /**
@@ -290,6 +288,13 @@ LinkableNode.prototype.removeLink = function (other) {
  */
 LinkableNode.prototype.setTransitionDuration = function (duration) {
   this.node.setTransitionDuration(duration);
+};
+
+/**
+ * Echos the value changed event from the Node
+ */
+LinkableNode.prototype._emitValueChanged = function (id, value) {
+  this.dispatcher.valuechanged(this.id, value);
 };
 
 module.exports = LinkableNode;

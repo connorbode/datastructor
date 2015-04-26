@@ -173,7 +173,7 @@ Node.prototype._closeEditor = function () {
 Node.prototype._getEditorValue = function () {
   if (this.editor) {
     var value = this.editor.node().value;
-    this.dispatcher.valuechanged(value);
+    this.dispatcher.valuechanged(this.id, value);
   }
 };
 
