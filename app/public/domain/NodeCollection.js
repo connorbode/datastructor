@@ -45,7 +45,7 @@ NodeCollection.prototype.add = function (node) {
 NodeCollection.prototype.remove = function (node) {
 
   // typecheck
-  if (node._type !== 'Node' && node._type !== 'LinkableNode')
+  if (node._type !== 'Node' && node._type !== 'LinkableNode' && node._type !== 'Tree')
     return;
 
   // find the node in the collection
