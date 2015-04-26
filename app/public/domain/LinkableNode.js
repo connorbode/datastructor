@@ -109,6 +109,34 @@ LinkableNode.prototype._onHoverOtherNode = function () {
 };
 
 /**
+ * Given two nodes, one that is linking to another, this
+ * method returns the "snap point", the first point of 
+ * intersection with the other node.
+ * - `first` the linking node; should be a LinkableNode
+ * - `second` the linked node; should be a LinkableNode
+ */
+LinkableNode._getSnapPoint = function (first, second) {
+
+  // the return point
+  var snapPoint;
+
+  // check if the have the same center
+  if (first.node.center.x === second.node.center.x && first.node.center.y === second.node.center.y) {
+    snapPoint = first.node.center;
+  }
+
+  // otherwise, find the snap point
+  else {
+    var line = TwoDee.Line.fromPoints(first.node.center, second.node.center);
+    var circle = new TwoDee.Circle(second.node.center, second.node.radius);
+    var intersectionPoints = line.intersectionWith(circle);
+    snapPoint = first.node.center.closest(intersectionPoints);
+  }
+
+  return snapPoint;
+};
+
+/**
  * Snaps the arrowhead to another node
  * `link` should be an instance of a Link
  * `other` should be a d3 selection of a LinkableNode DOM element
@@ -169,29 +197,30 @@ LinkableNode.prototype._onLinkOtherNode = function () {
  * Sets the center of the node
  */
 LinkableNode.prototype.setCoordinates = function (point) {
+  
   var end = this.draggableLink.end;
+  var transition = this.node.setCoordinates(point);
   this.draggableLink.setCoordinates(point, end);
-  this.node.setCoordinates(point);
   this.dispatcher.moved(point);
   
   // update each of the links
   var key;
   for (key in this.links) {
-    var link = this.links[key];
-    var end = link.end;
+    var link = this.links[key].link;
+    var end = LinkableNode._getSnapPoint(this, this.links[key].node);
     link.setCoordinates(point, end);
   }
 
   // update each of the "linkedToBy" links
   for (key in this.linkedToBy) {
-    var link = this.linkedToBy[key];
+    var link = this.linkedToBy[key].link;
     var start = link.start;
-    var nextCircle = new TwoDee.Circle(point, this.node.radius);
-    var lineToNextCircle = TwoDee.Line.fromPoints(point, start);
-    var intersectionPoints = lineToNextCircle.intersectionWith(nextCircle);
-    var closestPoint = start.closest(intersectionPoints);
-    link.setCoordinates(start, closestPoint);
+    var end = LinkableNode._getSnapPoint(this.linkedToBy[key].node, this);
+    link.setCoordinates(start, end);
   }
+
+  // return the transition so the end event can be detected
+  return transition;
 };
 
 /**
@@ -238,24 +267,26 @@ LinkableNode.prototype.createLink = function (other) {
     bidirectional = true;
   }
 
-  // console.log(other);
-
   // create the link
   var link = new Link(this.group);
   var start = this.node.center;
   var end = other.node.center;
 
+  link.setTransitionDuration(this.duration);
   link.sendToBack();
   link.setCoordinates(start, end);
   this._snapArrowheadToOtherNode(link, other.group);
 
-  // save the link
-  this.links[other.id] = link;
-  other.linkedToBy[this.id] = link;
+  // save the links
+  this.links[other.id] = {
+    link: link,
+    node: other
+  };
 
-  // register an event listeners to update the arrowhead
-  // other.addEventListener('moved', this._updateLink.bind(this, other));
-  // this.addEventListener('moved', this._updateLink.bind(this, other));
+  other.linkedToBy[this.id] = {
+    link: link,
+    node: this
+  };
 };
 
 /**
@@ -263,7 +294,7 @@ LinkableNode.prototype.createLink = function (other) {
  * `other` should be an instance of a LinkableNode
  */
 LinkableNode.prototype._updateLink = function (other) {
-  var link = this.links[other.id];
+  var link = this.links[other.id].link;
   if (link) {
     var start = this.node.center;
     var end = link.end;
@@ -278,7 +309,7 @@ LinkableNode.prototype.removeLink = function (other) {
   if (this.links[other.id]) {
     other.removeEventListener('moved', this._updateLink.bind(this, other));
     this.removeEventListener('moved', this._updateLink.bind(this, other));
-    this.links[other.id].remove();
+    this.links[other.id].link.remove();
     this.links[other.id] = undefined;
   }
 };
@@ -287,7 +318,11 @@ LinkableNode.prototype.removeLink = function (other) {
  * Sets the transition duration
  */
 LinkableNode.prototype.setTransitionDuration = function (duration) {
+  var key;
   this.node.setTransitionDuration(duration);
+  for (key in this.links) {
+    this.links[key].link.setTransitionDuration(duration);
+  }
 };
 
 /**
