@@ -86,14 +86,14 @@ Node.prototype.setCoordinates = function (point) {
       .attr('cy', point.y);
 
     // move the node text
-    this.text
+    var transition = this.text
       .transition()
       .duration(this.duration)
       .attr('x', point.x)
-      .attr('y', point.y + 8)
-      .each('end', function () {
-        resolve();
-      });
+      .attr('y', point.y + 8);
+
+    // resolve the promise when the transition ends
+    transition.each('end', resolve);
   }.bind(this));
 };
 
