@@ -2,6 +2,7 @@ var DomainObject  = require('./DomainObject');
 var Node          = require('./Node');
 var Link          = require('./Link');
 var TwoDee        = require('two-dee');
+var Promise       = require('es6-promise').Promise;
 
 var LinkableNode = function (container) {
 
@@ -197,30 +198,31 @@ LinkableNode.prototype._onLinkOtherNode = function () {
  * Sets the center of the node
  */
 LinkableNode.prototype.setCoordinates = function (point) {
-  
-  var end = this.draggableLink.end;
-  var transition = this.node.setCoordinates(point);
-  this.draggableLink.setCoordinates(point, end);
-  this.dispatcher.moved(point);
-  
-  // update each of the links
-  var key;
-  for (key in this.links) {
-    var link = this.links[key].link;
-    var end = LinkableNode._getSnapPoint(this, this.links[key].node);
-    link.setCoordinates(point, end);
-  }
+  return new Promise(function (resolve) {
+    var end = this.draggableLink.end;
+    var transition = this.node.setCoordinates(point);
+    this.draggableLink.setCoordinates(point, end);
+    this.dispatcher.moved(point);
+    
+    // update each of the links
+    var key;
+    for (key in this.links) {
+      var link = this.links[key].link;
+      var end = LinkableNode._getSnapPoint(this, this.links[key].node);
+      link.setCoordinates(point, end);
+    }
 
-  // update each of the "linkedToBy" links
-  for (key in this.linkedToBy) {
-    var link = this.linkedToBy[key].link;
-    var start = link.start;
-    var end = LinkableNode._getSnapPoint(this.linkedToBy[key].node, this);
-    link.setCoordinates(start, end);
-  }
+    // update each of the "linkedToBy" links
+    for (key in this.linkedToBy) {
+      var link = this.linkedToBy[key].link;
+      var start = link.start;
+      var end = LinkableNode._getSnapPoint(this.linkedToBy[key].node, this);
+      link.setCoordinates(start, end);
+    }
 
-  // return the transition so the end event can be detected
-  return transition;
+    // resolve the promise when the transition ends
+    transition.each('end', resolve);
+  }.bind(this));
 };
 
 /**
@@ -257,37 +259,41 @@ LinkableNode.prototype._removeEvent = function (event, eventStr, callback) {
  * - `other` should be an instance of a LinkableNode
  */
 LinkableNode.prototype.createLink = function (other) {
+  return new Promise(function (resolve) {
 
-  // check if link is bi-directional
-  var bidirectional = false;
-  if (other.links[this.id]) {
-    if (this.allowBidirectional === false)
-      return;
+    // check if link is bi-directional
+    var bidirectional = false;
+    if (other.links[this.id]) {
+      if (this.allowBidirectional === false)
+        return;
 
-    bidirectional = true;
-  }
+      bidirectional = true;
+    }
 
-  // create the link
-  var link = new Link(this.group);
-  var start = this.node.center;
-  var end = LinkableNode._getSnapPoint(this, other);
+    // create the link
+    var link = new Link(this.group);
+    var start = this.node.center;
+    var end = LinkableNode._getSnapPoint(this, other);
 
-  link.setTransitionDuration(this.duration);
-  link.sendToBack();
-  var transition = link.setCoordinates(start, end);
+    link.setTransitionDuration(this.duration);
+    link.sendToBack();
+    var transition = link.setCoordinates(start, end);
 
-  // save the links
-  this.links[other.id] = {
-    link: link,
-    node: other
-  };
+    // save the links
+    this.links[other.id] = {
+      link: link,
+      node: other
+    };
 
-  other.linkedToBy[this.id] = {
-    link: link,
-    node: this
-  };
+    other.linkedToBy[this.id] = {
+      link: link,
+      node: this
+    };
 
-  return transition;
+    // resolve the promise when the transition finishes
+    transition.each('end', resolve);
+
+  }.bind(this));
 };
 
 /**
@@ -320,6 +326,7 @@ LinkableNode.prototype.removeLink = function (other) {
  */
 LinkableNode.prototype.setTransitionDuration = function (duration) {
   var key;
+  this.duration = duration;
   this.node.setTransitionDuration(duration);
   for (key in this.links) {
     this.links[key].link.setTransitionDuration(duration);
