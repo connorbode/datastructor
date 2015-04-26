@@ -50,10 +50,17 @@ NodeCollection.prototype.remove = function (node) {
 
   // find the node in the collection
   var index = this.nodes.indexOf(node);
-  this.nodes[index].node().remove();
+  if (index === -1)
+    return;
+  
+  // this.nodes[index].group.node().remove();
   this.nodes.splice(index, 1);
 };
 
+
+/**
+ * Organizes the node collection
+ */
 NodeCollection.prototype._sitPretty = function () {
   var sep = 100;
   var leftOffset = (this.nodes.length - 1) * sep / 2;
@@ -62,6 +69,20 @@ NodeCollection.prototype._sitPretty = function () {
     var y = 0;
     node.setCoordinates(new TwoDee.Point(x, y));
   });
+};
+
+/**
+ * Checks whether the collection contains the specified element
+ */
+NodeCollection.prototype.contains = function (node) {
+
+  // typecheck 
+  if (node._type !== 'Node' && node._type !== 'LinkableNode')
+    return false;
+
+  // find the node
+  var index = this.nodes.indexOf(node);
+  return index > -1;
 };
 
 module.exports = NodeCollection;

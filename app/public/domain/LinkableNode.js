@@ -86,7 +86,7 @@ LinkableNode.prototype._endDragging = function () {
  */
 LinkableNode.prototype._onHoverOtherNode = function () {
   var target = d3.event.target;
-  var linkableNodeElem = this.findElemOfType(target, this._type);
+  var linkableNodeElem = DomainObject.findElemOfType(target, this._type);
   var elem = d3.select(linkableNodeElem);
   var id = elem.attr('data-id');
 
@@ -158,7 +158,7 @@ LinkableNode.prototype._onExitOtherNode = function () {
  */
 LinkableNode.prototype._onLinkOtherNode = function () {
   var target = d3.event.target;
-  var linkableNodeElem = this.findElemOfType(target, this._type);
+  var linkableNodeElem = DomainObject.findElemOfType(target, this._type);
   var otherId = d3.select(linkableNodeElem).attr('data-id');
   this._onExitOtherNode();
   this.dispatcher.linkcreated(this.id, otherId);
@@ -186,7 +186,9 @@ LinkableNode.prototype.setCoordinates = function (point) {
     var link = this.linkedToBy[key];
     var start = link.start;
     var nextCircle = new TwoDee.Circle(point, this.node.radius);
+    console.log(point, start);
     var lineToNextCircle = TwoDee.Line.fromPoints(point, start);
+    console.log(lineToNextCircle);
     var intersectionPoints = lineToNextCircle.intersectionWith(nextCircle);
     var closestPoint = start.closest(intersectionPoints);
     link.setCoordinates(start, closestPoint);

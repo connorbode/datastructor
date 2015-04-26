@@ -25,8 +25,12 @@ Tree.prototype.setRoot = function (root) {
   if (root !== null && root._type !== 'LinkableNode')
     throw "Root of a tree can only be a LinkableNode (or null)!";
 
+  if (this.root)
+    this.root._isRoot = undefined;
+
   // set the root
   this.root = root;
+  this.root._isRoot = true;
 
   // move the root to this tree's svg group
   var group = root.group.remove();
@@ -65,9 +69,12 @@ Tree.prototype.setChildren = function (children) {
     }
 
     // move the child to this tree's svg group
+    console.log(child);
     var group = child.group.remove();
     this.group.node().appendChild(child.group.node());
   }.bind(this));
+
+  this._sitPretty();
 };
 
 
@@ -115,7 +122,7 @@ Tree.prototype.removeChild = function (child) {
 /**
  * Organizes the nodes of the tree (by spacing them appropriately)
  */
-Tree.prototype.sitPretty = function () {
+Tree.prototype._sitPretty = function () {
 
   // get the measurements for the levels
   var measurements = this._getMeasurements(this);
@@ -209,6 +216,17 @@ Tree.prototype.setCoordinates = function (point) {
     newPoint.y += dy;
     linkableNode.setCoordinates(newPoint);
   });
+};
+
+/**
+ * Finds a tree that a given node belongs to.  If 
+ * the node does not belong to a tree, return null.
+ */
+Tree.findTreeFromRoot = function (node) {
+  if (node._isRoot) {
+    return DomainObject.findElemOfType(node, 'Tree');
+  }
+  return null;
 };
 
 

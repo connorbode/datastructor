@@ -78,14 +78,10 @@ Node.prototype.setCoordinates = function (point) {
   this.center = point;
 
   this.circle
-    .transition()
-    .duration(this.duration)
     .attr('cx', point.x)
     .attr('cy', point.y);
 
   this.text
-    .transition()
-    .duration(this.duration)
     .attr('x', point.x)
     .attr('y', point.y + 8);
 };

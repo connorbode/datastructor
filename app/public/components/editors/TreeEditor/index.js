@@ -17,10 +17,10 @@ var addOperation = function (op) {
   updateSequence();
 };
 
-var addNode = function () {
+var createNode = function () {
   var id = Domain.genId();
   addOperation({
-    type: 'addNode',
+    type: 'createNode',
     data: {
       id: id
     }
@@ -37,6 +37,16 @@ var changeNodeValue = function (id, value) {
   })
 };
 
+var createLink = function (firstId, secondId) {
+  addOperation({
+    type: 'createLink',
+    data: {
+      firstId: firstId,
+      secondId: secondId
+    }
+  });
+};
+
 var TreeOperations = {
 
   "initialization": {
@@ -46,7 +56,7 @@ var TreeOperations = {
     }
   },
 
-  "addNode": {
+  "createNode": {
     label: "Create Node",
     operation: function (viewport, data, duration) {
       var node = new Domain.LinkableNode(viewport);
@@ -54,6 +64,7 @@ var TreeOperations = {
       node.addEventListener('valuechanged', function (value) {
         changeNodeValue(node.id, value);
       });
+      node.addEventListener('linkcreated', createLink);
       _NodeCollection.add(node);
     }
   },
@@ -63,6 +74,28 @@ var TreeOperations = {
     operation: function (viewport, data, duration) {
       var node = Domain.getObject(data.id);
       node.setValue(data.value);
+    }
+  },
+
+  "createLink": {
+    label: "Create Link",
+    operation: function (viewport, data, duration) {
+      var first = Domain.getObject(data.firstId);
+      var second = Domain.getObject(data.secondId);
+
+      var tree = Domain.Tree.findTreeFromRoot(first);
+
+      if (!tree) {
+        tree = new Domain.Tree(viewport);
+        tree.setRoot(first);
+      }
+
+      var children = tree.children;
+      children.push(second);
+      tree.setChildren(children);
+
+      _NodeCollection.remove(first);
+      _NodeCollection.remove(second);
     }
   }
 
@@ -82,7 +115,7 @@ module.exports = React.createClass({
       sequence:   this.props,
       structure:  TreeOperations,
       options: [
-        { label: '+', action: addNode }
+        { label: '+', action: createNode }
       ],
       onChangeStep: this.onChangeStep,
       reset: this.reset
