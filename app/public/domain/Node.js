@@ -1,5 +1,5 @@
-var DomainObject = require('./DomainObject');
-var TwoDee       = require('two-dee');
+var DomainObject  = require('./DomainObject');
+var TwoDee        = require('two-dee');
 
 /**
  * It is expected that container is a d3
@@ -77,13 +77,22 @@ Node.prototype.setCoordinates = function (point) {
 
   this.center = point;
 
+  // move the circle
   this.circle
+    .transition()
+    .duration(this.duration)
     .attr('cx', point.x)
     .attr('cy', point.y);
 
-  this.text
+  // move the node text
+  var transition = this.text
+    .transition()
+    .duration(this.duration)
     .attr('x', point.x)
     .attr('y', point.y + 8);
+
+  // return the transition so that the end event can be caught
+  return transition;
 };
 
 /**
