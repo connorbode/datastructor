@@ -269,6 +269,9 @@ module.exports = React.createClass({
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('mousemove', this.handleMouseMove);
 
+    // add a resize listener to re-center
+    window.addEventListener('resize', this.centerGroup);
+
     // set up viewport
     _svg = d3.select('svg');
     _viewport = _svg.append('g');
