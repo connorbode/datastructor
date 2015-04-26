@@ -1,4 +1,5 @@
-var uuid = require('node-uuid');
+var uuid    = require('node-uuid');
+var Promise = require('es6-promise').Promise;
 
 /**
  * All domain objects should implement
@@ -12,6 +13,7 @@ var DomainObject = function (type, container) {
   this.id = uuid.v4();
   this.group = container.append('g')
     .attr('data-id', this.id)
+    .attr('opacity', '0')
     .classed(type, true);
 
   window.Datastructor.objects[this.id] = this;
@@ -71,10 +73,18 @@ DomainObject.prototype.checkInterface = function () {
 DomainObject.prototype.hide = function () {
 
   this.checkInterface();
-  return this.group
+  var transition = this.group
     .transition('showhide')
     .duration(this.duration)
     .attr('opacity', '0');
+
+  this.getContainedObjects().forEach(function (obj) {
+    obj.hide();
+  });
+
+  return new Promise(function (resolve) {
+    transition.each('end', resolve);
+  });
 };
 
 /**
@@ -83,10 +93,44 @@ DomainObject.prototype.hide = function () {
 DomainObject.prototype.show = function () {
 
   this.checkInterface();
-  return this.group
+  var transition = this.group
     .transition('showhide')
     .duration(this.duration)
     .attr('opacity', '1');
+
+  this.getContainedObjects().forEach(function (obj) {
+    obj.show();
+  });
+
+  return new Promise(function (resolve) {
+    transition.each('end', resolve);
+  });
+};
+
+/**
+ * Retrieves all child elements
+ */
+DomainObject.prototype.getContainedObjects = function () {
+  var elem = this.group.node();
+  var children;
+  var i;
+  var containedObjects = [];
+
+  children = elem.childNodes;
+
+  // childNodes doesn't return an actual array.  WTF DOM?!@ 
+  for (i = 0; i < children.length; i += 1) {
+    var child = children[i];
+    var id = child.getAttribute('data-id');
+    var obj;
+    if (id) {
+      obj = DomainObject.getObject(id);
+      containedObjects.push(obj);
+      containedObjects = containedObjects.concat(obj.getContainedObjects());
+    }
+  }
+
+  return containedObjects;
 };
 
 /**

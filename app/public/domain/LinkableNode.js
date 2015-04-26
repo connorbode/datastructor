@@ -198,31 +198,28 @@ LinkableNode.prototype._onLinkOtherNode = function () {
  * Sets the center of the node
  */
 LinkableNode.prototype.setCoordinates = function (point) {
-  return new Promise(function (resolve) {
-    var end = this.draggableLink.end;
-    var transition = this.node.setCoordinates(point);
-    this.draggableLink.setCoordinates(point, end);
-    this.dispatcher.moved(point);
-    
-    // update each of the links
-    var key;
-    for (key in this.links) {
-      var link = this.links[key].link;
-      var end = LinkableNode._getSnapPoint(this, this.links[key].node);
-      link.setCoordinates(point, end);
-    }
+  var end = this.draggableLink.end;
+  var promise = this.node.setCoordinates(point);
+  this.draggableLink.setCoordinates(point, end);
+  this.dispatcher.moved(point);
+  
+  // update each of the links
+  var key;
+  for (key in this.links) {
+    var link = this.links[key].link;
+    var end = LinkableNode._getSnapPoint(this, this.links[key].node);
+    link.setCoordinates(point, end);
+  }
 
-    // update each of the "linkedToBy" links
-    for (key in this.linkedToBy) {
-      var link = this.linkedToBy[key].link;
-      var start = link.start;
-      var end = LinkableNode._getSnapPoint(this.linkedToBy[key].node, this);
-      link.setCoordinates(start, end);
-    }
+  // update each of the "linkedToBy" links
+  for (key in this.linkedToBy) {
+    var link = this.linkedToBy[key].link;
+    var start = link.start;
+    var end = LinkableNode._getSnapPoint(this.linkedToBy[key].node, this);
+    link.setCoordinates(start, end);
+  }
 
-    // resolve the promise when the transition ends
-    transition.each('end', resolve);
-  }.bind(this));
+  return promise;
 };
 
 /**
@@ -259,23 +256,22 @@ LinkableNode.prototype._removeEvent = function (event, eventStr, callback) {
  * - `other` should be an instance of a LinkableNode
  */
 LinkableNode.prototype.createLink = function (other) {
+
+  // check if link is bi-directional
+  var bidirectional = false;
+  if (other.links[this.id]) {
+    if (this.allowBidirectional === false)
+      return;
+
+    bidirectional = true;
+  }
+
+  // create the link
+  var link = new Link(this.group);
+  var start = this.node.center;
+  var end = LinkableNode._getSnapPoint(this, other);
+
   return new Promise(function (resolve) {
-
-    // check if link is bi-directional
-    var bidirectional = false;
-    if (other.links[this.id]) {
-      if (this.allowBidirectional === false)
-        return;
-
-      bidirectional = true;
-    }
-
-    // create the link
-    var link = new Link(this.group);
-    var start = this.node.center;
-    var end = LinkableNode._getSnapPoint(this, other);
-
-    link.setTransitionDuration(this.duration);
     link.sendToBack();
     var transition = link.setCoordinates(start, end);
 
@@ -291,8 +287,12 @@ LinkableNode.prototype.createLink = function (other) {
     };
 
     // resolve the promise when the transition finishes
-    transition.each('end', resolve);
-
+    transition.each('end', function () {
+      link.setTransitionDuration(this.duration / 2);
+      link.show().then(function () {
+        resolve();
+      });
+    });
   }.bind(this));
 };
 

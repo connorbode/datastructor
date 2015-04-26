@@ -1,6 +1,7 @@
 var DomainObject  = require('./DomainObject');
 var LinkableNode  = require('./LinkableNode');
 var TwoDee        = require('two-dee');
+var Promise       = require('es6-promise').Promise;
 
 var Tree = function (container) {
   
@@ -115,10 +116,10 @@ Tree.prototype._sitPretty = function () {
   var rootX = measurements.width / 2;
   var rootY = 0;
   var rootPoint = new TwoDee.Point(rootX, rootY);
-  var transition = this.node.setCoordinates(rootPoint);
+  var promise = this.node.setCoordinates(rootPoint);
   this._organizeLevel(measurements);
 
-  return transition;
+  return promise;
 };
 
 
@@ -139,7 +140,8 @@ Tree.prototype.getRoot = function () {
  */
  
 Tree.prototype.sitPretty = function () {
-  return this.getRoot()._sitPretty();
+  var promise = this.getRoot()._sitPretty();
+  return promise;
 };
 
 /**
@@ -221,8 +223,9 @@ Tree.prototype.setCoordinates = function (point) {
   var center = this.node.node.center;
   center.x += dx;
   center.y += dy;
-  var transition = this.node.setCoordinates(center);
-  return transition;
+
+  var promise = this.node.setCoordinates(center);
+  return promise;
 };
 
 /**
