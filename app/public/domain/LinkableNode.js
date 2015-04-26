@@ -10,9 +10,10 @@ var LinkableNode = function (container) {
   DomainObject.call(this, 'LinkableNode', container);
 
   // append the draggable link
-  this.draggableLink = new Link(this.group);
-  this.draggableLink.setTransitionDuration(0);
-  this.draggableLink.hide();
+  this.draggableLink = null;
+  // new Link(this.group);
+  // this.draggableLink.setTransitionDuration(0);
+  // this.draggableLink.hide();
 
   // event dispatcher
   this.dispatcher = d3.dispatch('linkcreated', 'moved', 'valuechanged');
@@ -38,6 +39,9 @@ LinkableNode.prototype._startDragging = function () {
   d3.event.stopPropagation();
 
   // show the draggable link
+  this.draggableLink = new Link(this.group);
+  this.draggableLink.setTransitionDuration(0);
+  this.draggableLink.sendToBack();
   this.draggableLink.show();
   this._onDrag();
 
@@ -80,7 +84,8 @@ LinkableNode.prototype._endDragging = function () {
   var win = d3.select(window);
   win.on('mousemove.LinkableNode', null);
   win.on('mouseup.LinkableNode', null);
-  this.draggableLink.hide();
+  this.draggableLink.remove();
+  this.draggableLink = null;
 };
 
 /**
