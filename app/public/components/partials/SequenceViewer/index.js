@@ -30,14 +30,9 @@ module.exports = React.createClass({
    * Centers the elements on the screen
    */
   centerGroup: function () {
-    var groupBbox = _viewport.node().getBBox();
-    var groupWidth = groupBbox.width;
-    var groupHeight = groupBbox.height;
-    var containerNode = _svg.node();
-    var containerWidth = containerNode.scrollWidth;
-    var containerHeight = containerNode.scrollHeight;
-    var offsetLeft = (containerWidth - groupWidth) / 2;
-    var offsetTop = (containerHeight - groupHeight) / 2;
+    var rect = _svg.node().getBoundingClientRect();
+    var offsetLeft = rect.width / 2;
+    var offsetTop = rect.height / 2;
     _zoom.translate([offsetLeft, offsetTop]);
     _zoom.event(_svg);
   },

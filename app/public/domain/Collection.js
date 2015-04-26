@@ -8,6 +8,7 @@ var Collection = function (container) {
 
   // set defaults
   this.nodes = [];
+  this.stack = 'horizontal';
 };
 
 // Inherit from Domain Object
@@ -48,6 +49,22 @@ Collection.prototype.remove = function (node) {
   this.nodes.splice(index, 1);
 };
 
+/**
+ * Sets the stacking to horizontal
+ */
+Collection.prototype.setHorizontal = function () {
+  this.stack = 'horizontal';
+  this._sitPretty();
+};
+
+/**
+ * Sets the stacking to vertical
+ */
+Collection.prototype.setVertical = function () {
+  this.stack = 'vertical';
+  this._sitPretty();
+};
+
 
 /**
  * Organizes the node collection
@@ -58,8 +75,13 @@ Collection.prototype._sitPretty = function () {
   this.nodes.forEach(function (node, index) {
     var x = sep * index - leftOffset;
     var y = 0;
-    node.setCoordinates(new TwoDee.Point(x, y));
-  });
+    var point;
+    if (this.stack === 'horizontal')
+      point = new TwoDee.Point(x, y);
+    else
+      point = new TwoDee.Point(y, x);
+    node.setCoordinates(point);
+  }.bind(this));
 };
 
 /**
