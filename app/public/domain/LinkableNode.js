@@ -111,7 +111,9 @@ LinkableNode.prototype._onHoverOtherNode = function () {
   elem.on('mouseup.LinkableNode', this._onLinkOtherNode.bind(this));
 
   // Snap the arrowhead to the other node
-  this._snapArrowheadToOtherNode(this.draggableLink, elem);
+  var other = DomainObject.getObject(id);
+  var snapPoint = LinkableNode._getSnapPoint(this, other);
+  this.draggableLink.setCoordinates(this.node.center, snapPoint);
 };
 
 /**
@@ -140,41 +142,6 @@ LinkableNode._getSnapPoint = function (first, second) {
   }
 
   return snapPoint;
-};
-
-/**
- * Snaps the arrowhead to another node
- * `link` should be an instance of a Link
- * `other` should be a d3 selection of a LinkableNode DOM element
- */
-LinkableNode.prototype._snapArrowheadToOtherNode = function (link, other) {
-
-  var arrowStart = this.draggableLink.start;
-  var arrowEnd;
-
-  // get the details of the other node
-  var circle = other.select('g.Node').select('circle').node();
-  var x = parseFloat(circle.getAttribute('cx'));
-  var y = parseFloat(circle.getAttribute('cy'));
-  var r = parseFloat(circle.getAttribute('r'));
-
-  // check if the arrowhead start is the same as the link
-  if (arrowStart.x === x && arrowStart.y === y) {
-    arrowEnd = arrowStart;
-  }
-
-  // otherwise, find the snap point
-  else {
-    var otherNodeCenter = new TwoDee.Point(x, y);
-    var otherNodeCircle = new TwoDee.Circle(otherNodeCenter, r);
-    var arrowStartPoint = this.draggableLink.start;
-    var arrowLine = new TwoDee.Line.fromPoints(arrowStartPoint, otherNodeCenter);
-    var intersectionPoints = arrowLine.intersectionWith(otherNodeCircle);
-    arrowEnd = this.node.center.closest(intersectionPoints);
-  }
-
-  // set the link coordinates
-  link.setCoordinates(arrowStart, arrowEnd);
 };
 
 /**
@@ -308,7 +275,8 @@ LinkableNode.prototype._updateLink = function (other) {
   if (link) {
     var start = this.node.center;
     var end = link.end;
-    this._snapArrowheadToOtherNode(link, other.group);
+    var snapPoint = LinkableNode._getSnapPoint(this, other);
+    link.setCoordinates(start, snapPoint);
   }
 }; 
 
