@@ -52,7 +52,7 @@ var TreeOperations = {
   "initialization": {
     label: "Initialization",
     operation: function (viewport, data, duration) {
-      _NodeCollection = new Domain.NodeCollection(viewport);
+      _NodeCollection = new Domain.Collection(viewport);
     }
   },
 
