@@ -55,9 +55,10 @@ NodeCollection.prototype.remove = function (node) {
 };
 
 NodeCollection.prototype._sitPretty = function () {
-
+  var sep = 100;
+  var leftOffset = (this.nodes.length - 1) * sep / 2;
   this.nodes.forEach(function (node, index) {
-    var x = 100 * index;
+    var x = sep * index - leftOffset;
     var y = 0;
     node.setCoordinates(new TwoDee.Point(x, y));
   });
