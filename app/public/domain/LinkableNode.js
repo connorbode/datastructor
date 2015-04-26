@@ -209,6 +209,7 @@ LinkableNode.prototype._addEvent = function (event, eventStr, callback) {
   if (this.dispatcher[event]) {
     this.dispatcher.on(eventStr, callback);
   } 
+  this.node._addEvent(event, eventStr, callback);
 };
 
 /**

@@ -17,6 +17,26 @@ var addOperation = function (op) {
   updateSequence();
 };
 
+var addNode = function () {
+  var id = Domain.genId();
+  addOperation({
+    type: 'addNode',
+    data: {
+      id: id
+    }
+  });
+};
+
+var changeNodeValue = function (id, value) {
+  addOperation({
+    type: 'changeNodeValue',
+    data: {
+      id: id,
+      value: value
+    }
+  })
+};
+
 var TreeOperations = {
 
   "initialization": {
@@ -29,7 +49,20 @@ var TreeOperations = {
   "addNode": {
     label: "Create Node",
     operation: function (viewport, data, duration) {
-      _NodeCollection.add(new Domain.LinkableNode(viewport));
+      var node = new Domain.LinkableNode(viewport);
+      node.setId(data.id);
+      node.addEventListener('valuechanged', function (value) {
+        changeNodeValue(node.id, value);
+      });
+      _NodeCollection.add(node);
+    }
+  },
+
+  "changeNodeValue": {
+    label: "Change Value",
+    operation: function (viewport, data, duration) {
+      var node = Domain.getObject(data.id);
+      node.setValue(data.value);
     }
   }
 
@@ -44,18 +77,12 @@ module.exports = React.createClass({
 
   },
 
-  addNode: function () {
-    addOperation({
-      type: 'addNode'
-    });
-  },
-
   render: function () {
     var viewerProps = {
       sequence:   this.props,
       structure:  TreeOperations,
       options: [
-        { label: '+', action: this.addNode }
+        { label: '+', action: addNode }
       ],
       onChangeStep: this.onChangeStep,
       reset: this.reset

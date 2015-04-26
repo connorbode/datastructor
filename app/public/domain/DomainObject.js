@@ -26,10 +26,14 @@ if (!window.Datastructor.objects) {
 }
 
 /**
- * Retrieves an object by ID
+ * Sets an object's id
  */
-DomainObject.getObject = function (id) {
-  return window.Datastructor.objects[id];
+DomainObject.prototype.setId = function (id) {
+  window.Datastructor.objects[this.id] = undefined;
+  this.id = id;
+  this.group
+    .attr('data-id', this.id);
+  window.Datastructor.objects[this.id] = this;
 };
 
 /**
