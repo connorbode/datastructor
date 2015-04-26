@@ -95,7 +95,7 @@ DomainObject.prototype.hide = function () {
   this.checkInterface();
   var transition = this.group
     .transition('showhide')
-    .duration(this.duration)
+    .duration(this.getTransitionDuration())
     .attr('opacity', '0');
 
   this.getContainedObjects().forEach(function (obj) {
@@ -115,7 +115,7 @@ DomainObject.prototype.show = function () {
   this.checkInterface();
   var transition = this.group
     .transition('showhide')
-    .duration(this.duration)
+    .duration(this.getTransitionDuration())
     .attr('opacity', '1');
 
   this.getContainedObjects().forEach(function (obj) {
