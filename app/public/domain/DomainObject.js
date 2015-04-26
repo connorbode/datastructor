@@ -71,7 +71,7 @@ DomainObject.prototype.checkInterface = function () {
 DomainObject.prototype.hide = function () {
 
   this.checkInterface();
-  this.group
+  return this.group
     .transition('showhide')
     .duration(this.duration)
     .attr('opacity', '0');
@@ -83,7 +83,7 @@ DomainObject.prototype.hide = function () {
 DomainObject.prototype.show = function () {
 
   this.checkInterface();
-  this.group
+  return this.group
     .transition('showhide')
     .duration(this.duration)
     .attr('opacity', '1');
