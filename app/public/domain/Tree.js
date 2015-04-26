@@ -76,7 +76,6 @@ Tree.prototype.addChild = function (child) {
 
   // create a link from the root to the child
   var transition = this.node.createLink(child.node);
-  this.node.setTransitionDuration(1000);
 
   // set the parent in the child
   child.setParent(this);

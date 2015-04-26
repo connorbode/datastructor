@@ -54,7 +54,6 @@ var TreeOperations = {
     operation: function (viewport, data, duration) {
       Datastructor.DomainObject.setGlobalTransitionDuration(duration);
       _NodeCollection = new Domain.Collection(viewport);
-      _NodeCollection.setTransitionDuration(duration);
       _NodeCollection.show();
     }
   },
@@ -66,7 +65,6 @@ var TreeOperations = {
       var node = new Domain.Tree(viewport);
       node.setId(data.id);
       node.show();
-      node.setTransitionDuration(duration);
       node.addEventListener('valuechanged', changeNodeValue);
       node.addEventListener('linkcreated', createLink);
       _NodeCollection.add(node);
