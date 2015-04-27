@@ -9,7 +9,7 @@ var Collection = function (container) {
   // set defaults
   this.nodes = [];
   this.stack = 'horizontal';
-  this.separation = 100;
+  this.separation = 0;
 };
 
 // Inherit from Domain Object
@@ -109,12 +109,12 @@ Collection.prototype._sitPretty = function () {
   } 
 
   else {
-    var currentHeight = 0;
+    var currentOffset = - (totalHeight + totalSeparation) / 2;
     this.nodes.forEach(function (node, index) {
       var bbox = node.group.node().getBBox();
-      var point = new TwoDee.Point(0, currentHeight);
+      var point = new TwoDee.Point(0, currentOffset);
       node.setCoordinates(point);
-      currentHeight += bbox.height + this.separation;
+      currentOffset += bbox.height + this.separation;
     }.bind(this));
   }
 };
@@ -137,6 +137,13 @@ Collection.prototype.setTransitionDuration = function (duration) {
   this.nodes.forEach(function (node) {
     node.setTransitionDuration(duration);
   });
+};
+
+/**
+ * Sets the separation for a collection
+ */
+Collection.prototype.setSeparation = function (separation) {
+  this.separation = separation;
 };
 
 /**
