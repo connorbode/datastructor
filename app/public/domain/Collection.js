@@ -9,6 +9,7 @@ var Collection = function (container) {
   // set defaults
   this.nodes = [];
   this.stack = 'horizontal';
+  this.separation = 100;
 };
 
 // Inherit from Domain Object
@@ -26,8 +27,8 @@ Collection.prototype.add = function (node) {
   // add the node to the collection
   this.nodes.push(node);
 
-  // set the appropriate transition duration
-  // node.setTransitionDuration(this.duration);
+  // add a hook for node changes
+  node.addEventListener('changed', this._sitPretty.bind(this));
 
   // remove the node from the DOM and add it to this group
   node.group.node().remove();
@@ -49,6 +50,10 @@ Collection.prototype.remove = function (node) {
   if (index === -1)
     return;
   
+  // remove the change listener from the node
+  this.nodes[index].removeEventListener('changed', this._sitPretty.bind(this));
+
+  // remove the node
   this.nodes.splice(index, 1);
 };
 
@@ -73,18 +78,45 @@ Collection.prototype.setVertical = function () {
  * Organizes the node collection
  */
 Collection.prototype._sitPretty = function () {
-  var sep = 100;
-  var leftOffset = (this.nodes.length - 1) * sep / 2;
-  this.nodes.forEach(function (node, index) {
-    var x = sep * index - leftOffset;
-    var y = 0;
-    var point;
-    if (this.stack === 'horizontal')
-      point = new TwoDee.Point(x, y);
-    else
-      point = new TwoDee.Point(y, x);
-    node.setCoordinates(point);
-  }.bind(this));
+
+  // get the bboxes for all elements
+  var bboxes = this.nodes.map(function (node) {
+    return node.group.node().getBBox();
+  });
+
+  // get the total widths of the elements contained
+  var totalWidth = bboxes.reduce(function (width, bbox) {
+    return width + bbox.width;
+  }, 0);
+
+  // get the total height of the elements contained
+  var totalHeight = bboxes.reduce(function (height, bbox) {
+    return height + bbox.height;
+  }, 0);
+
+  // the total separation amount
+  var totalSeparation = (this.nodes.length - 1) * this.separation;
+
+  // set the offset of each group member
+  if (this.stack === 'horizontal') {
+    var currentOffset = - (totalWidth + totalSeparation) / 2;
+    this.nodes.forEach(function (node, index) {
+      var bbox = node.group.node().getBBox();
+      var point = new TwoDee.Point(currentOffset, 0);
+      node.setCoordinates(point);
+      currentOffset += bbox.width + this.separation;
+    }.bind(this));
+  } 
+
+  else {
+    var currentHeight = 0;
+    this.nodes.forEach(function (node, index) {
+      var bbox = node.group.node().getBBox();
+      var point = new TwoDee.Point(0, currentHeight);
+      node.setCoordinates(point);
+      currentHeight += bbox.height + this.separation;
+    }.bind(this));
+  }
 };
 
 /**

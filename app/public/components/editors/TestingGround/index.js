@@ -14,17 +14,21 @@ var TreeOperations = {
   "initialization": {
     label: "Initialization",
     operation: function (viewport, data, duration) {
-      var first = new Domain.LinkableNode(viewport);
-      var second = new Domain.LinkableNode(viewport);
-      var third = new Domain.LinkableNode(viewport);
-
-      first.setValue('1');
-      second.setValue('2');
-      third.setValue('3');
-
-      var treeOne = new Domain.Tree(viewport);
-      treeOne.setRoot(first);
-      treeOne.addChild(second);
+      var collection = new Domain.Collection(viewport);
+      var first = new Domain.Node(viewport);
+      var second = new Domain.Node(viewport);
+      var third = new Domain.Node(viewport);
+      var fourth = new Domain.Node(viewport);
+      collection.show();
+      collection.setHorizontal();
+      [first, second, third, fourth].forEach(function (n, i) {
+        n.setValue(i);
+        n.show();
+      });
+      collection.add(first);
+      collection.add(second);
+      collection.add(third);
+      collection.add(fourth);
     }
   }
 
